@@ -42,6 +42,40 @@
   color: white;
 }
 
+.icon-button.theme-button {
+  color: #f59e0b;
+  border-color: #f59e0b;   
+  background: rgb(62, 51, 26);
+}
+
+.icon-button.theme-button:hover {
+  background: #f59e0b;
+  color: white;
+}
+
+/* Dark mode specific styles */
+[data-theme='dark'] .icon-button.theme-button {
+  color: #f59e0b;
+  border-color: #f59e0b;
+}
+
+[data-theme='dark'] .icon-button.theme-button:hover {
+  background: #f59e0b;
+  color: white;
+}
+
+/* Light mode specific styles */
+[data-theme='light'] .icon-button.theme-button {
+  color: #fff;
+  border-color: #1e293b;
+  background: #334155;
+}
+
+[data-theme='light'] .icon-button.theme-button:hover {
+  background: #1e293b;
+  color: white;
+}
+
 .icon-button svg {
   width: 20px;
   height: 20px;

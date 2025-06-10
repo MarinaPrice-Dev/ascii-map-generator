@@ -1,5 +1,5 @@
 import React from 'react';
-import { UndoIcon, RedoIcon, ClearIcon, SaveIcon } from './icons/Icons';
+import { UndoIcon, RedoIcon, ClearIcon, SaveIcon, ThemeIcon } from './icons/Icons';
 import './icons/Icons.css';
 
 interface HeaderProps {
@@ -41,10 +41,13 @@ const Header: React.FC<HeaderProps> = ({
           <button className="icon-button save-button" onClick={onSaveMap} title="Export Map">
             <SaveIcon />
           </button>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: 16 }}>
-            <span style={{ fontSize: 14 }}>Dark Mode</span>
-            <input type="checkbox" checked={darkMode} onChange={() => onDarkModeChange(!darkMode)} />
-          </label>
+          <button 
+            className="icon-button theme-button" 
+            onClick={() => onDarkModeChange(!darkMode)} 
+            title={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+          >
+            <ThemeIcon isDark={darkMode} />
+          </button>
         </div>
       </header>
       {/* Toolbar for mobile/tablet */}
@@ -61,10 +64,13 @@ const Header: React.FC<HeaderProps> = ({
         <button className="icon-button save-button" onClick={onSaveMap} title="Export Map">
           <SaveIcon />
         </button>
-        <label style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: 8 }}>
-          <span style={{ fontSize: 14 }}>Dark</span>
-          <input type="checkbox" checked={darkMode} onChange={() => onDarkModeChange(!darkMode)} />
-        </label>
+        <button 
+          className="icon-button theme-button" 
+          onClick={() => onDarkModeChange(!darkMode)} 
+          title={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+        >
+          <ThemeIcon isDark={darkMode} />
+        </button>
       </div>
     </>
   );
