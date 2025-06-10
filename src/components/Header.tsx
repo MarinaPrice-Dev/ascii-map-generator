@@ -35,10 +35,10 @@ const Header: React.FC<HeaderProps> = ({
           <button className="icon-button" onClick={onRedo} disabled={!canRedo} title="Redo">
             <RedoIcon />
           </button>
-          <button className="icon-button" onClick={onClearMap} title="Clear Map">
+          <button className="icon-button clear-button" onClick={onClearMap} title="Clear Map">
             <ClearIcon />
           </button>
-          <button className="icon-button" onClick={onSaveMap} title="Export Map">
+          <button className="icon-button save-button" onClick={onSaveMap} title="Export Map">
             <SaveIcon />
           </button>
           <label style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: 16 }}>
@@ -55,10 +55,10 @@ const Header: React.FC<HeaderProps> = ({
         <button className="icon-button" onClick={onRedo} disabled={!canRedo} title="Redo">
           <RedoIcon />
         </button>
-        <button className="icon-button" onClick={onClearMap} title="Clear Map">
+        <button className="icon-button clear-button" onClick={onClearMap} title="Clear Map">
           <ClearIcon />
         </button>
-        <button className="icon-button" onClick={onSaveMap} title="Export Map">
+        <button className="icon-button save-button" onClick={onSaveMap} title="Export Map">
           <SaveIcon />
         </button>
         <label style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: 8 }}>

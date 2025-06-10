@@ -13,9 +13,33 @@
   transition: all 0.2s ease;
 }
 
+.icon-button:hover {
+  background: var(--hover);
+}
+
 .icon-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.icon-button.save-button {
+  color: #22c55e;
+  border-color: #22c55e;
+}
+
+.icon-button.save-button:hover {
+  background: #22c55e;
+  color: white;
+}
+
+.icon-button.clear-button {
+  color: #e33;
+  border-color: #e33;
+}
+
+.icon-button.clear-button:hover {
+  background: #e33;
+  color: white;
 }
 
 .icon-button svg {
