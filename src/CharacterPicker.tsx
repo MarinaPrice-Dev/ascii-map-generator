@@ -22,7 +22,6 @@ const CharacterPicker: React.FC<CharacterPickerProps> = ({ selectedChar, setSele
             background: selectedChar === char ? '#888' : '#222',
             color: '#fff',
             border: '1px solid #444',
-            width: 32,
             height: 32,
             cursor: 'pointer',
           }}

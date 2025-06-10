@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react'
 import './App.css'
 import AsciiMapGrid from './AsciiMapGrid'
 import CharacterPicker from './CharacterPicker'
+import { useUndoRedo } from './useUndoRedo'
+import { getInitialGrid } from './mapUtils'
 
 const HEADER_HEIGHT = 60;
 const FOOTER_HEIGHT = 110; // enough for two rows of elements
@@ -22,12 +24,22 @@ const App: React.FC = () => {
   const [selectedChar, setSelectedChar] = useState<string>('#')
   const [selectedFg, setSelectedFg] = useState<string>(DEFAULT_FG);
   const [selectedBg, setSelectedBg] = useState<string>(DEFAULT_BG);
-  const [grid, setGrid] = useState<Cell[][]>([])
   const [cellSize, setCellSize] = useState<number>(getCellSize());
   const [darkMode, setDarkMode] = useState<boolean>(true);
-  const [history, setHistory] = useState<Cell[][][]>([]);
-  const [future, setFuture] = useState<Cell[][][]>([]);
   const mainRef = useRef<HTMLDivElement>(null);
+
+  // Initial grid setup
+  const getGridDims = () => {
+    const cellSize = getCellSize();
+    const availableWidth = window.innerWidth - 2;
+    const availableHeight = window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT - 2;
+    const cols = Math.floor(availableWidth / cellSize);
+    const rows = Math.floor(availableHeight / cellSize);
+    return { rows, cols };
+  };
+
+  const { rows, cols } = getGridDims();
+  const [grid, setGrid, undo, redo, canUndo, canRedo, beginAction] = useUndoRedo<Cell[][]>(getInitialGrid(rows, cols, DEFAULT_FG, DEFAULT_BG));
 
   useEffect(() => {
     document.body.setAttribute('data-theme', darkMode ? 'dark' : 'light');
@@ -36,17 +48,11 @@ const App: React.FC = () => {
   useEffect(() => {
     const cellSize = getCellSize();
     setCellSize(cellSize);
-    const availableWidth = window.innerWidth - 2;
-    const availableHeight = window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT - 2;
-    const cols = Math.floor(availableWidth / cellSize);
-    const rows = Math.floor(availableHeight / cellSize);
-    const initialGrid = Array.from({ length: rows }, () => Array.from({ length: cols }, () => ({ char: ' ', fg: DEFAULT_FG, bg: DEFAULT_BG })));
-    setGrid(initialGrid);
-    setHistory([]);
-    setFuture([]);
+    // Only reset grid on mount, not on every resize
+    // eslint-disable-next-line
   }, []);
 
-  // Update a cell with char, fg, bg and push to history
+  // Update a cell with char, fg, bg
   const updateCell = (row: number, col: number, char: string, fg: string, bg: string) => {
     setGrid(prev => {
       const newGrid = prev.map(arr => arr.slice())
@@ -55,28 +61,10 @@ const App: React.FC = () => {
     })
   }
 
-  // beginAction: push current grid to history, clear future
-  const beginAction = () => {
-    setHistory(h => [...h, grid]);
-    setFuture([]);
-  };
-
-  // Undo/Redo logic
-  const undo = () => {
-    setHistory(h => {
-      if (h.length === 0) return h;
-      setFuture(f => [grid, ...f]);
-      setGrid(h[h.length - 1]);
-      return h.slice(0, -1);
-    });
-  };
-  const redo = () => {
-    setFuture(f => {
-      if (f.length === 0) return f;
-      setHistory(h => [...h, grid]);
-      setGrid(f[0]);
-      return f.slice(1);
-    });
+  // Clear map
+  const clearMap = () => {
+    beginAction();
+    setGrid(getInitialGrid(rows, cols, DEFAULT_FG, DEFAULT_BG));
   };
 
   // Save map (only chars)
@@ -112,8 +100,12 @@ const App: React.FC = () => {
       {/* Header */}
       <header style={{ height: HEADER_HEIGHT, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px', borderBottom: '1px solid var(--border)' }}>
         <h1 style={{ fontSize: 24, margin: 0 }}>ASCII Map Generator</h1>
-        <div>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <button onClick={saveMap} style={{ height: 32 }}>Save Map</button>
+          <button onClick={clearMap} style={{ height: 32 }}>Clear Map</button>
+          <button onClick={undo} style={{ height: 32 }} disabled={!canUndo}>Undo</button>
+          <button onClick={redo} style={{ height: 32 }} disabled={!canRedo}>Redo</button>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: 16 }}>
             <span style={{ fontSize: 14 }}>Dark Mode</span>
             <input type="checkbox" checked={darkMode} onChange={() => setDarkMode(d => !d)} />
           </label>
@@ -128,9 +120,6 @@ const App: React.FC = () => {
       {/* Footer */}
       <footer style={{ height: FOOTER_HEIGHT, borderTop: '1px solid var(--border)', background: 'var(--footer-bg)', padding: '8px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ width: '100%', display: 'flex', justifyContent: 'center', marginBottom: 8, gap: 16 }}>
-          <button onClick={saveMap} style={{ height: 32 }}>Save Map</button>
-          <button onClick={undo} style={{ height: 32 }} disabled={history.length === 0}>Undo</button>
-          <button onClick={redo} style={{ height: 32 }} disabled={future.length === 0}>Redo</button>
           <label style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
             <span style={{ fontSize: 14 }}>Text</span>
             <input type="color" value={selectedFg} onChange={e => setSelectedFg(e.target.value)} />
