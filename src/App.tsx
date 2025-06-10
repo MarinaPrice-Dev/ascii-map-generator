@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react'
 import './App.css'
 import AsciiMapGrid from './components/AsciiMapGrid'
-import CharacterPicker from './components/CharacterPicker'
 import { useUndoRedo } from './useUndoRedo'
 import { getInitialGrid } from './utils/mapUtils'
 import Header from './components/Header'
 import Footer from './components/Footer'
+import type { Cell } from './types/cell'
 
 const HEADER_HEIGHT = 60;
 const FOOTER_HEIGHT = 150;
@@ -13,9 +13,6 @@ const DESKTOP_CELL_SIZE = 20;
 const MOBILE_CELL_SIZE = 14;
 
 const getCellSize = () => (window.innerWidth < 600 ? MOBILE_CELL_SIZE : DESKTOP_CELL_SIZE);
-
-// Cell type with char, fg, bg
-export type Cell = { char: string; fg: string; bg: string };
 
 const DEFAULT_FG = '#ffffff';
 const DEFAULT_BG = '#222222';

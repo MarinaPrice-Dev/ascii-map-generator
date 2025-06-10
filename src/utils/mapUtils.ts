@@ -1,4 +1,4 @@
-import type { Cell } from './App';
+import type { Cell } from '../types/cell';
  
 export function getInitialGrid(rows: number, cols: number, fg: string, bg: string, char: string = ' '): Cell[][] {
   return Array.from({ length: rows }, () =>

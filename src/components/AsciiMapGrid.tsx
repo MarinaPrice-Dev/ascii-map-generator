@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { Cell } from './App';
+import type { Cell } from '../types/cell';
 
 type AsciiMapGridProps = {
   grid: Cell[][];
