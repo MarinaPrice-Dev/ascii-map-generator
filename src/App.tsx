@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react'
 import './App.css'
-import AsciiMapGrid from './AsciiMapGrid'
-import CharacterPicker from './CharacterPicker'
+import AsciiMapGrid from './components/AsciiMapGrid'
+import CharacterPicker from './components/CharacterPicker'
 import { useUndoRedo } from './useUndoRedo'
-import { getInitialGrid } from './mapUtils'
+import { getInitialGrid } from './utils/mapUtils'
+import Header from './components/Header'
+import Footer from './components/Footer'
 
 const HEADER_HEIGHT = 60;
-const FOOTER_HEIGHT = 150; // Increased height to accommodate stacked color sections
+const FOOTER_HEIGHT = 150;
 const DESKTOP_CELL_SIZE = 20;
 const MOBILE_CELL_SIZE = 14;
 
@@ -97,63 +99,32 @@ const App: React.FC = () => {
 
   return (
     <div className="App" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--bg)', color: 'var(--fg)' }}>
-      {/* Header */}
-      <header className="app-header" style={{ height: HEADER_HEIGHT, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px', borderBottom: '1px solid var(--border)' }}>
-        <h1 style={{ fontSize: 24, margin: 0 }}>ASCII Map Generator</h1>
-        <div className="header-actions" style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <button onClick={saveMap} style={{ height: 32 }}>Save Map</button>
-          <button onClick={clearMap} style={{ height: 32 }}>Clear Map</button>
-          <button onClick={undo} style={{ height: 32 }} disabled={!canUndo}>Undo</button>
-          <button onClick={redo} style={{ height: 32 }} disabled={!canRedo}>Redo</button>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: 16 }}>
-            <span style={{ fontSize: 14 }}>Dark Mode</span>
-            <input type="checkbox" checked={darkMode} onChange={() => setDarkMode(d => !d)} />
-          </label>
-        </div>
-      </header>
-      {/* Toolbar for mobile/tablet */}
-      <div className="toolbar-actions">
-        <button onClick={saveMap} style={{ height: 40 }}>Save</button>
-        <button onClick={clearMap} style={{ height: 40 }}>Clear</button>
-        <button onClick={undo} style={{ height: 40 }} disabled={!canUndo}>Undo</button>
-        <button onClick={redo} style={{ height: 40 }} disabled={!canRedo}>Redo</button>
-        <label style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: 8 }}>
-          <span style={{ fontSize: 14 }}>Dark</span>
-          <input type="checkbox" checked={darkMode} onChange={() => setDarkMode(d => !d)} />
-        </label>
-      </div>
+      <Header
+        onSaveMap={saveMap}
+        onClearMap={clearMap}
+        onUndo={undo}
+        onRedo={redo}
+        canUndo={canUndo}
+        canRedo={canRedo}
+        darkMode={darkMode}
+        onDarkModeChange={setDarkMode}
+      />
       {/* Main Grid Area */}
       <main ref={mainRef} style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', background: 'var(--bg)' }}>
         {grid.length > 0 && (
           <AsciiMapGrid grid={grid} updateCell={updateCell} beginAction={beginAction} selectedChar={selectedChar} selectedFg={selectedFg} selectedBg={selectedBg} cellSize={cellSize} />
         )}
       </main>
-      {/* Footer */}
-      <footer style={{ height: FOOTER_HEIGHT, borderTop: '1px solid var(--border)', background: 'var(--footer-bg)', padding: '8px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 8, padding: '0 16px' }}>
-          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: 16, flexWrap: 'wrap' }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-              <span style={{ fontSize: 14 }}>Text</span>
-              <input type="color" value={selectedFg} onChange={e => setSelectedFg(e.target.value)} />
-              {FG_PRESETS.map(color => (
-                <button key={color} style={{ background: color, width: 20, height: 20, border: selectedFg === color ? '2px solid #888' : '1px solid #444', marginLeft: 2, cursor: 'pointer' }} onClick={() => setSelectedFg(color)} />
-              ))}
-            </label>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: 16, flexWrap: 'wrap' }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-              <span style={{ fontSize: 14 }}>Background</span>
-              <input type="color" value={selectedBg} onChange={e => setSelectedBg(e.target.value)} />
-              {BG_PRESETS.map(color => (
-                <button key={color} style={{ background: color, width: 20, height: 20, border: selectedBg === color ? '2px solid #888' : '1px solid #444', marginLeft: 2, cursor: 'pointer' }} onClick={() => setSelectedBg(color)} />
-              ))}
-            </label>
-          </div>
-        </div>
-        <div style={{ width: '100%', display: 'flex', justifyContent: 'center', marginTop: 8 }}>
-          <CharacterPicker selectedChar={selectedChar} setSelectedChar={setSelectedChar} />
-        </div>
-      </footer>
+      <Footer
+        selectedChar={selectedChar}
+        setSelectedChar={setSelectedChar}
+        selectedFg={selectedFg}
+        setSelectedFg={setSelectedFg}
+        selectedBg={selectedBg}
+        setSelectedBg={setSelectedBg}
+        fgPresets={FG_PRESETS}
+        bgPresets={BG_PRESETS}
+      />
     </div>
   )
 }
