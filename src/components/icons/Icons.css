@@ -11,6 +11,11 @@
   color: var(--fg);
   cursor: pointer;
   transition: all 0.2s ease;
+  outline: none;
+}
+
+.icon-button:focus {
+  outline: none;
 }
 
 .icon-button:hover {
