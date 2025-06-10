@@ -1,18 +1,23 @@
 import React, { useState } from 'react';
+import type { Cell } from './App';
 
 type AsciiMapGridProps = {
-  grid: string[][];
-  updateCell: (row: number, col: number, char: string) => void;
+  grid: Cell[][];
+  updateCell: (row: number, col: number, char: string, fg: string, bg: string) => void;
+  beginAction: () => void;
   selectedChar: string;
+  selectedFg: string;
+  selectedBg: string;
   cellSize: number;
 };
 
-const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, selectedChar, cellSize }) => {
+const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, beginAction, selectedChar, selectedFg, selectedBg, cellSize }) => {
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [startCell, setStartCell] = useState<{ row: number; col: number } | null>(null);
   const [hoverCell, setHoverCell] = useState<{ row: number; col: number } | null>(null);
 
   const handleMouseDown = (row: number, col: number) => {
+    beginAction();
     setIsMouseDown(true);
     setStartCell({ row, col });
     setHoverCell({ row, col });
@@ -32,7 +37,7 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, selectedC
       const maxCol = Math.max(startCell.col, hoverCell.col);
       for (let r = minRow; r <= maxRow; r++) {
         for (let c = minCol; c <= maxCol; c++) {
-          updateCell(r, c, selectedChar);
+          updateCell(r, c, selectedChar, selectedFg, selectedBg);
         }
       }
     }
@@ -45,7 +50,7 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, selectedC
     window.addEventListener('mouseup', handleMouseUp);
     return () => window.removeEventListener('mouseup', handleMouseUp);
     // eslint-disable-next-line
-  }, [isMouseDown, startCell, hoverCell, selectedChar]);
+  }, [isMouseDown, startCell, hoverCell, selectedChar, selectedFg, selectedBg]);
 
   // Helper to check if a cell is in the current selection rectangle
   const isInSelection = (row: number, col: number) => {
@@ -58,7 +63,7 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, selectedC
   };
 
   return (
-    <div style={{ display: 'inline-block', border: '1px solid #ccc', background: '#222', userSelect: 'none' }}>
+    <div style={{ display: 'inline-block', border: '1px solid #ccc', background: 'var(--bg)', userSelect: 'none' }}>
       {grid.map((row, rowIndex) => (
         <div key={rowIndex} style={{ display: 'flex' }}>
           {row.map((cell, colIndex) => {
@@ -72,10 +77,8 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, selectedC
                   width: cellSize,
                   height: cellSize,
                   border: '1px solid #444',
-                  color: '#fff',
-                  background: selected
-                    ? '#555'
-                    : cell === ' ' ? '#222' : '#333',
+                  color: cell.fg,
+                  background: selected ? '#555' : cell.bg,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -85,7 +88,7 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, selectedC
                   userSelect: 'none',
                 }}
               >
-                {cell}
+                {cell.char}
               </div>
             );
           })}
