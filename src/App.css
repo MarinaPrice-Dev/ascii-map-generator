@@ -137,3 +137,38 @@ button:disabled {
     font-size: 14px;
   }
 }
+
+.header-actions {
+  display: flex;
+}
+.toolbar-actions {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .header-actions {
+    display: none !important;
+  }
+  .toolbar-actions {
+    display: flex;
+    width: 100vw;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    background: var(--footer-bg);
+    border-bottom: 1px solid var(--border);
+    z-index: 2;
+  }
+  .app-header {
+    padding-bottom: 0 !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+  .toolbar-actions button, .toolbar-actions label {
+    font-size: 18px;
+    height: 40px;
+    min-width: 48px;
+    padding: 0 10px;
+  }
+}
