@@ -4,7 +4,7 @@ import AsciiMapGrid from './components/AsciiMapGrid'
 import { useUndoRedo } from './utils/useUndoRedo'
 import { getInitialGrid } from './utils/mapUtils'
 import Header from './components/Header'
-import Footer from './components/Footer'
+import Footer from './components/footer/Footer'
 import type { Cell } from './types/cell'
 
 const HEADER_HEIGHT = 60;
@@ -16,7 +16,7 @@ const getCellSize = () => (window.innerWidth < 600 ? MOBILE_CELL_SIZE : DESKTOP_
 
 const DEFAULT_FG = '#ffffff';
 const DEFAULT_BG = '#222222';
-const FG_PRESETS = ['#ffffff', '#000000', '#ff0000', '#00ff00', '#0000ff', '#ffff00', '#00ffff', '#ff00ff'];
+const FG_PRESETS = ['#ffffff', '#222222', '#000000', '#ff0000', '#00ff00', '#0000ff', '#ffff00', '#00ffff', '#ff00ff'];
 const BG_PRESETS = ['#222222', '#000000', '#ffffff', '#ffcccc', '#ccffcc', '#ccccff', '#ffffcc', '#ccffff', '#ffccff'];
 
 const App: React.FC = () => {

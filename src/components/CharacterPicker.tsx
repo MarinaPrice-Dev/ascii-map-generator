@@ -9,15 +9,14 @@ const presetChars = ['#', '.', '@', '+', '-', '|', '~', ' '];
 
 const CharacterPicker: React.FC<CharacterPickerProps> = ({ selectedChar, setSelectedChar }) => {
   return (
-    <div style={{ marginBottom: 16 }}>
+    <div style={{ marginBottom: 6 }}>
       <span style={{ marginRight: 8 }}>Pick character:</span>
       {presetChars.map((char) => (
         <button
           key={char}
           onClick={() => setSelectedChar(char)}
           style={{
-            fontFamily: 'monospace',
-            fontSize: 18,
+            fontSize: 16,
             marginRight: 4,
             background: selectedChar === char ? '#888' : '#222',
             color: '#fff',
