@@ -11,6 +11,12 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --hover-bg: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="light"] {
+  --hover-bg: rgba(0, 0, 0, 0.05);
 }
 
 a {
