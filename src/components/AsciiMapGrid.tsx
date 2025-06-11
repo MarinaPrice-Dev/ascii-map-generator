@@ -16,20 +16,20 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, beginActi
   const [startCell, setStartCell] = useState<{ row: number; col: number } | null>(null);
   const [hoverCell, setHoverCell] = useState<{ row: number; col: number } | null>(null);
 
-  const handleMouseDown = (row: number, col: number) => {
+  const handleStart = (row: number, col: number) => {
     beginAction();
     setIsMouseDown(true);
     setStartCell({ row, col });
     setHoverCell({ row, col });
   };
 
-  const handleMouseOver = (row: number, col: number) => {
+  const handleMove = (row: number, col: number) => {
     if (isMouseDown && startCell) {
       setHoverCell({ row, col });
     }
   };
 
-  const handleMouseUp = () => {
+  const handleEnd = () => {
     if (isMouseDown && startCell && hoverCell) {
       const minRow = Math.min(startCell.row, hoverCell.row);
       const maxRow = Math.max(startCell.row, hoverCell.row);
@@ -47,8 +47,12 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, beginActi
   };
 
   React.useEffect(() => {
-    window.addEventListener('mouseup', handleMouseUp);
-    return () => window.removeEventListener('mouseup', handleMouseUp);
+    window.addEventListener('mouseup', handleEnd);
+    window.addEventListener('touchend', handleEnd);
+    return () => {
+      window.removeEventListener('mouseup', handleEnd);
+      window.removeEventListener('touchend', handleEnd);
+    };
     // eslint-disable-next-line
   }, [isMouseDown, startCell, hoverCell, selectedChar, selectedFg, selectedBg]);
 
@@ -62,8 +66,32 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, beginActi
     return row >= minRow && row <= maxRow && col >= minCol && col <= maxCol;
   };
 
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isMouseDown) return;
+    
+    const touch = e.touches[0];
+    const element = document.elementFromPoint(touch.clientX, touch.clientY);
+    
+    if (element) {
+      const rowIndex = element.getAttribute('data-row');
+      const colIndex = element.getAttribute('data-col');
+      
+      if (rowIndex !== null && colIndex !== null) {
+        handleMove(parseInt(rowIndex), parseInt(colIndex));
+      }
+    }
+  };
+
   return (
-    <div style={{ display: 'inline-block', border: '1px solid #ccc', background: 'var(--bg)', userSelect: 'none' }}>
+    <div 
+      style={{ 
+        display: 'inline-block', 
+        border: '1px solid #ccc', 
+        background: 'var(--bg)', 
+        userSelect: 'none',
+        touchAction: 'none' // Prevent default touch actions like scrolling
+      }}
+    >
       {grid.map((row, rowIndex) => (
         <div key={rowIndex} style={{ display: 'flex' }}>
           {row.map((cell, colIndex) => {
@@ -71,8 +99,12 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, beginActi
             return (
               <div
                 key={colIndex}
-                onMouseDown={() => handleMouseDown(rowIndex, colIndex)}
-                onMouseOver={() => handleMouseOver(rowIndex, colIndex)}
+                data-row={rowIndex}
+                data-col={colIndex}
+                onMouseDown={() => handleStart(rowIndex, colIndex)}
+                onMouseOver={() => handleMove(rowIndex, colIndex)}
+                onTouchStart={() => handleStart(rowIndex, colIndex)}
+                onTouchMove={handleTouchMove}
                 style={{
                   width: cellSize,
                   height: cellSize,
