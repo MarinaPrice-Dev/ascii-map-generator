@@ -75,7 +75,7 @@ const colorCategories = {
   }
 };
 
-const ColorPalette: React.FC<ColorPaletteProps> = ({ value, onChange, mode }) => {
+const ColorPalette: React.FC<ColorPaletteProps> = ({ value, onChange }) => {
   return (
     <div className="color-palette">
       <div className="color-categories">
