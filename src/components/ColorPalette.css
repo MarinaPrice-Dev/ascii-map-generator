@@ -1,8 +1,10 @@
 .color-palette {
-  width: 100%;
-  background: var(--bg);
-  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   padding: 8px;
+  height: 100%;
+  overflow: hidden;
 }
 
 .color-palette-header {
@@ -17,79 +19,75 @@
   color: var(--fg);
 }
 
-.color-input {
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  border: 2px solid var(--border);
-  border-radius: 4px;
-  cursor: pointer;
-}
-
 .color-categories {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
+  overflow-y: auto;
+  flex: 1;
 }
 
 .color-category {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-}
-
-.category-name {
-  margin: 0;
-  font-size: 14px;
-  color: var(--fg);
-  opacity: 0.8;
 }
 
 .color-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(28px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(24px, 1fr));
   gap: 4px;
-  padding: 2px;
+  padding: 0 4px;
 }
 
 .color-swatch {
-  width: 28px;
-  height: 28px;
-  border-radius: 3px;
+  width: 24px;
+  height: 24px;
   border: 1px solid var(--border);
+  border-radius: 4px;
   cursor: pointer;
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  transition: transform 0.1s ease;
   padding: 0;
 }
 
 .color-swatch:hover {
   transform: scale(1.1);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 1;
 }
 
 .color-swatch.selected {
+  border: 2px solid var(--accent);
   transform: scale(1.1);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 1;
 }
 
-/* Responsive adjustments */
-@media (max-width: 600px) {
-  .color-palette {
-    padding: 6px;
-  }
+/* Custom scrollbar */
+.color-categories::-webkit-scrollbar {
+  width: 8px;
+}
 
+.color-categories::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: 4px;
+}
+
+.color-categories::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+.color-categories::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
   .color-grid {
-    grid-template-columns: repeat(auto-fill, minmax(24px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(20px, 1fr));
     gap: 3px;
   }
 
   .color-swatch {
-    width: 24px;
-    height: 24px;
-  }
-
-  .color-input {
-    width: 28px;
-    height: 28px;
+    width: 20px;
+    height: 20px;
   }
 } 
