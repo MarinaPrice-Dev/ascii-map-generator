@@ -25,20 +25,12 @@ const colorCategories = {
       '#E60000', '#CC0000', '#990000', '#660000', '#330000'
     ]
   },
-  greens: {
-    name: 'Greens',
+  browns: {
+    name: 'Browns',
     colors: [
-      '#E5FFE5', '#CCFFCC', '#B3FFB3', '#99FF99', '#80FF80',
-      '#66FF66', '#4DFF4D', '#33FF33', '#1AFF1A', '#00FF00',
-      '#00E600', '#00CC00', '#009900', '#006600', '#003300'
-    ]
-  },
-  blues: {
-    name: 'Blues',
-    colors: [
-      '#E5E5FF', '#CCCCFF', '#B3B3FF', '#9999FF', '#8080FF',
-      '#6666FF', '#4D4DFF', '#3333FF', '#1A1AFF', '#0000FF',
-      '#0000E6', '#0000CC', '#000099', '#000066', '#000033'
+      '#FFF2E5', '#FFE6CC', '#FFD9B3', '#FFCC99', '#FFBF80',
+      '#FFB366', '#FFA64D', '#FF9933', '#FF8C1A', '#FF8000',
+      '#E65C00', '#CC5200', '#993D00', '#662900', '#331400'
     ]
   },
   yellows: {
@@ -49,6 +41,14 @@ const colorCategories = {
       '#E6E600', '#CCCC00', '#999900', '#666600', '#333300'
     ]
   },
+  greens: {
+    name: 'Greens',
+    colors: [
+      '#E5FFE5', '#CCFFCC', '#B3FFB3', '#99FF99', '#80FF80',
+      '#66FF66', '#4DFF4D', '#33FF33', '#1AFF1A', '#00FF00',
+      '#00E600', '#00CC00', '#009900', '#006600', '#003300'
+    ]
+  },
   cyans: {
     name: 'Cyans',
     colors: [
@@ -57,20 +57,20 @@ const colorCategories = {
       '#00E6E6', '#00CCCC', '#009999', '#006666', '#003333'
     ]
   },
+  blues: {
+    name: 'Blues',
+    colors: [
+      '#E5E5FF', '#CCCCFF', '#B3B3FF', '#9999FF', '#8080FF',
+      '#6666FF', '#4D4DFF', '#3333FF', '#1A1AFF', '#0000FF',
+      '#0000E6', '#0000CC', '#000099', '#000066', '#000033'
+    ]
+  },
   magentas: {
     name: 'Magentas',
     colors: [
       '#FFE5FF', '#FFCCFF', '#FFB3FF', '#FF99FF', '#FF80FF',
       '#FF66FF', '#FF4DFF', '#FF33FF', '#FF1AFF', '#FF00FF',
       '#E600E6', '#CC00CC', '#990099', '#660066', '#330033'
-    ]
-  },
-  browns: {
-    name: 'Browns',
-    colors: [
-      '#FFF2E5', '#FFE6CC', '#FFD9B3', '#FFCC99', '#FFBF80',
-      '#FFB366', '#FFA64D', '#FF9933', '#FF8C1A', '#FF8000',
-      '#E65C00', '#CC5200', '#993D00', '#662900', '#331400'
     ]
   }
 };
