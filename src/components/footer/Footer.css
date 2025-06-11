@@ -114,23 +114,14 @@
 }
 
 /* Responsive adjustments */
-@media (max-width: 768px) {
-  .footer {
-    height: auto;
-    min-height: 200px;
-  }
-
-  .footer:hover {
-    height: auto;
-  }
-
+@media (max-width: 768px) and (hover: none) and (pointer: coarse) {
   .footer-sections {
     flex-direction: column;
     gap: 8px;
   }
 
   .footer-section {
-    min-height: 0;
+    height: 150px;
   }
 
   .color-section {
@@ -150,5 +141,36 @@
   .color-mode-btn .color-swatch {
     width: 18px;
     height: 18px;
+  }
+}
+
+/* Mobile and Tablet Styles */
+@media (max-width: 1024px) and (hover: none) and (pointer: coarse) {
+  .footer {
+    height: 450px !important;
+  }
+  
+  .footer:hover {
+    height: 450px !important;
+  }
+}
+
+/* Force Portrait Mode */
+@media screen and (orientation: landscape) and (max-width: 1024px) and (hover: none) and (pointer: coarse) {
+  .App {
+    display: none;
+  }
+
+  .App::after {
+    content: "Please rotate your device to portrait mode";
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--bg);
+    padding: 2rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    z-index: 1000;
   }
 } 
