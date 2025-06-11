@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 type CharacterPickerProps = {
   selectedChar: string;
@@ -8,6 +8,31 @@ type CharacterPickerProps = {
 const presetChars = ['#', '.', '@', '+', '-', '|', '~', ' '];
 
 const CharacterPicker: React.FC<CharacterPickerProps> = ({ selectedChar, setSelectedChar }) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Handle keyboard input
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      // Ignore if user is typing in the input field
+      if (e.target instanceof HTMLInputElement) return;
+      
+      // Only handle single character keys
+      if (e.key.length === 1) {
+        e.preventDefault();
+        setSelectedChar(e.key);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [setSelectedChar]);
+
+  const handleFocus = () => {
+    if (inputRef.current) {
+      inputRef.current.select();
+    }
+  };
+
   return (
     <div style={{ marginBottom: 6 }}>
       <span style={{ marginRight: 8 }}>Pick character:</span>
@@ -29,10 +54,12 @@ const CharacterPicker: React.FC<CharacterPickerProps> = ({ selectedChar, setSele
         </button>
       ))}
       <input
+        ref={inputRef}
         type="text"
         maxLength={1}
         value={selectedChar}
         onChange={e => setSelectedChar(e.target.value)}
+        onFocus={handleFocus}
         style={{
           width: 32,
           height: 32,
