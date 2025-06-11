@@ -114,10 +114,14 @@
 }
 
 /* Responsive adjustments */
-@media (max-width: 768px) and (hover: none) and (pointer: coarse) {
-  .footer-sections {
-    flex-direction: column;
-    gap: 8px;
+/* Mobile and Tablet Styles */
+@media (max-width: 1024px) and (hover: none) and (pointer: coarse) {
+  .footer {
+    height: 450px !important;
+  }
+  
+  .footer:hover {
+    height: 450px !important;
   }
 
   .footer-section {
@@ -132,31 +136,10 @@
     flex-direction: row;
     justify-content: center;
   }
-
-  .color-mode-btn {
-    padding: 6px 10px;
-    font-size: 13px;
-  }
-
-  .color-mode-btn .color-swatch {
-    width: 18px;
-    height: 18px;
-  }
-}
-
-/* Mobile and Tablet Styles */
-@media (max-width: 1024px) and (hover: none) and (pointer: coarse) {
-  .footer {
-    height: 450px !important;
-  }
-  
-  .footer:hover {
-    height: 450px !important;
-  }
 }
 
 /* Force Portrait Mode */
-@media screen and (orientation: landscape) and (max-width: 1024px) and (hover: none) and (pointer: coarse) {
+@media screen and (orientation: landscape) and (hover: none) and (pointer: coarse) {
   .App {
     display: none;
   }
@@ -173,4 +156,6 @@
     border-radius: 8px;
     z-index: 1000;
   }
+
+
 } 
