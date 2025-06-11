@@ -4,7 +4,7 @@ import AsciiMapGrid from './components/AsciiMapGrid'
 import { useUndoRedo } from './utils/useUndoRedo'
 import { getInitialGrid } from './utils/mapUtils'
 import Header from './components/Header'
-import Footer from './components/footer/Footer'
+import { Footer } from './components/footer/Footer'
 import type { Cell } from './types/cell'
 
 const HEADER_HEIGHT = 60;

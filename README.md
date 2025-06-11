@@ -5,12 +5,13 @@
 - improve readme
 - deploy website
 
-## Next 1st
+## Next
+- improve pickers
 - save state locally
-- better exports - txt, html, rotjs, colours
 
 ## Next 2nd
 - add arrows so we have an infinite canvas
+- better exports - txt, html, rotjs, colours
 - add import - validate whether it will fit, or just load what we can
 - colour history
 
@@ -18,10 +19,6 @@
 - add ability to create/remove custom colours for desktop site
 - save custom colours to local storage
 
-
-## Small improvements
-- fix footer so bottom bar text lines up
-- footer buttons should be the same size
 
 
 Used: React + TypeScript + Vite

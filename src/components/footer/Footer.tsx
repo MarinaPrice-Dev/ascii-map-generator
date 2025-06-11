@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import CharacterPicker from '../CharacterPicker';
-import ColorPicker from '../ColorPicker';
+import ColorPalette from '../ColorPalette';
 import './Footer.css';
 
 interface FooterProps {
@@ -14,7 +14,7 @@ interface FooterProps {
   bgPresets: string[];
 }
 
-const Footer: React.FC<FooterProps> = ({
+export const Footer: React.FC<FooterProps> = ({
   selectedChar,
   setSelectedChar,
   selectedFg,
@@ -22,31 +22,68 @@ const Footer: React.FC<FooterProps> = ({
   selectedBg,
   setSelectedBg,
   fgPresets,
-  bgPresets,
+  bgPresets
 }) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key === 'Alt') {
+        e.preventDefault();
+        if (inputRef.current) {
+          inputRef.current.focus();
+          inputRef.current.select();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, []);
+
   return (
     <footer className="footer">
       <div className="footer-content">
-        <div className="color-pickers">
-          <ColorPicker
-            label="Text"
-            value={selectedFg}
-            onChange={setSelectedFg}
-            presets={fgPresets}
-          />
-          <ColorPicker
-            label="Background"
-            value={selectedBg}
-            onChange={setSelectedBg}
-            presets={bgPresets}
-          />
-        </div>
-        <div className="character-picker-container">
-          <CharacterPicker selectedChar={selectedChar} setSelectedChar={setSelectedChar} />
+        <div className="footer-sections">
+        <div className="footer-section color-section">
+            <div className="section-header">
+              <div className="section-label">Character</div>
+              <input
+                ref={inputRef}
+                type="text"
+                maxLength={1}
+                value={selectedChar}
+                onChange={e => setSelectedChar(e.target.value)}
+                className="character-input"
+              />
+            </div>
+            <CharacterPicker 
+              selectedChar={selectedChar}
+              setSelectedChar={setSelectedChar}
+            />
+          </div>
+          
+          <div className="footer-section color-section">
+            <div className="section-label">Foreground</div>
+            <ColorPalette 
+              value={selectedFg}
+              onChange={setSelectedFg}
+              mode="foreground"
+            />
+          </div>
+
+          <div className="footer-section color-section">
+            <div className="section-label">Background</div>
+            <ColorPalette 
+              value={selectedBg}
+              onChange={setSelectedBg}
+              mode="background"
+            />
+          </div>
+
+
         </div>
       </div>
     </footer>
   );
-};
-
-export default Footer; 
+}; 
