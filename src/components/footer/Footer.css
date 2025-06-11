@@ -115,13 +115,18 @@
 
 /* Responsive adjustments */
 /* Mobile and Tablet Styles */
-@media (max-width: 1024px) and (hover: none) and (pointer: coarse) {
+@media (max-width: 1023px) and (hover: none) and (pointer: coarse) {
   .footer {
     height: 450px !important;
   }
   
   .footer:hover {
     height: 450px !important;
+  }
+
+  .footer-sections {
+    flex-direction: column;
+    gap: 8px;
   }
 
   .footer-section {
@@ -139,7 +144,7 @@
 }
 
 /* Force Portrait Mode */
-@media screen and (orientation: landscape) and (hover: none) and (pointer: coarse) {
+@media screen and (max-height: 767px) and (orientation: landscape) and (hover: none) and (pointer: coarse) {
   .App {
     display: none;
   }
