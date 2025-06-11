@@ -1,9 +1,8 @@
 # Ascii Map Generator
 
 ## TO DO
-- add info icon to explain what the site is
+- add menu: about, updates, example maps
 - improve readme
-- deploy website
 
 ## Next
 - improve pickers
