@@ -115,7 +115,7 @@
 
 /* Responsive adjustments */
 /* Mobile and Tablet Styles */
-@media (hover: none) and (pointer: coarse) {
+@media (hover: none) {
   .footer {
     height: 450px !important;
   }
@@ -144,7 +144,7 @@
 }
 
 /* Force Portrait Mode */
-@media screen and (max-height: 767px) and (orientation: landscape) and (hover: none) and (pointer: coarse) {
+@media screen and (max-height: 767px) and (orientation: landscape) and (hover: none) {
   .App {
     display: none;
   }
