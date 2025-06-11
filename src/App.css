@@ -87,9 +87,6 @@ header {
 }
 
 footer {
-  height: 140px;
-  min-height: 140px;
-  max-height: 140px;
   width: 100vw;
   background: var(--footer-bg);
   color: var(--fg);
