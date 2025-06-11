@@ -1,7 +1,6 @@
 # Ascii Map Generator
 
 ## TO DO
-- type in character we want to use
 - add info icon to explain what the site is
 - improve readme
 - deploy website

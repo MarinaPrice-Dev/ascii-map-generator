@@ -13,6 +13,16 @@ const CharacterPicker: React.FC<CharacterPickerProps> = ({ selectedChar, setSele
   // Handle keyboard input
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
+      // Focus input when Alt is pressed
+      if (e.key === 'Alt') {
+        e.preventDefault();
+        if (inputRef.current) {
+          inputRef.current.focus();
+          inputRef.current.select();
+        }
+        return;
+      }
+
       // Ignore if user is typing in the input field
       if (e.target instanceof HTMLInputElement) return;
       
