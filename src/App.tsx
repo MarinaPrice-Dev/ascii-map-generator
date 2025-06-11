@@ -14,10 +14,8 @@ const MOBILE_CELL_SIZE = 14;
 
 const getCellSize = () => (window.innerWidth < 600 ? MOBILE_CELL_SIZE : DESKTOP_CELL_SIZE);
 
-const DEFAULT_FG = '#ffffff';
+const DEFAULT_FG = '#FFFFFF';
 const DEFAULT_BG = '#222222';
-const FG_PRESETS = ['#ffffff', '#222222', '#000000', '#ff0000', '#00ff00', '#0000ff', '#ffff00', '#00ffff', '#ff00ff'];
-const BG_PRESETS = ['#222222', '#000000', '#ffffff', '#ffcccc', '#ccffcc', '#ccccff', '#ffffcc', '#ccffff', '#ffccff'];
 
 const App: React.FC = () => {
   const [selectedChar, setSelectedChar] = useState<string>('#')
@@ -119,8 +117,6 @@ const App: React.FC = () => {
         setSelectedFg={setSelectedFg}
         selectedBg={selectedBg}
         setSelectedBg={setSelectedBg}
-        fgPresets={FG_PRESETS}
-        bgPresets={BG_PRESETS}
       />
     </div>
   )

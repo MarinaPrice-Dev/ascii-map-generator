@@ -46,13 +46,14 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 4px;
 }
 
 .section-label {
   font-size: 14px;
   color: var(--fg);
   opacity: 0.8;
+  text-align: left;
+  margin-left: 3px;
 }
 
 /* Color Section */

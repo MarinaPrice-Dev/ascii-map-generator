@@ -10,8 +10,6 @@ interface FooterProps {
   setSelectedFg: (color: string) => void;
   selectedBg: string;
   setSelectedBg: (color: string) => void;
-  fgPresets: string[];
-  bgPresets: string[];
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -20,9 +18,7 @@ export const Footer: React.FC<FooterProps> = ({
   selectedFg,
   setSelectedFg,
   selectedBg,
-  setSelectedBg,
-  fgPresets,
-  bgPresets
+  setSelectedBg
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -47,7 +43,7 @@ export const Footer: React.FC<FooterProps> = ({
         <div className="footer-sections">
         <div className="footer-section color-section">
             <div className="section-header">
-              <div className="section-label">Character</div>
+              <div className="section-label">Symbol:</div>
               <input
                 ref={inputRef}
                 type="text"
@@ -55,6 +51,10 @@ export const Footer: React.FC<FooterProps> = ({
                 value={selectedChar}
                 onChange={e => setSelectedChar(e.target.value)}
                 className="character-input"
+                style={{ 
+                  color: selectedFg,
+                  backgroundColor: selectedBg
+                }}
               />
             </div>
             <CharacterPicker 

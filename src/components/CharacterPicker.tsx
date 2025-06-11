@@ -9,7 +9,7 @@ type CharacterPickerProps = {
 // Character categories
 const characterCategories = {
   symbols: {
-    name: 'Symbols',
+    name: '',
     chars: [
       // Punctuation
       '#', '@', '.', '"', "'", '*', '!', '$', '%', '&', '(', ')', '+', ',', '-', '/',
