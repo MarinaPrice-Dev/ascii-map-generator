@@ -6,6 +6,7 @@
 - deploy website
 
 ## Next 1st
+- save state locally
 - better exports - txt, html, rotjs, colours
 
 ## Next 2nd
@@ -24,3 +25,8 @@
 
 
 Used: React + TypeScript + Vite
+
+
+# Things to document
+
+- use of alt codes
