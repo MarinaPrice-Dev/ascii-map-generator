@@ -115,7 +115,7 @@
 
 /* Responsive adjustments */
 /* Mobile and Tablet Styles */
-@media (max-width: 1023px) and (hover: none) and (pointer: coarse) {
+@media (hover: none) and (pointer: coarse) {
   .footer {
     height: 450px !important;
   }
