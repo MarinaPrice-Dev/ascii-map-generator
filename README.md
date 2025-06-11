@@ -3,9 +3,6 @@
 ## TO DO
 - add menu: about, updates, example maps
 - improve readme
-
-## Next
-- improve pickers
 - save state locally
 
 ## Next 2nd
