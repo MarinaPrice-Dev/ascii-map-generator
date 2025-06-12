@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react'
 import './App.css'
-import AsciiMapGrid from './components/AsciiMapGrid'
+import AsciiMapGrid from './components/grid/AsciiMapGrid'
 import { useUndoRedo } from './utils/useUndoRedo'
 import { getInitialGrid } from './utils/mapUtils'
-import Header from './components/Header'
+import Header from './components/header/Header'
 import { Footer } from './components/footer/Footer'
 import type { Cell } from './types/cell'
 

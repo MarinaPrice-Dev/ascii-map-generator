@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
-import CharacterPicker from '../CharacterPicker';
-import ColorPalette from '../ColorPalette';
+import CharacterPicker from './CharacterPicker';
+import ColorPalette from './ColorPalette';
 import './Footer.css';
 
 interface FooterProps {
@@ -43,7 +43,7 @@ export const Footer: React.FC<FooterProps> = ({
         <div className="footer-sections w-full h-[460px] grid gap-4 grid-cols-1 md:grid-cols-[1fr_2fr] md:grid-rows-2 lg:grid-cols-3 lg:grid-rows-1">
         <div className="footer-section color-section min-h-[150px] md:row-span-2 md:min-h-0 lg:row-span-1">
             <div className="section-header">
-              <div className="section-label">Symbol:</div>
+              <div className="section-label">Selected:</div>
               <input
                 ref={inputRef}
                 type="text"

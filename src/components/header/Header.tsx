@@ -1,6 +1,7 @@
 import React from 'react';
-import { UndoIcon, RedoIcon, ClearIcon, SaveIcon, ThemeIcon } from './icons/Icons';
-import './icons/Icons.css';
+import { UndoIcon, RedoIcon, ClearIcon, SaveIcon, ThemeIcon } from '../icons/Icons';
+import '../icons/Icons.css';
+import './Header.css';
 
 interface HeaderProps {
   onSaveMap: () => void;
@@ -26,9 +27,9 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <>
       {/* Header */}
-      <header className="app-header" style={{ height: 60, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px', borderBottom: '1px solid var(--border)' }}>
-        <h1 style={{ fontSize: 24, margin: 0 }}>ASCII Studio</h1>
-        <div className="header-actions" style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+      <header className="app-header">
+        <h1>ASCII Studio</h1>
+        <div className="header-actions">
           <button className="icon-button" onClick={onUndo} disabled={!canUndo} title="Undo">
             <UndoIcon />
           </button>
