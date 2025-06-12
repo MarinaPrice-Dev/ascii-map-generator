@@ -1,23 +1,17 @@
 # Ascii Map Generator
 
 ## TO DO
-- add menu: about, updates, example maps
-- improve readme
+- add: about, updates, example maps
 - save state locally
-
-## Next 2nd
 - add arrows so we have an infinite canvas
 - better exports - txt, html, rotjs, colours
 - add import - validate whether it will fit, or just load what we can
-- colour history
+- keyboard shortcuts (save, undo, etc)
 
-## Next maybe??
+## Maybe??
 - add ability to create/remove custom colours for desktop site
 - save custom colours to local storage
 
-
-
-Used: React + TypeScript + Vite
 
 
 # Things to document
