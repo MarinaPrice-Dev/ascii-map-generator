@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import type { Cell } from '../types/cell';
+import type { Cell } from '../../types/cell';
+import './AsciiMapGrid.css';
 
 type AsciiMapGridProps = {
   grid: Cell[][];
@@ -83,17 +84,9 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, beginActi
   };
 
   return (
-    <div 
-      style={{ 
-        display: 'inline-block', 
-        border: '1px solid #ccc', 
-        background: 'var(--bg)', 
-        userSelect: 'none',
-        touchAction: 'none' // Prevent default touch actions like scrolling
-      }}
-    >
+    <div className="ascii-map-grid">
       {grid.map((row, rowIndex) => (
-        <div key={rowIndex} style={{ display: 'flex' }}>
+        <div key={rowIndex} className="ascii-map-grid-row">
           {row.map((cell, colIndex) => {
             const selected = isInSelection(rowIndex, colIndex);
             return (
@@ -105,19 +98,13 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, beginActi
                 onMouseOver={() => handleMove(rowIndex, colIndex)}
                 onTouchStart={() => handleStart(rowIndex, colIndex)}
                 onTouchMove={handleTouchMove}
+                className={`ascii-map-grid-cell ${selected ? 'selected' : ''}`}
                 style={{
                   width: cellSize,
                   height: cellSize,
-                  border: '1px solid #444',
                   color: cell.fg,
-                  background: selected ? '#555' : cell.bg,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontFamily: 'monospace',
+                  background: cell.bg,
                   fontSize: Math.floor(cellSize * 0.8),
-                  cursor: 'pointer',
-                  userSelect: 'none',
                 }}
               >
                 {cell.char}

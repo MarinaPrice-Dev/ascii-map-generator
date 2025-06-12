@@ -93,7 +93,7 @@
   background: var(--accent);
 }
 
-@media (max-width: 600px) {
+/* @media (max-width: 600px) {
   .character-grid {
     grid-template-columns: repeat(auto-fill, minmax(24px, 1fr));
     gap: 3px;
@@ -110,4 +110,4 @@
     height: 24px;
     font-size: 12px;
   }
-} 
+}  */

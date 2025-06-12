@@ -1,0 +1,25 @@
+.ascii-map-grid {
+  display: inline-block;
+  border: 1px solid #ccc;
+  background: var(--bg);
+  user-select: none;
+  touch-action: none;
+}
+
+.ascii-map-grid-row {
+  display: flex;
+}
+
+.ascii-map-grid-cell {
+  border: 1px solid #444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: monospace;
+  cursor: pointer;
+  user-select: none;
+}
+
+.ascii-map-grid-cell.selected {
+  background: #555;
+} 
