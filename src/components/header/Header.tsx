@@ -1,7 +1,8 @@
-import React from 'react';
-import { UndoIcon, RedoIcon, ClearIcon, SaveIcon, ThemeIcon } from '../icons/Icons';
+import React, { useState } from 'react';
+import { UndoIcon, RedoIcon, ClearIcon, SaveIcon, ThemeIcon, InfoIcon } from '../icons/Icons';
 import '../icons/Icons.css';
 import './Header.css';
+import InfoDialog from './InfoDialog';
 
 interface HeaderProps {
   onSaveMap: () => void;
@@ -12,6 +13,7 @@ interface HeaderProps {
   canRedo: boolean;
   darkMode: boolean;
   onDarkModeChange: (darkMode: boolean) => void;
+  grid: Array<Array<{ char: string }>>;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -23,7 +25,11 @@ const Header: React.FC<HeaderProps> = ({
   canRedo,
   darkMode,
   onDarkModeChange,
+  grid = [],
 }) => {
+  const isGridEmpty = grid.every(row => row.every(cell => cell.char === ' '));
+  const [showInfoDialog, setShowInfoDialog] = useState(false);
+
   return (
     <>
       {/* Header */}
@@ -36,10 +42,10 @@ const Header: React.FC<HeaderProps> = ({
           <button className="icon-button" onClick={onRedo} disabled={!canRedo} title="Redo">
             <RedoIcon />
           </button>
-          <button className="icon-button clear-button" onClick={onClearMap} title="Clear Map">
+          <button className="icon-button clear-button" onClick={onClearMap} disabled={isGridEmpty} title="Clear Map">
             <ClearIcon />
           </button>
-          <button className="icon-button save-button" onClick={onSaveMap} title="Export Map">
+          <button className="icon-button save-button" onClick={onSaveMap} disabled={isGridEmpty} title="Export Map">
             <SaveIcon />
           </button>
           <button 
@@ -48,6 +54,13 @@ const Header: React.FC<HeaderProps> = ({
             title={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
           >
             <ThemeIcon isDark={darkMode} />
+          </button>
+          <button 
+            className="icon-button info-button" 
+            onClick={() => setShowInfoDialog(true)} 
+            title="More Information"
+          >
+            <InfoIcon />
           </button>
         </div>
       </header>
@@ -59,10 +72,10 @@ const Header: React.FC<HeaderProps> = ({
         <button className="icon-button" onClick={onRedo} disabled={!canRedo} title="Redo">
           <RedoIcon />
         </button>
-        <button className="icon-button clear-button" onClick={onClearMap} title="Clear Map">
+        <button className="icon-button clear-button" onClick={onClearMap} disabled={isGridEmpty} title="Clear Map">
           <ClearIcon />
         </button>
-        <button className="icon-button save-button" onClick={onSaveMap} title="Export Map">
+        <button className="icon-button save-button" onClick={onSaveMap} disabled={isGridEmpty} title="Export Map">
           <SaveIcon />
         </button>
         <button 
@@ -72,7 +85,15 @@ const Header: React.FC<HeaderProps> = ({
         >
           <ThemeIcon isDark={darkMode} />
         </button>
+        <button 
+          className="icon-button info-button" 
+          onClick={() => setShowInfoDialog(true)} 
+          title="More Information"
+        >
+          <InfoIcon />
+        </button>
       </div>
+      {showInfoDialog && <InfoDialog onClose={() => setShowInfoDialog(false)} />}
     </>
   );
 };

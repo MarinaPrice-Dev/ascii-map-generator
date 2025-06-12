@@ -84,4 +84,14 @@
 .icon-button svg {
   width: 20px;
   height: 20px;
+}
+
+.icon-button.info-button {
+  color: #3b82f6;
+  border-color: #3b82f6;
+}
+
+.icon-button.info-button:hover {
+  background: #3b82f6;
+  color: white;
 } 
