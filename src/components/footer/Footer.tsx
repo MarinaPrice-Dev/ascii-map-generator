@@ -40,8 +40,8 @@ export const Footer: React.FC<FooterProps> = ({
   return (
     <footer className="footer">
       <div className="footer-content">
-        <div className="footer-sections">
-        <div className="footer-section color-section">
+        <div className="footer-sections w-full h-[500px] grid gap-4 grid-cols-1 md:grid-cols-[1fr_2fr] md:grid-rows-2 lg:grid-cols-3 lg:grid-rows-1">
+        <div className="footer-section color-section min-h-[150px] md:row-span-2 md:min-h-0 lg:row-span-1">
             <div className="section-header">
               <div className="section-label">Symbol:</div>
               <input
@@ -63,7 +63,7 @@ export const Footer: React.FC<FooterProps> = ({
             />
           </div>
           
-          <div className="footer-section color-section">
+          <div className="footer-section color-section min-h-[150px] md:col-start-2 md:min-h-0 lg:col-auto">
             <div className="section-label">Foreground</div>
             <ColorPalette 
               value={selectedFg}
@@ -72,7 +72,7 @@ export const Footer: React.FC<FooterProps> = ({
             />
           </div>
 
-          <div className="footer-section color-section">
+          <div className="footer-section color-section min-h-[150px] md:col-start-2 md:min-h-0 lg:col-auto">
             <div className="section-label">Background</div>
             <ColorPalette 
               value={selectedBg}

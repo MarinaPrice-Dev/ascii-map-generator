@@ -1,3 +1,5 @@
+@import 'tailwindcss';
+
 .footer {
   height: 200px;
   border-top: 1px solid var(--border);
@@ -26,7 +28,6 @@
 }
 
 .footer-sections {
-  display: flex;
   gap: 12px;
   flex: 1;
   min-height: 0;
@@ -115,13 +116,13 @@
 
 /* Responsive adjustments */
 /* Mobile and Tablet Styles */
-@media (max-width: 1080px) and (orientation: portrait) {
+@media (max-width: 1024px) {
   .footer {
-    height: 460px !important;
+    height: 500px !important;
   }
   
   .footer:hover {
-    height: 460px !important;
+    height: 500px !important;
   }
 
   .footer-sections {
@@ -129,13 +130,8 @@
     gap: 8px;
   }
 
-  .footer-section {
-    height: 150px;
-  }
-
   .color-section {
     gap: 4px;
-    padding-right: 22px;
   }
 
   .color-mode-buttons {
