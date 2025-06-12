@@ -58,6 +58,15 @@
     margin-left: 10px;
     opacity: 0.85;
 }
+  
+  .feature-icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: var(--primary-color);
+    opacity: 0.9;
+    display: inline-block;
+    width: 25px;
+  }
 
 .info-dialog-footer {
   padding-top: 10px;
