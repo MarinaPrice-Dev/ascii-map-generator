@@ -168,3 +168,9 @@ button:disabled {
     padding: 0 10px;
   }
 }
+
+@media (max-width: 450px) {
+  .zoom-controls {
+    display: none!important;
+  }
+}
