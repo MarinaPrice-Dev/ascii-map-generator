@@ -7,6 +7,7 @@ import { loadSavedState, saveState, clearSavedState } from './utils/saveState'
 import Header from './components/header/Header'
 import { Footer } from './components/footer/Footer'
 import type { Cell } from './types/cell'
+import { handleZoom, expandGrid } from './utils/zoomUtils'
 
 const HEADER_HEIGHT = 60;
 const FOOTER_HEIGHT = 150;
@@ -23,12 +24,10 @@ const App: React.FC = () => {
   const [selectedFg, setSelectedFg] = useState<string>(DEFAULT_FG);
   const [selectedBg, setSelectedBg] = useState<string>(DEFAULT_BG);
   const [cellSize, setCellSize] = useState<number>(getCellSize());
-  const [darkMode, setDarkMode] = useState<boolean>(true);
   const mainRef = useRef<HTMLDivElement>(null);
 
   // Initial grid setup
   const getGridDims = () => {
-    const cellSize = getCellSize();
     const availableWidth = window.innerWidth - 2;
     const availableHeight = window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT - 2;
     const cols = Math.floor(availableWidth / cellSize);
@@ -48,13 +47,46 @@ const App: React.FC = () => {
   }, [grid, rows, cols]);
 
   useEffect(() => {
-    document.body.setAttribute('data-theme', darkMode ? 'dark' : 'light');
-  }, [darkMode]);
-
-  useEffect(() => {
     const cellSize = getCellSize();
     setCellSize(cellSize);
   }, []);
+
+  // Handle zoom in/out
+  const handleZoomIn = () => {
+    beginAction();
+    const availableWidth = window.innerWidth - 2;
+    const availableHeight = window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT - 2;
+    
+    const { newCellSize, newRows, newCols } = handleZoom(
+      cellSize,
+      true,
+      availableWidth,
+      availableHeight,
+      DEFAULT_FG,
+      DEFAULT_BG
+    );
+
+    setCellSize(newCellSize);
+    setGrid(prevGrid => expandGrid(prevGrid, newRows, newCols, DEFAULT_FG, DEFAULT_BG));
+  };
+
+  const handleZoomOut = () => {
+    beginAction();
+    const availableWidth = window.innerWidth - 2;
+    const availableHeight = window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT - 2;
+    
+    const { newCellSize, newRows, newCols } = handleZoom(
+      cellSize,
+      false,
+      availableWidth,
+      availableHeight,
+      DEFAULT_FG,
+      DEFAULT_BG
+    );
+
+    setCellSize(newCellSize);
+    setGrid(prevGrid => expandGrid(prevGrid, newRows, newCols, DEFAULT_FG, DEFAULT_BG));
+  };
 
   // Update a cell with char, fg, bg
   const updateCell = (row: number, col: number, char: string, fg: string, bg: string) => {
@@ -109,9 +141,10 @@ const App: React.FC = () => {
         onRedo={redo}
         canUndo={canUndo}
         canRedo={canRedo}
-        darkMode={darkMode}
-        onDarkModeChange={setDarkMode}
         grid={grid}
+        cellSize={cellSize}
+        onZoomIn={handleZoomIn}
+        onZoomOut={handleZoomOut}
       />
       {/* Main Grid Area */}
       <main ref={mainRef} style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', background: 'var(--bg)' }}>

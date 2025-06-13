@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { UndoIcon, RedoIcon, ClearIcon, SaveIcon, ThemeIcon, InfoIcon } from '../icons/Icons';
+import { UndoIcon, RedoIcon, ClearIcon, SaveIcon, InfoIcon, ZoomInIcon, ZoomOutIcon } from '../icons/Icons';
 import '../icons/Icons.css';
 import './Header.css';
 import InfoDialog from './InfoDialog';
+import { MIN_ZOOM, MAX_ZOOM } from '../../utils/zoomUtils';
 
 interface HeaderProps {
   onSaveMap: () => void;
@@ -11,9 +12,10 @@ interface HeaderProps {
   onRedo: () => void;
   canUndo: boolean;
   canRedo: boolean;
-  darkMode: boolean;
-  onDarkModeChange: (darkMode: boolean) => void;
   grid: Array<Array<{ char: string }>>;
+  cellSize: number;
+  onZoomIn: () => void;
+  onZoomOut: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -23,9 +25,10 @@ const Header: React.FC<HeaderProps> = ({
   onRedo,
   canUndo,
   canRedo,
-  darkMode,
-  onDarkModeChange,
   grid = [],
+  cellSize,
+  onZoomIn,
+  onZoomOut,
 }) => {
   const isGridEmpty = grid.every(row => row.every(cell => cell.char === ' '));
   const [showInfoDialog, setShowInfoDialog] = useState(false);
@@ -36,6 +39,25 @@ const Header: React.FC<HeaderProps> = ({
       <header className="app-header">
         <h1>ASCII Studio</h1>
         <div className="header-actions">
+          <div className="zoom-controls">
+            <button 
+              className="icon-button zoom-button" 
+              onClick={onZoomOut} 
+              disabled={cellSize <= MIN_ZOOM} 
+              title="Zoom Out"
+            >
+              <ZoomOutIcon />
+            </button>
+            <span className="zoom-level">{cellSize}px</span>
+            <button 
+              className="icon-button zoom-button" 
+              onClick={onZoomIn} 
+              disabled={cellSize >= MAX_ZOOM} 
+              title="Zoom In"
+            >
+              <ZoomInIcon />
+            </button>
+          </div>
           <button className="icon-button" onClick={onUndo} disabled={!canUndo} title="Undo">
             <UndoIcon />
           </button>
@@ -49,13 +71,6 @@ const Header: React.FC<HeaderProps> = ({
             <SaveIcon />
           </button>
           <button 
-            className="icon-button theme-button" 
-            onClick={() => onDarkModeChange(!darkMode)} 
-            title={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
-          >
-            <ThemeIcon isDark={darkMode} />
-          </button>
-          <button 
             className="icon-button info-button" 
             onClick={() => setShowInfoDialog(true)} 
             title="More Information"
@@ -66,6 +81,25 @@ const Header: React.FC<HeaderProps> = ({
       </header>
       {/* Toolbar for mobile/tablet */}
       <div className="toolbar-actions">
+        <div className="zoom-controls">
+          <button 
+            className="icon-button zoom-button" 
+            onClick={onZoomOut} 
+            disabled={cellSize <= MIN_ZOOM} 
+            title="Zoom Out"
+          >
+            <ZoomOutIcon />
+          </button>
+          <span className="zoom-level">{cellSize}px</span>
+          <button 
+            className="icon-button zoom-button" 
+            onClick={onZoomIn} 
+            disabled={cellSize >= MAX_ZOOM} 
+            title="Zoom In"
+          >
+            <ZoomInIcon />
+          </button>
+        </div>
         <button className="icon-button" onClick={onUndo} disabled={!canUndo} title="Undo">
           <UndoIcon />
         </button>
@@ -77,13 +111,6 @@ const Header: React.FC<HeaderProps> = ({
         </button>
         <button className="icon-button save-button" onClick={onSaveMap} disabled={isGridEmpty} title="Export Map">
           <SaveIcon />
-        </button>
-        <button 
-          className="icon-button theme-button" 
-          onClick={() => onDarkModeChange(!darkMode)} 
-          title={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
-        >
-          <ThemeIcon isDark={darkMode} />
         </button>
         <button 
           className="icon-button info-button" 
