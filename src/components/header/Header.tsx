@@ -42,10 +42,10 @@ const Header: React.FC<HeaderProps> = ({
           <button className="icon-button" onClick={onRedo} disabled={!canRedo} title="Redo">
             <RedoIcon />
           </button>
-          <button className="icon-button clear-button" onClick={onClearMap} disabled={!canUndo} title="Clear Map">
+          <button className="icon-button clear-button" onClick={onClearMap} disabled={isGridEmpty} title="Clear Map">
             <ClearIcon />
           </button>
-          <button className="icon-button save-button" onClick={onSaveMap} disabled={!canUndo} title="Export Map">
+          <button className="icon-button save-button" onClick={onSaveMap} disabled={isGridEmpty} title="Export Map">
             <SaveIcon />
           </button>
           <button 
