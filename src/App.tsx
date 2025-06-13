@@ -11,10 +11,9 @@ import { handleZoom, expandGrid } from './utils/zoomUtils'
 
 const HEADER_HEIGHT = 60;
 const FOOTER_HEIGHT = 150;
-const DESKTOP_CELL_SIZE = 20;
-const MOBILE_CELL_SIZE = 20; // 14
+const CELL_SIZE = 20;
 
-const getCellSize = () => (window.innerWidth < 600 ? MOBILE_CELL_SIZE : DESKTOP_CELL_SIZE);
+const getCellSize = () => CELL_SIZE;
 
 const DEFAULT_FG = '#FFFFFF';
 const DEFAULT_BG = '#222222';

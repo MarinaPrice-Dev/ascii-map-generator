@@ -79,27 +79,8 @@ const Header: React.FC<HeaderProps> = ({
           </button>
         </div>
       </header>
-      {/* Toolbar for mobile/tablet */}
+      {/* Toolbar for mobile with limited functionality */}
       <div className="toolbar-actions">
-        <div className="zoom-controls">
-          <button 
-            className="icon-button zoom-button" 
-            onClick={onZoomOut} 
-            disabled={cellSize <= MIN_ZOOM} 
-            title="Zoom Out"
-          >
-            <ZoomOutIcon />
-          </button>
-          <span className="zoom-level">{cellSize}px</span>
-          <button 
-            className="icon-button zoom-button" 
-            onClick={onZoomIn} 
-            disabled={cellSize >= MAX_ZOOM} 
-            title="Zoom In"
-          >
-            <ZoomInIcon />
-          </button>
-        </div>
         <button className="icon-button" onClick={onUndo} disabled={!canUndo} title="Undo">
           <UndoIcon />
         </button>
