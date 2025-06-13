@@ -53,6 +53,13 @@ const InfoDialog: React.FC<InfoDialogProps> = ({ onClose }) => (
         <h3>Example ASCII Maps (todo)</h3>
         <p>Here are some examples of what you can create with ASCII Studio:</p>
         <h3>Latest Updates</h3>
+        <h5>2025-06-13</h5>
+        <ul>
+            <li><strong>Zoom 10px to 30px:</strong> Zoom in and out of the map. Not avalaible in mobile.</li>
+            <li><strong>UI for Drag and Fill:</strong> Displays a blue rectangle when dragging to fill an area.</li>
+            <li><strong>Save State:</strong> Save state to local storage.</li>
+            <li><strong>Bug fixes</strong></li>
+        </ul>
         <h5>2025-06-12</h5>
         <ul>
             <li><strong>Styling:</strong> Improved styling of the App.</li>

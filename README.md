@@ -7,14 +7,5 @@
 - keyboard shortcuts (save, undo, etc)
 - ai integration - generate automatically
 - procedurally generated maps
+- infinite canvas
 
-## Maybe??
-- add arrows so we have an infinite canvas
-
-
-## Known bugs
-
-
-# done
-- save state locally
-- rectangle isnt rendering
