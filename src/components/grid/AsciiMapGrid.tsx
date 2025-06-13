@@ -83,6 +83,25 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, beginActi
     }
   };
 
+  // Calculate selection rectangle position and size
+  const getSelectionRectangle = () => {
+    if (!isMouseDown || !startCell || !hoverCell) return null;
+
+    const minRow = Math.min(startCell.row, hoverCell.row);
+    const maxRow = Math.max(startCell.row, hoverCell.row);
+    const minCol = Math.min(startCell.col, hoverCell.col);
+    const maxCol = Math.max(startCell.col, hoverCell.col);
+
+    return {
+      top: minRow * cellSize,
+      left: minCol * cellSize,
+      width: (maxCol - minCol + 1) * cellSize,
+      height: (maxRow - minRow + 1) * cellSize
+    };
+  };
+
+  const selectionRect = getSelectionRectangle();
+
   return (
     <div className="ascii-map-grid">
       {grid.map((row, rowIndex) => (
@@ -113,6 +132,17 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, beginActi
           })}
         </div>
       ))}
+      {selectionRect && (
+        <div
+          className="selection-rectangle"
+          style={{
+            top: selectionRect.top,
+            left: selectionRect.left,
+            width: selectionRect.width,
+            height: selectionRect.height
+          }}
+        />
+      )}
     </div>
   );
 };

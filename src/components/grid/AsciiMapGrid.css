@@ -4,6 +4,7 @@
   background: var(--bg);
   user-select: none;
   touch-action: none;
+  position: relative;
 }
 
 .ascii-map-grid-row {
@@ -21,5 +22,13 @@
 }
 
 .ascii-map-grid-cell.selected {
-  background: #555;
+  background: rgba(85, 85, 85, 0.3);
+}
+
+.selection-rectangle {
+  position: absolute;
+  border: 2px solid #3b83f6a2;
+  background: #11284c50;
+  pointer-events: none;
+  z-index: 1;
 } 

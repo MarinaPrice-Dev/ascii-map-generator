@@ -11,6 +11,8 @@
 - add ability to create/remove custom colours for desktop site
 - save custom colours to local storage
 
+## To fix
+- rectangle isnt rendering
 
 
 # done
