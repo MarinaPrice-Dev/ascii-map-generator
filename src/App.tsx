@@ -23,33 +23,51 @@ const App: React.FC = () => {
   const [selectedChar, setSelectedChar] = useState<string>('#')
   const [selectedFg, setSelectedFg] = useState<string>(DEFAULT_FG);
   const [selectedBg, setSelectedBg] = useState<string>(DEFAULT_BG);
-  const [cellSize, setCellSize] = useState<number>(getCellSize());
   const mainRef = useRef<HTMLDivElement>(null);
 
   // Initial grid setup
-  const getGridDims = () => {
+  const getGridDims = (currentCellSize: number) => {
     const availableWidth = window.innerWidth - 2;
     const availableHeight = window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT - 2;
-    const cols = Math.floor(availableWidth / cellSize);
-    const rows = Math.floor(availableHeight / cellSize);
+    const cols = Math.floor(availableWidth / currentCellSize);
+    const rows = Math.floor(availableHeight / currentCellSize);
     return { rows, cols };
   };
 
-  const { rows, cols } = getGridDims();
+  // First, try to load saved zoom level
+  const savedState = localStorage.getItem('ascii-map-state');
+  let initialCellSize = getCellSize();
+  if (savedState) {
+    try {
+      const parsed = JSON.parse(savedState);
+      if (parsed.cellSize) {
+        initialCellSize = parsed.cellSize;
+      }
+    } catch (e) {
+      console.error('Failed to parse saved state:', e);
+    }
+  }
+
+  // Calculate grid dimensions based on the zoom level
+  const { rows, cols } = getGridDims(initialCellSize);
   
-  const [grid, setGrid, undo, redo, canUndo, canRedo, beginAction] = useUndoRedo<Cell[][]>(
-    loadSavedState(rows, cols, DEFAULT_FG, DEFAULT_BG)
+  // Now load the complete saved state with the correct dimensions
+  const { grid: savedGrid, cellSize: savedCellSize } = loadSavedState(
+    rows,
+    cols,
+    DEFAULT_FG,
+    DEFAULT_BG,
+    initialCellSize
   );
+
+  const [cellSize, setCellSize] = useState<number>(savedCellSize);
+  const [grid, setGrid, undo, redo, canUndo, canRedo, beginAction] = useUndoRedo<Cell[][]>(savedGrid);
 
   // Save grid state whenever it changes
   useEffect(() => {
-    saveState(grid, rows, cols);
-  }, [grid, rows, cols]);
-
-  useEffect(() => {
-    const cellSize = getCellSize();
-    setCellSize(cellSize);
-  }, []);
+    const { rows, cols } = getGridDims(cellSize);
+    saveState(grid, rows, cols, cellSize);
+  }, [grid, cellSize]);
 
   // Handle zoom in/out
   const handleZoomIn = () => {
@@ -100,6 +118,7 @@ const App: React.FC = () => {
   // Clear map
   const clearMap = () => {
     beginAction();
+    const { rows, cols } = getGridDims(cellSize);
     setGrid(getInitialGrid(rows, cols, DEFAULT_FG, DEFAULT_BG));
     clearSavedState();
   };
