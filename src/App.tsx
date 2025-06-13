@@ -3,6 +3,7 @@ import './App.css'
 import AsciiMapGrid from './components/grid/AsciiMapGrid'
 import { useUndoRedo } from './utils/useUndoRedo'
 import { getInitialGrid } from './utils/mapUtils'
+import { loadSavedState, saveState, clearSavedState } from './utils/saveState'
 import Header from './components/header/Header'
 import { Footer } from './components/footer/Footer'
 import type { Cell } from './types/cell'
@@ -36,7 +37,15 @@ const App: React.FC = () => {
   };
 
   const { rows, cols } = getGridDims();
-  const [grid, setGrid, undo, redo, canUndo, canRedo, beginAction] = useUndoRedo<Cell[][]>(getInitialGrid(rows, cols, DEFAULT_FG, DEFAULT_BG));
+  
+  const [grid, setGrid, undo, redo, canUndo, canRedo, beginAction] = useUndoRedo<Cell[][]>(
+    loadSavedState(rows, cols, DEFAULT_FG, DEFAULT_BG)
+  );
+
+  // Save grid state whenever it changes
+  useEffect(() => {
+    saveState(grid, rows, cols);
+  }, [grid, rows, cols]);
 
   useEffect(() => {
     document.body.setAttribute('data-theme', darkMode ? 'dark' : 'light');
@@ -45,8 +54,6 @@ const App: React.FC = () => {
   useEffect(() => {
     const cellSize = getCellSize();
     setCellSize(cellSize);
-    // Only reset grid on mount, not on every resize
-    // eslint-disable-next-line
   }, []);
 
   // Update a cell with char, fg, bg
@@ -62,6 +69,7 @@ const App: React.FC = () => {
   const clearMap = () => {
     beginAction();
     setGrid(getInitialGrid(rows, cols, DEFAULT_FG, DEFAULT_BG));
+    clearSavedState();
   };
 
   // Save map (only chars)
