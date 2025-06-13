@@ -103,6 +103,7 @@ const App: React.FC = () => {
         canRedo={canRedo}
         darkMode={darkMode}
         onDarkModeChange={setDarkMode}
+        grid={grid}
       />
       {/* Main Grid Area */}
       <main ref={mainRef} style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', background: 'var(--bg)' }}>

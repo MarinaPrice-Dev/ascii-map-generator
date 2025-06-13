@@ -46,9 +46,7 @@ const Header: React.FC<HeaderProps> = ({
             <ClearIcon />
           </button>
           <button className="icon-button save-button" onClick={onSaveMap} disabled={!canUndo} title="Export Map">
-            <svg className="icon" viewBox="0 0 24 24" width="24" height="24">
-              <path fill="currentColor" d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-            </svg>
+            <SaveIcon />
           </button>
           <button 
             className="icon-button theme-button" 
@@ -78,9 +76,7 @@ const Header: React.FC<HeaderProps> = ({
           <ClearIcon />
         </button>
         <button className="icon-button save-button" onClick={onSaveMap} disabled={isGridEmpty} title="Export Map">
-          <svg className="icon" viewBox="0 0 24 24" width="24" height="24">
-            <path fill="currentColor" d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-          </svg>
+          <SaveIcon />
         </button>
         <button 
           className="icon-button theme-button" 
