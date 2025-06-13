@@ -78,9 +78,7 @@ const App: React.FC = () => {
       cellSize,
       true,
       availableWidth,
-      availableHeight,
-      DEFAULT_FG,
-      DEFAULT_BG
+      availableHeight
     );
 
     setCellSize(newCellSize);
@@ -96,9 +94,7 @@ const App: React.FC = () => {
       cellSize,
       false,
       availableWidth,
-      availableHeight,
-      DEFAULT_FG,
-      DEFAULT_BG
+      availableHeight
     );
 
     setCellSize(newCellSize);

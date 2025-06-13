@@ -59,8 +59,6 @@ export const handleZoom = (
   zoomIn: boolean,
   availableWidth: number,
   availableHeight: number,
-  defaultFg: string,
-  defaultBg: string
 ): { newCellSize: number; newRows: number; newCols: number } => {
   const newCellSize = zoomIn
     ? Math.min(currentCellSize + ZOOM_STEP, MAX_ZOOM)
