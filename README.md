@@ -2,7 +2,6 @@
 
 ## TO DO
 - add: about, updates, example maps
-- save state locally
 - add arrows so we have an infinite canvas
 - better exports - txt, html, rotjs, colours
 - add import - validate whether it will fit, or just load what we can
@@ -14,6 +13,5 @@
 
 
 
-# Things to document
-
-- use of alt codes
+# done
+- save state locally
