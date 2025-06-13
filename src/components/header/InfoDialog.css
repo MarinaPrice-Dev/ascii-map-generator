@@ -33,23 +33,26 @@
 .info-dialog-body {
   overflow-y: auto;
   flex-grow: 1;
-  padding: 15px 10px;
+  padding: 20px 10px;
   opacity: 0.9;
 }
 
 .info-dialog-body h3 {
-    margin-top: 0;
+    margin-top: 34px;
     color: var(--fg);
     font-size: 1.1em;
     border-bottom: 2px dashed var(--border);
     padding-bottom: 5px;
-    margin-bottom: 3px;
+    margin-bottom: 6px;
     border-top: 2px dashed var(--border);
     padding-top: 5px;
 }
 
+.info-dialog-body h5 {
+  margin-top: 15px;
+}
+
 .info-dialog-body p, .info-dialog-body ul {
-  margin-bottom: 22px;
   color: var(--fg);
   font-size: 0.9em;
 }
