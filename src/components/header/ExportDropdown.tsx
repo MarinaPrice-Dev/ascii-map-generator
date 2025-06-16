@@ -3,7 +3,7 @@ import { SaveIcon } from '../icons/Icons';
 import './ExportDropdown.css';
 
 interface ExportDropdownProps {
-  onExport: (format: 'txt' | 'json' | 'ansi') => void;
+  onExport: (format: 'txt' | 'json' | 'ansi' | 'rot') => void;
   disabled?: boolean;
 }
 
@@ -22,7 +22,7 @@ const ExportDropdown: React.FC<ExportDropdownProps> = ({ onExport, disabled = fa
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleExport = (format: 'txt' | 'json' | 'ansi') => {
+  const handleExport = (format: 'txt' | 'json' | 'ansi' | 'rot') => {
     onExport(format);
     setIsOpen(false);
   };
@@ -46,6 +46,9 @@ const ExportDropdown: React.FC<ExportDropdownProps> = ({ onExport, disabled = fa
           </button>
           <button className="dropdown-item" onClick={() => handleExport('json')}>JSON File (.json)</button>
           <button className="dropdown-item" onClick={() => handleExport('ansi')}>ANSI File (.ansi)</button>
+          <button className="dropdown-item" onClick={() => handleExport('rot')}>ROT.js File (.txt)
+            <span className="button-description"> - with colours</span>
+          </button>
         </div>
       )}
     </div>

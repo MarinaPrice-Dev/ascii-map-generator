@@ -1,7 +1,7 @@
 import type { Cell } from '../types/cell'
 
 interface ExportOptions {
-  format: 'txt' | 'json' | 'ansi';
+  format: 'txt' | 'json' | 'ansi' | 'rot';
 }
 
 interface BoundingBox {
@@ -112,6 +112,57 @@ const exportAsAnsi = (grid: Cell[][], options: ExportOptions) => {
   downloadFile(content, 'map.ansi');
 }
 
+// Export as ROT.js format
+const exportAsRot = (grid: Cell[][], options: ExportOptions) => {
+  const { top, left, bottom, right } = findBoundingBox(grid);
+  let content = '';
+  
+  for (let row = top; row <= bottom; row++) {
+    let line = '';
+    let currentFg = '';
+    let currentBg = '';
+    
+    for (let col = left; col <= right; col++) {
+      const cell = grid[row][col];
+      
+      // Handle color changes
+      if (cell.fg !== currentFg) {
+        if (cell.fg === '#FFFFFF') {
+          line += '%c{}';
+        } else {
+          line += `%c{${cell.fg}}`;
+        }
+        currentFg = cell.fg;
+      }
+      
+      if (cell.bg !== currentBg) {
+        if (cell.bg === '#000000') {
+          line += '%b{}';
+        } else {
+          line += `%b{${cell.bg}}`;
+        }
+        currentBg = cell.bg;
+      }
+      
+      // Handle leading spaces
+      if (cell.char === ' ' && line === '') {
+        line += '\u00A0'; // Use non-breaking space for leading spaces
+      } else {
+        line += cell.char;
+      }
+    }
+    
+    // Reset colors at end of line
+    if (currentFg !== '#FFFFFF') line += '%c{}';
+    if (currentBg !== '#000000') line += '%b{}';
+    
+    content += line + '\n';
+  }
+  
+  downloadFile(content, 'map.rot.txt');
+};
+
+// Main export function
 export const exportMap = (grid: Cell[][], options: ExportOptions) => {
   if (!grid || !Array.isArray(grid) || grid.length === 0) {
     throw new Error('Invalid grid data');
@@ -126,6 +177,9 @@ export const exportMap = (grid: Cell[][], options: ExportOptions) => {
       break;
     case 'ansi':
       exportAsAnsi(grid, options);
+      break;
+    case 'rot':
+      exportAsRot(grid, options);
       break;
     default:
       throw new Error(`Unsupported export format: ${options.format}`);
