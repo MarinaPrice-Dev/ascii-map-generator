@@ -76,7 +76,7 @@
 
 /* Scrollbar styles */
 .character-categories::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
 
 .character-categories::-webkit-scrollbar-track {
@@ -92,22 +92,3 @@
 .character-categories::-webkit-scrollbar-thumb:hover {
   background: var(--accent);
 }
-
-/* @media (max-width: 600px) {
-  .character-grid {
-    grid-template-columns: repeat(auto-fill, minmax(24px, 1fr));
-    gap: 3px;
-  }
-
-  .character-swatch {
-    width: 24px;
-    height: 24px;
-    font-size: 12px;
-  }
-
-  .character-input {
-    width: 24px;
-    height: 24px;
-    font-size: 12px;
-  }
-}  */

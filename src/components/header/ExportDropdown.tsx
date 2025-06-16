@@ -40,7 +40,7 @@ const ExportDropdown: React.FC<ExportDropdownProps> = ({ onExport, disabled }) =
       </button>
       {isOpen && (
         <div className="dropdown-menu">
-          <div className="dropdown-header">Export Format</div>
+          <div className="dropdown-header">Export Formats</div>
           <button onClick={() => handleExport('txt')} className="dropdown-item">
             .txt <span className="button-description">(no colours)</span>
           </button>

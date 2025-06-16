@@ -63,12 +63,10 @@ body {
 
 .App {
   height: 100vh;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   background: var(--bg);
   color: var(--fg);
-  overflow: hidden;
 }
 
 header {
@@ -170,4 +168,34 @@ button:disabled {
   .zoom-controls {
     display: none!important;
   }
+}
+
+.main-grid-area {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  overflow: hidden;
+  background: var(--bg);
+  overflow: auto;
+  padding-top: 0;
+}
+
+/* Custom scrollbar */
+.main-grid-area::-webkit-scrollbar {
+  width: 8px;
+}
+
+.main-grid-area::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: 4px;
+}
+
+.main-grid-area::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+.main-grid-area::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
 }
