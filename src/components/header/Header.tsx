@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { UndoIcon, RedoIcon, ClearIcon, InfoIcon, ZoomInIcon, ZoomOutIcon, ImportIcon } from '../icons/Icons';
 import '../icons/Icons.css';
 import './Header.css';
 import InfoDialog from './InfoDialog';
 import ExportDropdown from './ExportDropdown';
 import { MIN_ZOOM, MAX_ZOOM } from '../../utils/zoomUtils';
+import { importMap } from '../../utils/importMap';
+import type { Cell } from '../../types/cell';
 
 interface HeaderProps {
   onSaveMap: (format: 'txt' | 'json') => void;
@@ -17,6 +19,7 @@ interface HeaderProps {
   cellSize: number;
   onZoomIn: () => void;
   onZoomOut: () => void;
+  onImportMap: (grid: Cell[][]) => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -30,9 +33,59 @@ const Header: React.FC<HeaderProps> = ({
   cellSize,
   onZoomIn,
   onZoomOut,
+  onImportMap,
 }) => {
   const isGridEmpty = grid.every(row => row.every(cell => cell.char === ' '));
   const [showInfoDialog, setShowInfoDialog] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleImportClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const validateFileType = (file: File): 'txt' | 'json' | null => {
+    const extension = file.name.split('.').pop()?.toLowerCase();
+    if (extension === 'txt') return 'txt';
+    if (extension === 'json') return 'json';
+    return null;
+  };
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Reset the input
+    event.target.value = '';
+
+    const format = validateFileType(file);
+    if (!format) {
+      alert('Please select a .txt or .json file');
+      return;
+    }
+
+    try {
+      const result = await importMap(file, { format });
+      
+      // Validate grid dimensions
+      const currentRows = grid.length;
+      const currentCols = grid[0]?.length || 0;
+      
+      if (result.dimensions) {
+        if (result.dimensions.rows > currentRows || result.dimensions.cols > currentCols) {
+          alert(`The imported map is too large. Maximum dimensions are ${currentRows}x${currentCols}`);
+          return;
+        }
+      }
+
+      onImportMap(result.grid);
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert('Failed to import map');
+      }
+    }
+  };
 
   return (
     <>
@@ -72,10 +125,17 @@ const Header: React.FC<HeaderProps> = ({
             <ExportDropdown onExport={onSaveMap} disabled={isGridEmpty} />
           </div>
           <div className="desktop-only">
-            <button className="icon-button import-button" title="Import Map">
+            <button className="icon-button import-button" onClick={handleImportClick} title="Import Map">
               <ImportIcon />
               <span className="button-label">Import</span>
             </button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".txt,.json"
+              onChange={handleFileChange}
+              style={{ display: 'none' }}
+            />
           </div>
           <button 
             className="icon-button info-button" 
@@ -117,9 +177,16 @@ const Header: React.FC<HeaderProps> = ({
           <ClearIcon />
         </button>
         <ExportDropdown onExport={onSaveMap} disabled={isGridEmpty} />
-        <button className="icon-button import-button" title="Import Map">
+        <button className="icon-button import-button" onClick={handleImportClick} title="Import Map">
           <ImportIcon />
         </button>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".txt,.json"
+          onChange={handleFileChange}
+          style={{ display: 'none' }}
+        />
         <button 
           className="icon-button info-button" 
           onClick={() => setShowInfoDialog(true)} 

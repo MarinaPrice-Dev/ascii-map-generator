@@ -124,6 +124,30 @@ const App: React.FC = () => {
     exportMap(grid, { format });
   };
 
+  const handleImportMap = (importedGrid: Cell[][]) => {
+    beginAction();
+    // Create a new grid with the same dimensions as the current grid
+    const newGrid = Array.from({ length: grid.length }, (_, rowIndex) =>
+      Array.from({ length: grid[0].length }, (_, colIndex) => {
+        const importedCell = importedGrid[rowIndex]?.[colIndex];
+        if (importedCell) {
+          return {
+            char: importedCell.char,
+            fg: importedCell.fg || DEFAULT_FG,
+            bg: importedCell.bg || DEFAULT_BG,
+          };
+        }
+        return {
+          char: ' ',
+          fg: DEFAULT_FG,
+          bg: DEFAULT_BG,
+        };
+      })
+    );
+
+    setGrid(newGrid);
+  };
+
   return (
     <div className="App" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--bg)', color: 'var(--fg)' }}>
       <Header
@@ -137,6 +161,7 @@ const App: React.FC = () => {
         cellSize={cellSize}
         onZoomIn={handleZoomIn}
         onZoomOut={handleZoomOut}
+        onImportMap={handleImportMap}
       />
       {/* Main Grid Area */}
       <main ref={mainRef} style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', background: 'var(--bg)' }}>
