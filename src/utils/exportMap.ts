@@ -62,6 +62,11 @@ const downloadFile = (content: string, filename: string) => {
   URL.revokeObjectURL(url);
 }
 
+const generateFileName = (base: string, ext: string): string => {
+  const shortStamp = Date.now().toString(36); // Base36 is compact (0-9 + a-z)
+  return `${base}-${shortStamp}.${ext}`;
+}
+
 const exportAsTxt = (grid: Cell[][], options: ExportOptions) => {
   const { top, left, bottom, right } = findBoundingBox(grid);
   let content = '';
@@ -73,7 +78,7 @@ const exportAsTxt = (grid: Cell[][], options: ExportOptions) => {
     content += '\n';
   }
   
-  downloadFile(content, 'map.txt');
+  downloadFile(content, generateFileName('map', 'txt'));
 }
 
 const exportAsJson = (grid: Cell[][], options: ExportOptions) => {
@@ -92,7 +97,7 @@ const exportAsJson = (grid: Cell[][], options: ExportOptions) => {
     )
   };
   
-  downloadFile(JSON.stringify(data, null, 2), 'map.json');
+  downloadFile(JSON.stringify(data, null, 2), generateFileName('map', 'json'));
 }
 
 const exportAsAnsi = (grid: Cell[][], options: ExportOptions) => {
@@ -109,7 +114,7 @@ const exportAsAnsi = (grid: Cell[][], options: ExportOptions) => {
     content += '\x1b[0m\n';
   }
   
-  downloadFile(content, 'map.ansi');
+  downloadFile(content, generateFileName('map', 'ansi'));
 }
 
 // Export as ROT.js format
@@ -159,7 +164,7 @@ const exportAsRot = (grid: Cell[][], options: ExportOptions) => {
     content += line + '\n';
   }
   
-  downloadFile(content, 'map.rot.txt');
+  downloadFile(content, generateFileName('map', 'rot.txt'));
 };
 
 // Main export function
