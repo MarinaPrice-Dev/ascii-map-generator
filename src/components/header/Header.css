@@ -20,6 +20,28 @@
   gap: 16px;
 }
 
+.desktop-only .icon-button {
+  width: auto;
+  padding: 4px 12px;
+  gap: 8px;
+}
+
+.button-label {
+  font-size: 0.9em;
+  font-weight: 500;
+  display: none;
+}
+
+.desktop-only .button-label {
+  display: inline;
+}
+
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none;
+  }
+}
+
 .zoom-controls {
   display: flex;
   align-items: center;

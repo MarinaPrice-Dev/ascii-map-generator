@@ -121,12 +121,7 @@ const App: React.FC = () => {
 
   // Handle map export
   const handleExport = (format: 'txt' | 'json') => {
-    if (format === 'txt') {
-      exportMap(grid);
-    } else if (format === 'json') {
-      // TODO: Implement JSON export
-      console.log('JSON export not implemented yet');
-    }
+    exportMap(grid, { format });
   };
 
   return (

@@ -37,6 +37,15 @@
   color: var(--fg);
 }
 
+.icon-button.import-button {
+  color: var(--save);
+  border-color: var(--save);
+}
+
+.icon-button.import-button:hover {
+  background: var(--save);
+  color: var(--fg);
+}
 
 .icon-button.clear-button {
   color: #e33;

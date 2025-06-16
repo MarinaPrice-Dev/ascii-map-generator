@@ -58,8 +58,13 @@
 } 
 
 .icon-button.save-button.dropdown-open {
-    background: #22c55e;
-    color: white;
+    background: var(--save);
+    color: var(--fg);
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
+  }
+
+  .button-description {
+    font-weight: 400;
+    opacity: 0.75;
   }

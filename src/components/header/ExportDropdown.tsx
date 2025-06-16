@@ -36,12 +36,13 @@ const ExportDropdown: React.FC<ExportDropdownProps> = ({ onExport, disabled }) =
         title="Export Map"
       >
         <SaveIcon />
+        <span className="button-label">Export</span>
       </button>
       {isOpen && (
         <div className="dropdown-menu">
           <div className="dropdown-header">Export Format</div>
           <button onClick={() => handleExport('txt')} className="dropdown-item">
-            .txt (colours not included)
+            .txt <span className="button-description">(no colours)</span>
           </button>
           <button onClick={() => handleExport('json')} className="dropdown-item">
             .json

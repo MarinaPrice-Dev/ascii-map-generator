@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { UndoIcon, RedoIcon, ClearIcon, InfoIcon, ZoomInIcon, ZoomOutIcon } from '../icons/Icons';
+import { UndoIcon, RedoIcon, ClearIcon, InfoIcon, ZoomInIcon, ZoomOutIcon, ImportIcon } from '../icons/Icons';
 import '../icons/Icons.css';
 import './Header.css';
 import InfoDialog from './InfoDialog';
@@ -68,7 +68,15 @@ const Header: React.FC<HeaderProps> = ({
           <button className="icon-button clear-button" onClick={onClearMap} disabled={isGridEmpty} title="Clear Map">
             <ClearIcon />
           </button>
-          <ExportDropdown onExport={onSaveMap} disabled={isGridEmpty} />
+          <div className="desktop-only">
+            <ExportDropdown onExport={onSaveMap} disabled={isGridEmpty} />
+          </div>
+          <div className="desktop-only">
+            <button className="icon-button import-button" title="Import Map">
+              <ImportIcon />
+              <span className="button-label">Import</span>
+            </button>
+          </div>
           <button 
             className="icon-button info-button" 
             onClick={() => setShowInfoDialog(true)} 
@@ -109,6 +117,9 @@ const Header: React.FC<HeaderProps> = ({
           <ClearIcon />
         </button>
         <ExportDropdown onExport={onSaveMap} disabled={isGridEmpty} />
+        <button className="icon-button import-button" title="Import Map">
+          <ImportIcon />
+        </button>
         <button 
           className="icon-button info-button" 
           onClick={() => setShowInfoDialog(true)} 
