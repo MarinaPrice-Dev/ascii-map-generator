@@ -28,14 +28,15 @@
 }
 
 .icon-button.save-button {
-  color: #22c55e;
-  border-color: #22c55e;
+  color: var(--save);
+  border-color: var(--save);
 }
 
 .icon-button.save-button:hover {
-  background: #22c55e;
-  color: white;
+  background: var(--save);
+  color: var(--fg);
 }
+
 
 .icon-button.clear-button {
   color: #e33;

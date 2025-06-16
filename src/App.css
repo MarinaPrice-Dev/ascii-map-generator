@@ -48,12 +48,9 @@
   --fg: #fff;
   --border: #444;
   --footer-bg: #181818;
-}
-[data-theme='light'] {
-  --bg: #f7f7f7;
-  --fg: #181818;
-  --border: #ccc;
-  --footer-bg: #eaeaea;
+  --save: #22c55e;
+  --clear: #e33;
+  --info: #007bff;
 }
 
 body {

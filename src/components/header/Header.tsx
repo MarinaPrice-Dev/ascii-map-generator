@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { UndoIcon, RedoIcon, ClearIcon, SaveIcon, InfoIcon, ZoomInIcon, ZoomOutIcon } from '../icons/Icons';
+import { UndoIcon, RedoIcon, ClearIcon, InfoIcon, ZoomInIcon, ZoomOutIcon } from '../icons/Icons';
 import '../icons/Icons.css';
 import './Header.css';
 import InfoDialog from './InfoDialog';
+import ExportDropdown from './ExportDropdown';
 import { MIN_ZOOM, MAX_ZOOM } from '../../utils/zoomUtils';
 
 interface HeaderProps {
-  onSaveMap: () => void;
+  onSaveMap: (format: 'txt' | 'json') => void;
   onClearMap: () => void;
   onUndo: () => void;
   onRedo: () => void;
@@ -67,9 +68,7 @@ const Header: React.FC<HeaderProps> = ({
           <button className="icon-button clear-button" onClick={onClearMap} disabled={isGridEmpty} title="Clear Map">
             <ClearIcon />
           </button>
-          <button className="icon-button save-button" onClick={onSaveMap} disabled={isGridEmpty} title="Export Map">
-            <SaveIcon />
-          </button>
+          <ExportDropdown onExport={onSaveMap} disabled={isGridEmpty} />
           <button 
             className="icon-button info-button" 
             onClick={() => setShowInfoDialog(true)} 
@@ -109,9 +108,7 @@ const Header: React.FC<HeaderProps> = ({
         <button className="icon-button clear-button" onClick={onClearMap} disabled={isGridEmpty} title="Clear Map">
           <ClearIcon />
         </button>
-        <button className="icon-button save-button" onClick={onSaveMap} disabled={isGridEmpty} title="Export Map">
-          <SaveIcon />
-        </button>
+        <ExportDropdown onExport={onSaveMap} disabled={isGridEmpty} />
         <button 
           className="icon-button info-button" 
           onClick={() => setShowInfoDialog(true)} 
