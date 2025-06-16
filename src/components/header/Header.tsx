@@ -9,7 +9,7 @@ import { importMap } from '../../utils/importMap';
 import type { Cell } from '../../types/cell';
 
 interface HeaderProps {
-  onSaveMap: (format: 'txt' | 'json' | 'ansi') => void;
+  onSaveMap: (format: 'txt' | 'json' | 'ansi' | 'rot') => void;
   onClearMap: () => void;
   onUndo: () => void;
   onRedo: () => void;
@@ -43,9 +43,12 @@ const Header: React.FC<HeaderProps> = ({
     fileInputRef.current?.click();
   };
 
-  const validateFileType = (file: File): 'txt' | 'json' | 'ansi' | null => {
+  const validateFileType = (file: File): 'txt' | 'json' | 'ansi' | 'rot' | null => {
     const extension = file.name.split('.').pop()?.toLowerCase();
-    if (extension === 'txt') return 'txt';
+    if (extension === 'txt') {
+      // Check if it's a ROT.js file by looking for color codes
+      return file.name.toLowerCase().includes('.rot.txt') ? 'rot' : 'txt';
+    }
     if (extension === 'json') return 'json';
     if (extension === 'ansi') return 'ansi';
     return null;
@@ -60,21 +63,23 @@ const Header: React.FC<HeaderProps> = ({
 
     const format = validateFileType(file);
     if (!format) {
-      alert('Please select a .txt or .json file');
+      alert('Please select a .txt, .json, .ansi, or .rot.txt file');
       return;
     }
 
     try {
       const result = await importMap(file, { format });
       
-      // Validate grid dimensions
-      const currentRows = grid.length;
-      const currentCols = grid[0]?.length || 0;
-      
-      if (result.dimensions) {
-        if (result.dimensions.rows > currentRows || result.dimensions.cols > currentCols) {
-          alert(`The imported map is too large. Maximum dimensions are ${currentRows}x${currentCols}`);
-          return;
+      // Only validate grid dimensions for non-ROT.js files
+      if (format !== 'rot') {
+        const currentRows = grid.length;
+        const currentCols = grid[0]?.length || 0;
+        
+        if (result.dimensions) {
+          if (result.dimensions.rows > currentRows || result.dimensions.cols > currentCols) {
+            alert(`The imported map is too large. Maximum dimensions are ${currentRows}x${currentCols}`);
+            return;
+          }
         }
       }
 

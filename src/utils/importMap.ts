@@ -1,7 +1,7 @@
 import type { Cell } from '../types/cell';
 
 interface ImportOptions {
-  format: 'txt' | 'json' | 'ansi';
+  format: 'txt' | 'json' | 'ansi' | 'rot';
 }
 
 interface ImportedData {
@@ -162,34 +162,98 @@ const parseAnsiFile = async (file: File): Promise<ImportedData> => {
   };
 };
 
+// Parse ROT.js format
+const parseRotFile = async (file: File): Promise<ImportedData> => {
+  const text = await file.text();
+  const lines = text.split('\n').filter(line => line.trim());
+  
+  if (lines.length === 0) {
+    throw new Error('File is empty');
+  }
+  
+  const grid: Cell[][] = [];
+  let maxCols = 0;
+  
+  for (const line of lines) {
+    const row: Cell[] = [];
+    let currentFg = '#FFFFFF';
+    let currentBg = '#000000';
+    let i = 0;
+    
+    while (i < line.length) {
+      // Check for color codes
+      if (line[i] === '%' && i + 1 < line.length) {
+        if (line[i + 1] === 'c' && line[i + 2] === '{') {
+          // Foreground color
+          const endBrace = line.indexOf('}', i + 3);
+          if (endBrace === -1) {
+            throw new Error('Invalid color format: missing closing brace');
+          }
+          const color = line.substring(i + 3, endBrace);
+          currentFg = color === '' ? '#FFFFFF' : color;
+          i = endBrace + 1;
+          continue;
+        } else if (line[i + 1] === 'b' && line[i + 2] === '{') {
+          // Background color
+          const endBrace = line.indexOf('}', i + 3);
+          if (endBrace === -1) {
+            throw new Error('Invalid color format: missing closing brace');
+          }
+          const color = line.substring(i + 3, endBrace);
+          currentBg = color === '' ? '#000000' : color;
+          i = endBrace + 1;
+          continue;
+        }
+      }
+      
+      // Handle non-breaking space for leading spaces
+      if (line[i] === '\u00A0') {
+        row.push({ char: ' ', fg: currentFg, bg: currentBg });
+      } else {
+        row.push({ char: line[i], fg: currentFg, bg: currentBg });
+      }
+      i++;
+    }
+    
+    grid.push(row);
+    maxCols = Math.max(maxCols, row.length);
+  }
+  
+  // Ensure all rows have the same length
+  return {
+    grid: grid.map(row => {
+      while (row.length < maxCols) {
+        row.push({ char: ' ', fg: '#FFFFFF', bg: '#000000' });
+      }
+      return row;
+    })
+  };
+};
+
+// Main import function
 export const importMap = async (file: File, options: ImportOptions): Promise<ImportedData> => {
-  try {
-    // Validate file type
-    const extension = file.name.split('.').pop()?.toLowerCase();
-    if (!extension || !['txt', 'json', 'ansi'].includes(extension)) {
-      throw new Error('Unsupported file type');
-    }
-    
-    // Validate file size (max 1MB)
-    if (file.size > 1024 * 1024) {
-      throw new Error('File too large (max 1MB)');
-    }
-    
-    // Parse based on format
-    switch (options.format) {
-      case 'txt':
-        return parseTxtFile(file);
-      case 'json':
-        return parseJsonFile(file);
-      case 'ansi':
-        return parseAnsiFile(file);
-      default:
-        throw new Error(`Unsupported import format: ${options.format}`);
-    }
-  } catch (error) {
-    if (error instanceof Error) {
-      throw new Error(`Failed to import map: ${error.message}`);
-    }
-    throw new Error('Failed to import map: Unknown error');
+  // Validate file type
+  const extension = file.name.split('.').pop()?.toLowerCase();
+  if (!extension || !['txt', 'json', 'ansi', 'rot'].includes(extension)) {
+    throw new Error('Unsupported file type');
+  }
+  
+  // Validate file size (max 1MB)
+  if (file.size > 1024 * 1024) {
+    throw new Error('File too large (max 1MB)');
+  }
+  
+  // Parse based on format
+  switch (options.format) {
+    case 'txt':
+      return parseTxtFile(file);
+    case 'json':
+      return parseJsonFile(file);
+    case 'ansi':
+      return parseAnsiFile(file);
+    case 'rot':
+      return parseRotFile(file);
+    default:
+      throw new Error(`Unsupported import format: ${options.format}`);
   }
 }; 

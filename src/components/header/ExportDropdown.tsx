@@ -40,15 +40,13 @@ const ExportDropdown: React.FC<ExportDropdownProps> = ({ onExport, disabled = fa
       </button>
       {isOpen && (
         <div className="dropdown-menu">
-          <div className="dropdown-header">Export Format</div>
+          <div className="dropdown-header">Export Formats</div>
           <button className="dropdown-item" onClick={() => handleExport('txt')}>Text File (.txt)
             <span className="button-description"> - no colours</span>
           </button>
           <button className="dropdown-item" onClick={() => handleExport('json')}>JSON File (.json)</button>
           <button className="dropdown-item" onClick={() => handleExport('ansi')}>ANSI File (.ansi)</button>
-          <button className="dropdown-item" onClick={() => handleExport('rot')}>ROT.js File (.txt)
-            <span className="button-description"> - with colours</span>
-          </button>
+          <button className="dropdown-item" onClick={() => handleExport('rot')}>ROT.js File (.rot.txt)</button>
         </div>
       )}
     </div>
