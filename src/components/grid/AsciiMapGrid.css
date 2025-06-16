@@ -1,3 +1,12 @@
+.main-grid-area {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--bg);
+}
+
 .ascii-map-grid {
   display: inline-block;
   border: 1px solid #444;

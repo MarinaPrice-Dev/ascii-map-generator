@@ -164,7 +164,7 @@ const App: React.FC = () => {
         onImportMap={handleImportMap}
       />
       {/* Main Grid Area */}
-      <main ref={mainRef} style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', background: 'var(--bg)' }}>
+      <main ref={mainRef} className="main-grid-area">
         {grid.length > 0 && (
           <AsciiMapGrid grid={grid} updateCell={updateCell} beginAction={beginAction} selectedChar={selectedChar} selectedFg={selectedFg} selectedBg={selectedBg} cellSize={cellSize} />
         )}
