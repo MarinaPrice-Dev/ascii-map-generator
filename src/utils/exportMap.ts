@@ -67,7 +67,7 @@ const generateFileName = (base: string, ext: string): string => {
   return `${base}-${shortStamp}.${ext}`;
 }
 
-const exportAsTxt = (grid: Cell[][], options: ExportOptions) => {
+const exportAsTxt = (grid: Cell[][]) => {
   const { top, left, bottom, right } = findBoundingBox(grid);
   let content = '';
   
@@ -81,7 +81,7 @@ const exportAsTxt = (grid: Cell[][], options: ExportOptions) => {
   downloadFile(content, generateFileName('map', 'txt'));
 }
 
-const exportAsJson = (grid: Cell[][], options: ExportOptions) => {
+const exportAsJson = (grid: Cell[][]) => {
   const { top, left, bottom, right } = findBoundingBox(grid);
   const data = {
     dimensions: {
@@ -100,7 +100,7 @@ const exportAsJson = (grid: Cell[][], options: ExportOptions) => {
   downloadFile(JSON.stringify(data, null, 2), generateFileName('map', 'json'));
 }
 
-const exportAsAnsi = (grid: Cell[][], options: ExportOptions) => {
+const exportAsAnsi = (grid: Cell[][]) => {
   const { top, left, bottom, right } = findBoundingBox(grid);
   let content = '';
   
@@ -118,7 +118,7 @@ const exportAsAnsi = (grid: Cell[][], options: ExportOptions) => {
 }
 
 // Export as ROT.js format
-const exportAsRot = (grid: Cell[][], options: ExportOptions) => {
+const exportAsRot = (grid: Cell[][]) => {
   const { top, left, bottom, right } = findBoundingBox(grid);
   let content = '';
   
@@ -175,16 +175,16 @@ export const exportMap = (grid: Cell[][], options: ExportOptions) => {
 
   switch (options.format) {
     case 'txt':
-      exportAsTxt(grid, options);
+      exportAsTxt(grid);
       break;
     case 'json':
-      exportAsJson(grid, options);
+      exportAsJson(grid);
       break;
     case 'ansi':
-      exportAsAnsi(grid, options);
+      exportAsAnsi(grid);
       break;
     case 'rot':
-      exportAsRot(grid, options);
+      exportAsRot(grid);
       break;
     default:
       throw new Error(`Unsupported export format: ${options.format}`);

@@ -120,7 +120,7 @@ const App: React.FC = () => {
   };
 
   // Handle map export
-  const handleExport = (format: 'txt' | 'json') => {
+  const handleExport = (format: 'txt' | 'json' | 'ansi' | 'rot') => {
     exportMap(grid, { format });
   };
 
