@@ -9,7 +9,7 @@ import { importMap } from '../../utils/importMap';
 import type { Cell } from '../../types/cell';
 
 interface HeaderProps {
-  onSaveMap: (format: 'txt' | 'json') => void;
+  onSaveMap: (format: 'txt' | 'json' | 'ansi') => void;
   onClearMap: () => void;
   onUndo: () => void;
   onRedo: () => void;
@@ -43,10 +43,11 @@ const Header: React.FC<HeaderProps> = ({
     fileInputRef.current?.click();
   };
 
-  const validateFileType = (file: File): 'txt' | 'json' | null => {
+  const validateFileType = (file: File): 'txt' | 'json' | 'ansi' | null => {
     const extension = file.name.split('.').pop()?.toLowerCase();
     if (extension === 'txt') return 'txt';
     if (extension === 'json') return 'json';
+    if (extension === 'ansi') return 'ansi';
     return null;
   };
 
@@ -132,7 +133,7 @@ const Header: React.FC<HeaderProps> = ({
             <input
               ref={fileInputRef}
               type="file"
-              accept=".txt,.json"
+              accept=".txt,.json,.ansi"
               onChange={handleFileChange}
               style={{ display: 'none' }}
             />
@@ -183,7 +184,7 @@ const Header: React.FC<HeaderProps> = ({
         <input
           ref={fileInputRef}
           type="file"
-          accept=".txt,.json"
+          accept=".txt,.json,.ansi"
           onChange={handleFileChange}
           style={{ display: 'none' }}
         />

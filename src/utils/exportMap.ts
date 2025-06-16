@@ -1,89 +1,133 @@
 import type { Cell } from '../types/cell'
 
 interface ExportOptions {
-  format: 'txt' | 'json';
+  format: 'txt' | 'json' | 'ansi';
 }
 
 interface BoundingBox {
-  minRow: number;
-  maxRow: number;
-  minCol: number;
-  maxCol: number;
+  top: number;
+  left: number;
+  bottom: number;
+  right: number;
 }
 
-const getBoundingBox = (grid: Cell[][]): BoundingBox => {
-  let minRow = grid.length, maxRow = -1, minCol = grid[0].length, maxCol = -1
-  for (let r = 0; r < grid.length; r++) {
-    for (let c = 0; c < grid[0].length; c++) {
-      if (grid[r][c].char !== ' ') {
-        if (r < minRow) minRow = r
-        if (r > maxRow) maxRow = r
-        if (c < minCol) minCol = c
-        if (c > maxCol) maxCol = c
+const findBoundingBox = (grid: Cell[][]): BoundingBox => {
+  let top = grid.length;
+  let left = grid[0]?.length || 0;
+  let bottom = 0;
+  let right = 0;
+
+  for (let row = 0; row < grid.length; row++) {
+    for (let col = 0; col < grid[row].length; col++) {
+      if (grid[row][col].char !== ' ') {
+        top = Math.min(top, row);
+        left = Math.min(left, col);
+        bottom = Math.max(bottom, row);
+        right = Math.max(right, col);
       }
     }
   }
-  return { minRow, maxRow, minCol, maxCol };
+
+  return { top, left, bottom, right };
 }
 
-const downloadFile = (content: string, filename: string, mimeType: string) => {
-  const blob = new Blob([content], { type: mimeType })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = filename
-  a.click()
-  URL.revokeObjectURL(url)
-}
-
-const exportAsTxt = (grid: Cell[][], boundingBox: BoundingBox) => {
-  const { minRow, maxRow, minCol, maxCol } = boundingBox;
-  const lines = []
-  for (let r = minRow; r <= maxRow; r++) {
-    lines.push(grid[r].slice(minCol, maxCol + 1).map(cell => cell.char).join(''))
-  }
-  downloadFile(lines.join('\n'), 'ascii-map.txt', 'text/plain')
-}
-
-const exportAsJson = (grid: Cell[][], boundingBox: BoundingBox) => {
-  const { minRow, maxRow, minCol, maxCol } = boundingBox;
-  const trimmedGrid = grid
-    .slice(minRow, maxRow + 1)
-    .map(row => row.slice(minCol, maxCol + 1));
-
-  const exportData = {
-    grid: trimmedGrid,
-    dimensions: {
-      rows: maxRow - minRow + 1,
-      cols: maxCol - minCol + 1
-    },
-    metadata: {
-      exportedAt: new Date().toISOString(),
-      format: 'json'
-    }
-  };
-
-  downloadFile(
-    JSON.stringify(exportData, null, 2),
-    'ascii-map.json',
-    'application/json'
-  )
-}
-
-export const exportMap = (grid: Cell[][], options: ExportOptions = { format: 'txt' }) => {
-  if (!grid.length) return;
+const hexToAnsi = (hex: string): number => {
+  hex = hex.replace('#', '');
   
-  const boundingBox = getBoundingBox(grid);
-  if (boundingBox.maxRow === -1) return; // nothing to save
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+  
+  if (r === g && g === b) {
+    if (r < 8) return 16;
+    if (r > 248) return 231;
+    return Math.round(((r - 8) / 247) * 24) + 232;
+  }
+  
+  return 16 + 
+    (Math.round(r / 255 * 5) * 36) + 
+    (Math.round(g / 255 * 5) * 6) + 
+    Math.round(b / 255 * 5);
+}
+
+const downloadFile = (content: string, filename: string) => {
+  const blob = new Blob([content], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+const exportAsTxt = (grid: Cell[][], options: ExportOptions) => {
+  const { top, left, bottom, right } = findBoundingBox(grid);
+  let content = '';
+  
+  for (let row = top; row <= bottom; row++) {
+    for (let col = left; col <= right; col++) {
+      content += grid[row][col].char;
+    }
+    content += '\n';
+  }
+  
+  downloadFile(content, 'map.txt');
+}
+
+const exportAsJson = (grid: Cell[][], options: ExportOptions) => {
+  const { top, left, bottom, right } = findBoundingBox(grid);
+  const data = {
+    dimensions: {
+      rows: bottom - top + 1,
+      cols: right - left + 1
+    },
+    grid: grid.slice(top, bottom + 1).map(row => 
+      row.slice(left, right + 1).map(cell => ({
+        char: cell.char,
+        fg: cell.fg,
+        bg: cell.bg
+      }))
+    )
+  };
+  
+  downloadFile(JSON.stringify(data, null, 2), 'map.json');
+}
+
+const exportAsAnsi = (grid: Cell[][], options: ExportOptions) => {
+  const { top, left, bottom, right } = findBoundingBox(grid);
+  let content = '';
+  
+  for (let row = top; row <= bottom; row++) {
+    for (let col = left; col <= right; col++) {
+      const cell = grid[row][col];
+      const fgCode = hexToAnsi(cell.fg);
+      const bgCode = hexToAnsi(cell.bg);
+      content += `\x1b[38;5;${fgCode}m\x1b[48;5;${bgCode}m${cell.char}`;
+    }
+    content += '\x1b[0m\n';
+  }
+  
+  downloadFile(content, 'map.ansi');
+}
+
+export const exportMap = (grid: Cell[][], options: ExportOptions) => {
+  if (!grid || !Array.isArray(grid) || grid.length === 0) {
+    throw new Error('Invalid grid data');
+  }
 
   switch (options.format) {
     case 'txt':
-      exportAsTxt(grid, boundingBox);
+      exportAsTxt(grid, options);
       break;
     case 'json':
-      exportAsJson(grid, boundingBox);
+      exportAsJson(grid, options);
+      break;
+    case 'ansi':
+      exportAsAnsi(grid, options);
       break;
     default:
-      console.warn(`Unsupported export format: ${options.format}`);
+      throw new Error(`Unsupported export format: ${options.format}`);
   }
 } 

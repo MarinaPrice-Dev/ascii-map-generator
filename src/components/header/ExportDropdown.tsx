@@ -3,11 +3,11 @@ import { SaveIcon } from '../icons/Icons';
 import './ExportDropdown.css';
 
 interface ExportDropdownProps {
-  onExport: (format: 'txt' | 'json') => void;
-  disabled: boolean;
+  onExport: (format: 'txt' | 'json' | 'ansi') => void;
+  disabled?: boolean;
 }
 
-const ExportDropdown: React.FC<ExportDropdownProps> = ({ onExport, disabled }) => {
+const ExportDropdown: React.FC<ExportDropdownProps> = ({ onExport, disabled = false }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -22,7 +22,7 @@ const ExportDropdown: React.FC<ExportDropdownProps> = ({ onExport, disabled }) =
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleExport = (format: 'txt' | 'json') => {
+  const handleExport = (format: 'txt' | 'json' | 'ansi') => {
     onExport(format);
     setIsOpen(false);
   };
@@ -31,7 +31,7 @@ const ExportDropdown: React.FC<ExportDropdownProps> = ({ onExport, disabled }) =
     <div className="export-dropdown" ref={dropdownRef}>
       <button 
         className={`icon-button save-button ${isOpen ? 'dropdown-open' : ''}`}
-        onClick={() => setIsOpen(!isOpen)} 
+        onClick={() => setIsOpen(!isOpen)}
         disabled={disabled}
         title="Export Map"
       >
@@ -40,13 +40,12 @@ const ExportDropdown: React.FC<ExportDropdownProps> = ({ onExport, disabled }) =
       </button>
       {isOpen && (
         <div className="dropdown-menu">
-          <div className="dropdown-header">Export Formats</div>
-          <button onClick={() => handleExport('txt')} className="dropdown-item">
-            .txt <span className="button-description">(no colours)</span>
+          <div className="dropdown-header">Export Format</div>
+          <button className="dropdown-item" onClick={() => handleExport('txt')}>Text File (.txt)
+            <span className="button-description"> - no colours</span>
           </button>
-          <button onClick={() => handleExport('json')} className="dropdown-item">
-            .json
-          </button>
+          <button className="dropdown-item" onClick={() => handleExport('json')}>JSON File (.json)</button>
+          <button className="dropdown-item" onClick={() => handleExport('ansi')}>ANSI File (.ansi)</button>
         </div>
       )}
     </div>
