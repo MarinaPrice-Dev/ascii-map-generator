@@ -35,7 +35,7 @@ const InfoDialog: React.FC<InfoDialogProps> = ({ onClose }) => (
           <svg className="feature-icon" viewBox="0 0 24 24" width="16" height="16">
               <path fill="currentColor" d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
             </svg>
-            <strong>Export Functionality:</strong> Export your creations for use in other applications.</li>
+            <strong>Export and Import:</strong> Export and import your creations for use in other applications.</li>
           <li>
           <svg className="feature-icon" viewBox="0 0 24 24" width="16" height="16">
               <path fill="currentColor" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
@@ -53,6 +53,12 @@ const InfoDialog: React.FC<InfoDialogProps> = ({ onClose }) => (
         <h3>Example ASCII Maps (todo)</h3>
         <p>Here are some examples of what you can create with ASCII Studio:</p>
         <h3>Latest Updates</h3>
+        <h5>2025-06-17</h5>
+        <ul>
+            <li><strong>Export Formats:</strong> Added support for .txt, .json, .ansi, and .rot.txt.</li>
+            <li><strong>Importing:</strong> Added support for .txt, .json, .ansi, and .rot.txt.</li>
+            <li><strong>Bug fixes</strong></li>
+        </ul>
         <h5>2025-06-13</h5>
         <ul>
             <li><strong>Zoom 10px to 30px:</strong> Zoom in and out of the map. Not avalaible in mobile.</li>
