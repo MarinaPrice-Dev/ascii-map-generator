@@ -3,7 +3,7 @@
     background: var(--bg);
     border: 1px solid var(--border);
     border-radius: 8px;
-    padding: 20px;
+    padding: 0 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     z-index: 1000;
     display: flex;
@@ -19,21 +19,39 @@
     left: 5%;
 }
 
-.info-dialog h2 {
-  margin-top: 0;
-  color: var(--fg);
-  font-size: 1.5em;
-  padding-bottom: 5px;
-  padding-left: 5px;
+.info-dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0rem;
+  border-bottom: 2px dashed var(--info);
   font-family: "Doto", sans-serif;
-  border-bottom: 2px dashed #4477ca;
   font-weight: 700;
+}
+
+.info-dialog h2 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.info-dialog .menu-close {
+  background: none;
+  border: none;
+  color: var(--fg);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.info-dialog .menu-close:hover {
+  background: var(--info);
+  color: var(--fg);
 }
 
 .info-dialog-body {
   overflow-y: auto;
   flex-grow: 1;
-  padding: 20px 10px;
+  margin: 20px 10px;
   opacity: 0.9;
 }
 
@@ -70,26 +88,6 @@
     display: inline-block;
     width: 25px;
   }
-
-.info-dialog-footer {
-  padding-top: 10px;
-  text-align: right;
-  border-top: 2px dashed #4477ca;
-}
-
-.info-dialog-footer button {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 8px 16px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.info-dialog-footer button:hover {
-    background: #3b82f6;
-    color: var(--fg);
-}
 
 .info-dialog-overlay {
   position: fixed;

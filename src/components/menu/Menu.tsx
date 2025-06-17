@@ -45,6 +45,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
         </div>
         <div className="menu-content">
           {/* Add menu items here */}
+          Oops! This one's still in the oven.
         </div>
       </div>
     </>

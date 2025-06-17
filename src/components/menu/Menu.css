@@ -10,10 +10,10 @@
 
 .menu-panel {
     position: fixed;
-    top: 1.5%;
+    top: 2%;
     right: -340px;
     width: 340px;
-    height: calc(100% - 3%);
+    height: calc(100% - 4%);
     background: var(--bg);
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
     z-index: 1001;
@@ -61,7 +61,10 @@
 
 @media (max-width: 768px) {
   .menu-panel {
-    width: calc(100% - 1%);
+    width: calc(100% - 4%);
     right: -100%;
+  }
+  .menu-panel.open {
+    right: 2%;
   }
 } 

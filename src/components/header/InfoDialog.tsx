@@ -8,7 +8,10 @@ interface InfoDialogProps {
 const InfoDialog: React.FC<InfoDialogProps> = ({ onClose }) => (
   <div className="info-dialog-overlay">
     <div className="info-dialog">
-      <h2>About ASCII Studio</h2>
+      <div className="info-dialog-header">
+        <h2>About ASCII Studio</h2>
+        <button className="menu-close" onClick={onClose}>×</button>
+      </div>
       <div className="info-dialog-body">
         <p>ASCII Studio is a powerful tool for creating ASCII art maps with customizable characters and colors.</p>
         <p>It includes a variety of features to help you. It is still in development, with many more features being added every week.</p>
@@ -41,16 +44,16 @@ const InfoDialog: React.FC<InfoDialogProps> = ({ onClose }) => (
               <path fill="currentColor" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
               <path fill="currentColor" d="M7 12h2v5H7zm4-3h2v8h-2zm4-3h2v11h-2z"/>
             </svg>
-            <strong>Responsive:</strong> Fully supports tablets and mobile.</li>
+            <strong>Responsive:</strong> Fully supports tablets, and provides limited feature support for mobile.</li>
         </ul>
-        <h3>Keyboard Shortcuts (coming up soon)</h3>
+        <h3>Keyboard Shortcuts (coming soon)</h3>
         <ul>
           <li><strong>Ctrl + Z:</strong> Undo the last action.</li>
           <li><strong>Ctrl + Y:</strong> Redo the last undone action.</li>
           <li><strong>Ctrl + S:</strong> Save the current map.</li>
           <li><strong>Ctrl + C:</strong> Clear the current map.</li>
         </ul>
-        <h3>Example ASCII Maps (todo)</h3>
+        <h3>Example ASCII Maps (coming soon)</h3>
         <p>Here are some examples of what you can create with ASCII Studio:</p>
         <h3>Latest Updates</h3>
         <h5>2025-06-17</h5>
@@ -86,9 +89,6 @@ const InfoDialog: React.FC<InfoDialogProps> = ({ onClose }) => (
           <li><strong>Export:</strong> Basic .txt export functionality.</li>
           <li><strong>Color Support:</strong> Customize the foreground and background colors of each cell.</li>
         </ul>
-      </div>
-      <div className="info-dialog-footer">
-        <button onClick={onClose}>Close</button>
       </div>
     </div>
   </div>

@@ -48,23 +48,23 @@
 }
 
 .icon-button.clear-button {
-  color: #e33;
-  border-color: #e33;
+  color: var(--clear);
+  border-color: var(--clear);
 }
 
 .icon-button.clear-button:hover {
-  background: #e33;
-  color: white;
+  background: var(--clear);
+  color: var(--fg);
 }
 
 .icon-button.zoom-button {
-  color: #f59e0b;
-  border-color: #f59e0b;   
+  color: var(--zoom);
+  border-color: var(--zoom);   
 }
 
 .icon-button.zoom-button:hover {
-  background: #f59e0b;
-  color: white;
+  background: var(--zoom);
+  color: var(--fg);
 }
 
 /* Dark mode specific styles */
@@ -114,14 +114,3 @@
   background: var(--menu);
   color: var(--fg);
 } 
-
-/* .icon-button.menu-button {
-  background: var(--info);
-  color: var(--bg);
-  border-color: var(--bg);
-  opacity: 0.9;
-}
-
-.icon-button.menu-button:hover {
-  color: var(--fg);
-} */
