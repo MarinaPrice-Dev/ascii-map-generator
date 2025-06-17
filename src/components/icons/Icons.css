@@ -96,11 +96,32 @@
 }
 
 .icon-button.info-button {
-  color: #3b82f6;
-  border-color: #3b82f6;
+  color: var(--info);
+  border-color: var(--info);
 }
 
 .icon-button.info-button:hover {
-  background: #3b82f6;
-  color: white;
+  background: var(--info);
+  color: var(--fg);
 } 
+
+.icon-button.menu-button {
+  color: var(--menu);
+  border-color: var(--menu);
+}
+
+.icon-button.menu-button:hover {
+  background: var(--menu);
+  color: var(--fg);
+} 
+
+/* .icon-button.menu-button {
+  background: var(--info);
+  color: var(--bg);
+  border-color: var(--bg);
+  opacity: 0.9;
+}
+
+.icon-button.menu-button:hover {
+  color: var(--fg);
+} */

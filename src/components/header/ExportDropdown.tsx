@@ -4,6 +4,7 @@ import './ExportDropdown.css';
 
 interface ExportDropdownProps {
   onExport: (format: 'txt' | 'json' | 'ansi' | 'rot') => void;
+  onClose: () => void;
   disabled?: boolean;
 }
 

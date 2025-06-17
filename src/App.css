@@ -51,6 +51,7 @@
   --save: #22c55e;
   --clear: #e33;
   --info: #007bff;
+  --menu: #e600e6;
 }
 
 body {
@@ -149,7 +150,7 @@ button:disabled {
     padding: 8px 0;
     background: var(--footer-bg);
     border-bottom: 1px solid var(--border);
-    z-index: 2;
+    z-index: 20;
   }
   .app-header {
     padding-bottom: 0 !important;

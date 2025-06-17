@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { UndoIcon, RedoIcon, ClearIcon, InfoIcon, ZoomInIcon, ZoomOutIcon, ImportIcon } from '../icons/Icons';
+import { UndoIcon, RedoIcon, ClearIcon, InfoIcon, ZoomInIcon, ZoomOutIcon, ImportIcon, SaveIcon, MenuIcon } from '../icons/Icons';
 import '../icons/Icons.css';
 import './Header.css';
 import InfoDialog from './InfoDialog';
@@ -7,6 +7,7 @@ import ExportDropdown from './ExportDropdown';
 import { MIN_ZOOM, MAX_ZOOM } from '../../utils/zoomUtils';
 import { importMap } from '../../utils/importMap';
 import type { Cell } from '../../types/cell';
+import Menu from '../menu/Menu';
 
 interface HeaderProps {
   onSaveMap: (format: 'txt' | 'json' | 'ansi' | 'rot') => void;
@@ -38,6 +39,8 @@ const Header: React.FC<HeaderProps> = ({
   const isGridEmpty = grid.every(row => row.every(cell => cell.char === ' '));
   const [showInfoDialog, setShowInfoDialog] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isExportOpen, setIsExportOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleImportClick = () => {
     fileInputRef.current?.click();
@@ -128,7 +131,7 @@ const Header: React.FC<HeaderProps> = ({
             <ClearIcon />
           </button>
           <div className="desktop-only">
-            <ExportDropdown onExport={onSaveMap} disabled={isGridEmpty} />
+            <ExportDropdown onExport={onSaveMap} disabled={isGridEmpty} onClose={() => setIsExportOpen(false)} />
           </div>
           <div className="desktop-only">
             <button className="icon-button import-button" onClick={handleImportClick} title="Import Map">
@@ -149,6 +152,13 @@ const Header: React.FC<HeaderProps> = ({
             title="More Information"
           >
             <InfoIcon />
+          </button>
+          <button 
+            className="icon-button menu-button" 
+            onClick={() => setIsMenuOpen(true)} 
+            title="Menu"
+          >
+            <MenuIcon />
           </button>
         </div>
       </header>
@@ -182,7 +192,7 @@ const Header: React.FC<HeaderProps> = ({
         <button className="icon-button clear-button" onClick={onClearMap} disabled={isGridEmpty} title="Clear Map">
           <ClearIcon />
         </button>
-        <ExportDropdown onExport={onSaveMap} disabled={isGridEmpty} />
+        <ExportDropdown onExport={onSaveMap} disabled={isGridEmpty} onClose={() => setIsExportOpen(false)} />
         <button className="icon-button import-button" onClick={handleImportClick} title="Import Map">
           <ImportIcon />
         </button>
@@ -200,8 +210,16 @@ const Header: React.FC<HeaderProps> = ({
         >
           <InfoIcon />
         </button>
+        <button 
+          className="icon-button menu-button" 
+          onClick={() => setIsMenuOpen(true)} 
+          title="Menu"
+        >
+          <MenuIcon />
+        </button>
       </div>
       {showInfoDialog && <InfoDialog onClose={() => setShowInfoDialog(false)} />}
+      <Menu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
     </>
   );
 };
