@@ -56,7 +56,9 @@
 }
 
 .menu-content {
-  padding: 1rem;
+  padding: 1rem 0;
+  text-align: left;
+  font-size: 0.95rem;
 }
 
 @media (max-width: 768px) {

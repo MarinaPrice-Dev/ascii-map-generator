@@ -1,11 +1,12 @@
 # Ascii Map Generator
 
 ## TO DO
-- add: about, updates, example maps
-- better exports - txt, html, rotjs, colours
-- add import - validate whether it will fit, or just load what we can
+- menu: documentation, example maps, blog, contact us
+- email forwarding
+- more exports - rexpaint
+- add import - make the grid bigger if needed?
 - keyboard shortcuts (save, undo, etc)
-- ai integration - generate automatically
-- procedurally generated maps
+- replace colour function (paintbucket)
+- procedurally generated maps??
 - infinite canvas
 
