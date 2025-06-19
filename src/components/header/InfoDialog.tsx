@@ -13,8 +13,7 @@ const InfoDialog: React.FC<InfoDialogProps> = ({ onClose }) => (
         <button className="menu-close" onClick={onClose}>×</button>
       </div>
       <div className="info-dialog-body">
-        <p>ASCII Studio is a powerful tool for creating ASCII art maps with customizable characters and colors.</p>
-        <p>It includes a variety of features to help you. It is still in development, with many more features being added every week.</p>
+        <p>ASCII Studio is a powerful tool for creating ASCII art with customizable characters and colors.</p>
         <h3>Features</h3>
         <ul className="feature">
           <li>

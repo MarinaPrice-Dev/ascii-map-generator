@@ -12,6 +12,7 @@
   transition: height 0.3s ease;
   position: relative;
   z-index: 10;
+  overflow: hidden;
 }
 
 .footer:hover {
@@ -128,6 +129,7 @@
   .footer-sections {
     flex-direction: column;
     gap: 8px;
+    opacity: 1;
   }
 
   .color-section {

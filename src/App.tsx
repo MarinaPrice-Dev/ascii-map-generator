@@ -7,12 +7,14 @@ import { loadSavedState, saveState, clearSavedState } from './utils/saveState'
 import { exportMap } from './utils/exportMap'
 import Header from './components/header/Header'
 import { Footer } from './components/footer/Footer'
+import Menu from './components/menu/Menu'
 import type { Cell } from './types/cell'
 import { handleZoom, expandGrid } from './utils/zoomUtils'
 
 const HEADER_HEIGHT = 60;
-const FOOTER_HEIGHT = 150;
+const FOOTER_HEIGHT = 200;
 const CELL_SIZE = 20;
+const MENU_WIDTH = 340;
 
 const getCellSize = () => CELL_SIZE;
 
@@ -23,15 +25,18 @@ const App: React.FC = () => {
   const [selectedChar, setSelectedChar] = useState<string>('#')
   const [selectedFg, setSelectedFg] = useState<string>(DEFAULT_FG);
   const [selectedBg, setSelectedBg] = useState<string>(DEFAULT_BG);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const mainRef = useRef<HTMLDivElement>(null);
 
   // Initial grid setup
   const getGridDims = (currentCellSize: number) => {
-    const availableWidth = window.innerWidth - 2;
-    const availableHeight = window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT - 2;
+    const availableWidth = window.innerWidth - 2 - (isMenuOpen ? MENU_WIDTH : 0);
+    const availableHeight = window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT - 2; // 50px for footer (default collapsed state)
     const cols = Math.floor(availableWidth / currentCellSize);
     const rows = Math.floor(availableHeight / currentCellSize);
-    return { rows, cols };
+    // Make it square by using the smaller dimension for both rows and columns
+    const squareSize = Math.max(rows, cols);
+    return { rows: squareSize, cols: squareSize };
   };
 
   // First, try to load saved zoom level
@@ -67,13 +72,13 @@ const App: React.FC = () => {
   useEffect(() => {
     const { rows, cols } = getGridDims(cellSize);
     saveState(grid, rows, cols, cellSize);
-  }, [grid, cellSize]);
+  }, [grid, cellSize, isMenuOpen]);
 
   // Handle zoom in/out
   const handleZoomIn = () => {
     beginAction();
-    const availableWidth = window.innerWidth - 2;
-    const availableHeight = window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT - 2;
+    const availableWidth = window.innerWidth - 2 - (isMenuOpen ? MENU_WIDTH : 0);
+    const availableHeight = window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT - 2; // 50px for footer (default collapsed state)
     
     const { newCellSize, newRows, newCols } = handleZoom(
       cellSize,
@@ -88,8 +93,8 @@ const App: React.FC = () => {
 
   const handleZoomOut = () => {
     beginAction();
-    const availableWidth = window.innerWidth - 2;
-    const availableHeight = window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT - 2;
+    const availableWidth = window.innerWidth - 2 - (isMenuOpen ? MENU_WIDTH : 0);
+    const availableHeight = window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT - 2; // 50px for footer (default collapsed state)
     
     const { newCellSize, newRows, newCols } = handleZoom(
       cellSize,
@@ -106,7 +111,12 @@ const App: React.FC = () => {
   const updateCell = (row: number, col: number, char: string, fg: string, bg: string) => {
     setGrid(prev => {
       const newGrid = prev.map(arr => arr.slice())
-      newGrid[row][col] = { char, fg, bg };
+      newGrid[row][col] = { 
+        char, 
+        fg, 
+        bg, 
+        selected: newGrid[row][col]?.selected || false 
+      };
       return newGrid
     })
   }
@@ -135,12 +145,14 @@ const App: React.FC = () => {
             char: importedCell.char,
             fg: importedCell.fg || DEFAULT_FG,
             bg: importedCell.bg || DEFAULT_BG,
+            selected: importedCell.selected || false,
           };
         }
         return {
           char: ' ',
           fg: DEFAULT_FG,
           bg: DEFAULT_BG,
+          selected: false,
         };
       })
     );
@@ -162,21 +174,30 @@ const App: React.FC = () => {
         onZoomIn={handleZoomIn}
         onZoomOut={handleZoomOut}
         onImportMap={handleImportMap}
+        isMenuOpen={isMenuOpen}
+        onMenuToggle={() => setIsMenuOpen(!isMenuOpen)}
       />
-      {/* Main Grid Area */}
-      <main ref={mainRef} className="main-grid-area">
-        {grid.length > 0 && (
-          <AsciiMapGrid grid={grid} updateCell={updateCell} beginAction={beginAction} selectedChar={selectedChar} selectedFg={selectedFg} selectedBg={selectedBg} cellSize={cellSize} />
-        )}
-      </main>
-      <Footer
-        selectedChar={selectedChar}
-        setSelectedChar={setSelectedChar}
-        selectedFg={selectedFg}
-        setSelectedFg={setSelectedFg}
-        selectedBg={selectedBg}
-        setSelectedBg={setSelectedBg}
-      />
+      
+      <div className="main-content">
+        {/* Main Grid Area */}
+        <main ref={mainRef} className={`main-grid-area ${isMenuOpen ? 'menu-open' : ''}`}>
+          {grid.length > 0 && (
+            <AsciiMapGrid grid={grid} updateCell={updateCell} beginAction={beginAction} selectedChar={selectedChar} selectedFg={selectedFg} selectedBg={selectedBg} cellSize={cellSize} />
+          )}
+        </main>
+        
+        <Footer
+          selectedChar={selectedChar}
+          setSelectedChar={setSelectedChar}
+          selectedFg={selectedFg}
+          setSelectedFg={setSelectedFg}
+          selectedBg={selectedBg}
+          setSelectedBg={setSelectedBg}
+          isMenuOpen={isMenuOpen}
+        />
+        
+        <Menu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+      </div>
     </div>
   )
 }

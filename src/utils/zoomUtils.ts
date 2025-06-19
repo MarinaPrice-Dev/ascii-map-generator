@@ -17,7 +17,9 @@ export const calculateGridDimensions = (
 ): { rows: number; cols: number } => {
   const cols = Math.floor(availableWidth / cellSize);
   const rows = Math.floor(availableHeight / cellSize);
-  return { rows, cols };
+  // Make it square by using the smaller dimension for both rows and columns
+  const squareSize = Math.max(rows, cols);
+  return { rows: squareSize, cols: squareSize };
 };
 
 export const expandGrid = (
@@ -40,7 +42,8 @@ export const expandGrid = (
     Array(newCols).fill(null).map(() => ({
       char: ' ',
       fg: defaultFg,
-      bg: defaultBg
+      bg: defaultBg,
+      selected: false
     }))
   );
 

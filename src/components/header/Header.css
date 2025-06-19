@@ -90,3 +90,8 @@
   text-align: center;
   color: var(--fg);
 }
+
+.menu-button.active {
+  background: var(--menu);
+  color: var(--bg);
+}
