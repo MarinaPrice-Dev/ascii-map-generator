@@ -22,6 +22,8 @@ interface HeaderProps {
   onImportMap: (grid: Cell[][]) => void;
   isMenuOpen: boolean;
   onMenuToggle: () => void;
+  isExportPanelOpen: boolean;
+  onExportPanelToggle: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -38,6 +40,8 @@ const Header: React.FC<HeaderProps> = ({
   onImportMap,
   isMenuOpen,
   onMenuToggle,
+  isExportPanelOpen,
+  onExportPanelToggle,
 }) => {
   const isGridEmpty = grid.every(row => row.every(cell => cell.char === ' '));
   const [showInfoDialog, setShowInfoDialog] = useState(false);
@@ -132,7 +136,12 @@ const Header: React.FC<HeaderProps> = ({
             <ClearIcon />
           </button>
           <div className="desktop-only">
-            <ExportDropdown onExport={onSaveMap} disabled={isGridEmpty} onClose={() => {}} />
+            <ExportDropdown
+              onExport={onSaveMap}
+              disabled={isGridEmpty}
+              isOpen={isExportPanelOpen}
+              onToggle={onExportPanelToggle}
+            />
           </div>
           <div className="desktop-only">
             <button className="icon-button import-button" onClick={handleImportClick} title="Import Map">
@@ -193,7 +202,12 @@ const Header: React.FC<HeaderProps> = ({
         <button className="icon-button clear-button" onClick={onClearMap} disabled={isGridEmpty} title="Clear Map">
           <ClearIcon />
         </button>
-        <ExportDropdown onExport={onSaveMap} disabled={isGridEmpty} onClose={() => {}} />
+        <ExportDropdown
+          onExport={onSaveMap}
+          disabled={isGridEmpty}
+          isOpen={isExportPanelOpen}
+          onToggle={onExportPanelToggle}
+        />
         <button className="icon-button import-button" onClick={handleImportClick} title="Import Map">
           <ImportIcon />
         </button>

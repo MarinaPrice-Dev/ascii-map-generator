@@ -45,6 +45,7 @@
 
 :root {
   --bg: #222;
+  --bg-light: #2a2a2a;
   --fg: #fff;
   --border: #444;
   --footer-bg: #181818;

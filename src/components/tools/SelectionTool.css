@@ -78,15 +78,15 @@
 
 .tool-option:hover,
 .mode-option:hover {
-  background: #2a2a2a;
-  border-color: #444;
+  background: var(--bg-light);
+  border-color: var(--border);
 }
 
 .tool-option input[type="radio"],
 .mode-option input[type="radio"] {
   margin: 0;
   margin-top: 1px;
-  accent-color: #00ff00;
+  accent-color: var(--save);
 }
 
 .tool-option input[type="radio"]:disabled + .tool-option-content,

@@ -26,6 +26,7 @@ const App: React.FC = () => {
   const [selectedFg, setSelectedFg] = useState<string>(DEFAULT_FG);
   const [selectedBg, setSelectedBg] = useState<string>(DEFAULT_BG);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isExportPanelOpen, setIsExportPanelOpen] = useState(false);
   const mainRef = useRef<HTMLDivElement>(null);
 
   // Calculate initial grid dimensions once
@@ -145,9 +146,24 @@ const App: React.FC = () => {
     clearSavedState();
   };
 
+  const handleMenuToggle = () => {
+    setIsMenuOpen(prev => !prev);
+    if (!isMenuOpen) {
+      setIsExportPanelOpen(false); // Close export panel if opening menu
+    }
+  };
+
+  const handleExportPanelToggle = () => {
+    setIsExportPanelOpen(prev => !prev);
+    if (!isExportPanelOpen) {
+      setIsMenuOpen(false); // Close menu if opening export panel
+    }
+  };
+
   // Handle map export
   const handleExport = (format: 'txt' | 'json' | 'ansi' | 'rot') => {
     exportMap(grid, { format });
+    setIsExportPanelOpen(false); // Close panel after exporting
   };
 
   const handleImportMap = (importedGrid: Cell[][]) => {
@@ -191,7 +207,9 @@ const App: React.FC = () => {
         onZoomOut={handleZoomOut}
         onImportMap={handleImportMap}
         isMenuOpen={isMenuOpen}
-        onMenuToggle={() => setIsMenuOpen(!isMenuOpen)}
+        onMenuToggle={handleMenuToggle}
+        isExportPanelOpen={isExportPanelOpen}
+        onExportPanelToggle={handleExportPanelToggle}
       />
       
       <div className="main-content">
@@ -212,7 +230,7 @@ const App: React.FC = () => {
           isMenuOpen={isMenuOpen}
         />
         
-        <Menu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+        <Menu isOpen={isMenuOpen} onClose={handleMenuToggle} />
       </div>
     </div>
   )

@@ -1,72 +1,129 @@
 .export-dropdown {
-  position: relative;
-  display: inline-block;
+  position: static;
 }
 
-.dropdown-menu {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  margin-top: -1px;
+.export-panel {
+  position: fixed;
+  top: 60px;
+  right: -342px;
+  width: 340px;
+  height: calc(100% - 60px);
   background: var(--bg);
-  border: 1px solid var(--save);
-  border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  z-index: 1000;
-  min-width: 300px;
-  border-top-right-radius: 0;
+  border-left: 2px solid var(--save);
+  z-index: 999;
+  transition: right 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
 }
 
-.dropdown-header {
-  padding: 11px 16px;
+.export-panel.open {
+  right: 0;
+  /* Slide in */
+}
+
+.export-panel-header {
+  padding: 0.4rem 1rem;
   color: var(--fg);
   font-size: 1em;
-  font-weight: 500;
-  text-align: left;
-  border-bottom: 2px dashed var(--save);
-  font-family: "Doto", sans-serif;
   font-weight: 700;
-}
-
-.dropdown-item {
-  display: block;
-  width: 100%;
-  padding: 8px 12px;
-  border: none;
-  background: none;
-  color: var(--fg);
   text-align: left;
+  border-bottom: 1px dashed var(--save);
+  font-family: "Doto", sans-serif;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.export-panel-close {
+  background: none;
+  border: none;
+  color: var(--fg);
+  font-size: 1.5rem;
   cursor: pointer;
-  transition: background-color 0.2s ease;
-  border-left: 5px solid transparent;
-  font-size: 0.9em;
+  padding: 0.2rem 0.5rem;
+  line-height: 1;
 }
 
-.dropdown-item:hover {
-  background-color: var(--bg);
-  color: var(--save);
-  border-left: 5px solid var(--save);
-  border-radius: 0;
+.export-panel-close:hover {
+  background: var(--save);
+  color: var(--fg);
 }
 
-.dropdown-item:first-child {
-  border-radius: 4px 4px 0 0;
+.export-panel-content {
+  padding: 1rem;
+  flex-grow: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.dropdown-item:last-child {
-  border-radius: 0 0 4px 4px;
+/* Custom scrollbar for export panel */
+.export-panel-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.export-panel-content::-webkit-scrollbar-track {
+  background: var(--bg);
+  border-radius: 3px;
+}
+
+.export-panel-content::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+.export-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 5px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+  border: 1px solid transparent;
+  background: none;
+  text-align: left;
+}
+
+.export-item:hover {
+  background: var(--bg-light);
+  border-color: var(--border);
+}
+
+.export-item-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.export-label {
+  font-weight: bold;
+  color: var(--fg);
+  opacity: 0.9;
+  font-size: 0.8rem;
+}
+
+.export-description {
+  font-size: 0.7rem;
+  color: var(--fg);
+  opacity: 0.7;
+  line-height: 1.3;
+}
+
+/* Remove old styles that are no longer needed */
+.export-item:last-child {
+  margin-bottom: 0;
+}
+
+.button-description {
+  display: none; /* Replaced by export-description */
 }
 
 .icon-button.save-button.dropdown-open {
   background: var(--save);
   color: var(--fg);
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
-.button-description {
-  font-weight: 400;
-  opacity: 0.75;
 }
 
 @media (max-width: 768px) {
