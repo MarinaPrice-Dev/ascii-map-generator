@@ -17,46 +17,46 @@ const SelectionTool: React.FC = () => {
 
   const selectedCount = getSelectedCellsCount();
 
-  const toolOptions: { value: Tool; label: string; description: string; icon: React.FC }[] = [
-    {
-      value: 'select-area',
-      label: 'Select Area',
-      description: 'Drag to select a rectangular area',
-      icon: AreaIcon
-    },
-    {
-      value: 'select-rectangle',
-      label: 'Select Rectangle',
-      description: 'Drag to select the border of a rectangle',
-      icon: RectangleIcon
-    },
-    {
-      value: 'select-cells',
-      label: 'Select Cells',
-      description: 'Click to select individual cells',
-      icon: CellsIcon
-    },
-  ];
-
   const modeOptions: { value: SelectionMode; label: string; description: string; icon: React.FC }[] = [
     {
       value: 'draw',
-      label: 'Draw Mode',
+      label: 'Draw',
       description: 'Draw on the grid with selected character and colors',
       icon: PencilIcon
     },
     {
       value: 'single',
-      label: 'Single Selection',
-      description: 'Each new selection replaces the previous one',
+      label: 'Select',
+      description: 'Select an area to manipulate',
       icon: SingleBoxIcon
     },
     {
       value: 'multiple',
-      label: 'Multiple Selection',
-      description: 'New selections are added to existing ones',
+      label: 'Multi-Select',
+      description: 'Select multiple areas to manipulate',
       icon: MultipleBoxIcon
     }
+  ];
+
+  const toolOptions: { value: Tool; label: string; description: string; icon: React.FC }[] = [
+    {
+      value: 'select-area',
+      label: 'Area',
+      description: 'Drag for a rectangular area',
+      icon: AreaIcon
+    },
+    {
+      value: 'select-rectangle',
+      label: 'Rectangle',
+      description: 'Drag for a rectangle',
+      icon: RectangleIcon
+    },
+    {
+      value: 'select-cells',
+      label: 'Cells',
+      description: 'Click for individual cells',
+      icon: CellsIcon
+    },
   ];
 
   return (
@@ -122,19 +122,13 @@ const SelectionTool: React.FC = () => {
       </div>
 
       <div className="selection-tool-section">
-        <h4>Instructions</h4>
+        <h4>Help</h4>
         <div className="instructions">
           <div className="instruction-item">
             <strong>Draw Mode:</strong> Use tools to draw on the grid with selected character and colors
           </div>
           <div className="instruction-item">
-            <strong>Selection Mode:</strong> Use tools to select cells for future operations
-          </div>
-          <div className="instruction-item">
-            <strong>Tools:</strong> Select Area (fill), Select Rectangle (border), Select Cells (individual)
-          </div>
-          <div className="instruction-item">
-            <strong>Mac:</strong> One-finger click to select, Two-finger click to unselect
+            <strong>Select Mode:</strong> Use tools to select cells for future operations
           </div>
         </div>
       </div>

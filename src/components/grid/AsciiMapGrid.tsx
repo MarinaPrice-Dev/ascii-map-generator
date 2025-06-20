@@ -17,8 +17,10 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, beginActi
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [startCell, setStartCell] = useState<{ row: number; col: number } | null>(null);
   const [hoverCell, setHoverCell] = useState<{ row: number; col: number } | null>(null);
+  const [previousCell, setPreviousCell] = useState<{ row: number; col: number } | null>(null);
   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [isUnselectOperation, setIsUnselectOperation] = useState(false);
+  const [visitedCells, setVisitedCells] = useState<Set<string>>(new Set());
 
   const {
     activeTool,
@@ -30,7 +32,64 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, beginActi
     isDrawMode
   } = useSelectionStore();
 
+  // Line interpolation function using Bresenham's algorithm
+  const getCellsBetween = (start: { row: number; col: number }, end: { row: number; col: number }) => {
+    const cells: { row: number; col: number }[] = [];
+    let { row: x0, col: y0 } = start;
+    let { row: x1, col: y1 } = end;
+    
+    const dx = Math.abs(x1 - x0);
+    const dy = Math.abs(y1 - y0);
+    const sx = x0 < x1 ? 1 : -1;
+    const sy = y0 < y1 ? 1 : -1;
+    let err = dx - dy;
+    
+    while (true) {
+      cells.push({ row: x0, col: y0 });
+      
+      if (x0 === x1 && y0 === y1) break;
+      
+      const e2 = 2 * err;
+      if (e2 > -dy) {
+        err -= dy;
+        x0 += sx;
+      }
+      if (e2 < dx) {
+        err += dx;
+        y0 += sy;
+      }
+    }
+    
+    return cells;
+  };
+
+  const processCell = (row: number, col: number) => {
+    const cellKey = `${row},${col}`;
+    
+    // Only process if we haven't visited this cell yet
+    if (!visitedCells.has(cellKey)) {
+      if (isDrawMode()) {
+        // Drawing mode - draw on the cell
+        updateCell(row, col, selectedChar, selectedFg, selectedBg);
+      } else {
+        // Selection mode - select/unselect the cell
+        if (isUnselectOperation) {
+          unselectCell(row, col);
+        } else {
+          selectCell(row, col);
+        }
+      }
+      
+      // Mark this cell as visited
+      setVisitedCells(prev => new Set(prev).add(cellKey));
+    }
+  };
+
   const handleStart = (row: number, col: number, isRightClick: boolean = false) => {
+    // Reset visited cells for new operation
+    setVisitedCells(new Set());
+    setPreviousCell({ row, col });
+    
     // Check if we're in draw mode
     if (isDrawMode()) {
       // Drawing mode - can use selection tools to draw
@@ -41,7 +100,7 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, beginActi
       
       // For individual cell drawing
       if (activeTool === 'select-cells') {
-        updateCell(row, col, selectedChar, selectedFg, selectedBg);
+        processCell(row, col);
       }
       return;
     }
@@ -55,17 +114,26 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, beginActi
 
     if (activeTool === 'select-cells') {
       // For individual cell selection
-      if (isRightClick) {
-        unselectCell(row, col);
-      } else {
-        selectCell(row, col);
-      }
+      processCell(row, col);
     }
   };
 
   const handleMove = (row: number, col: number) => {
     if (isMouseDown && startCell) {
       setHoverCell({ row, col });
+      
+      // Handle continuous drawing/selection for select-cells tool
+      if (activeTool === 'select-cells' && previousCell) {
+        // Get all cells between the previous position and current position
+        const cellsToProcess = getCellsBetween(previousCell, { row, col });
+        
+        // Process each cell in the line
+        cellsToProcess.forEach(cell => {
+          processCell(cell.row, cell.col);
+        });
+      }
+      
+      setPreviousCell({ row, col });
     }
   };
 
@@ -131,17 +199,16 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, beginActi
             }
           }
         }
-      } else if (activeTool === 'select-cells') {
-        // Draw individual cells - already handled in handleStart
-        // This is for drag operations
-        updateCell(hoverCell.row, hoverCell.col, selectedChar, selectedFg, selectedBg);
       }
+      // Note: select-cells continuous drawing is now handled in handleMove
     }
     setIsMouseDown(false);
     setIsSelectionMode(false);
     setIsUnselectOperation(false);
     setStartCell(null);
     setHoverCell(null);
+    setPreviousCell(null);
+    setVisitedCells(new Set()); // Reset visited cells
   };
 
   const handleContextMenu = (e: React.MouseEvent, row: number, col: number) => {
@@ -159,7 +226,7 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, beginActi
       window.removeEventListener('touchend', handleEnd);
     };
     // eslint-disable-next-line
-  }, [isMouseDown, startCell, hoverCell, selectedChar, selectedFg, selectedBg, isSelectionMode, activeTool, isUnselectOperation, isDrawMode]);
+  }, [isMouseDown, startCell, hoverCell, previousCell, selectedChar, selectedFg, selectedBg, isSelectionMode, activeTool, isUnselectOperation, isDrawMode, visitedCells]);
 
   // Helper to check if a cell is in the current selection rectangle
   const isInSelection = (row: number, col: number) => {
