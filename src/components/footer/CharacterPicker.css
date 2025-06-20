@@ -88,7 +88,3 @@
   background: var(--border);
   border-radius: 3px;
 }
-
-.character-categories::-webkit-scrollbar-thumb:hover {
-  background: var(--accent);
-}

@@ -75,10 +75,6 @@
   border-radius: 4px;
 }
 
-.color-categories::-webkit-scrollbar-thumb:hover {
-  background: var(--text-secondary);
-}
-
 /* Mobile adjustments */
 @media (max-width: 768px) {
   .color-grid {

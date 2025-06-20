@@ -28,10 +28,10 @@ const App: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const mainRef = useRef<HTMLDivElement>(null);
 
-  // Initial grid setup
-  const getGridDims = (currentCellSize: number) => {
-    const availableWidth = window.innerWidth - 2 - (isMenuOpen ? MENU_WIDTH : 0);
-    const availableHeight = window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT - 2; // 50px for footer (default collapsed state)
+  // Calculate initial grid dimensions once
+  const getInitialGridDims = (currentCellSize: number) => {
+    const availableWidth = window.innerWidth - 2;
+    const availableHeight = window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT - 2;
     const cols = Math.floor(availableWidth / currentCellSize);
     const rows = Math.floor(availableHeight / currentCellSize);
     // Make it square by using the smaller dimension for both rows and columns
@@ -39,46 +39,59 @@ const App: React.FC = () => {
     return { rows: squareSize, cols: squareSize };
   };
 
-  // First, try to load saved zoom level
+  // First, try to load saved zoom level and dimensions
   const savedState = localStorage.getItem('ascii-map-state');
   let initialCellSize = getCellSize();
+  let initialRows = 0;
+  let initialCols = 0;
+  
   if (savedState) {
     try {
       const parsed = JSON.parse(savedState);
       if (parsed.cellSize) {
         initialCellSize = parsed.cellSize;
       }
+      if (parsed.rows && parsed.cols) {
+        // Use saved dimensions if available
+        initialRows = parsed.rows;
+        initialCols = parsed.cols;
+      }
     } catch (e) {
       console.error('Failed to parse saved state:', e);
     }
   }
 
-  // Calculate grid dimensions based on the zoom level
-  const { rows, cols } = getGridDims(initialCellSize);
+  // If no saved dimensions, calculate them
+  if (initialRows === 0 || initialCols === 0) {
+    const dims = getInitialGridDims(initialCellSize);
+    initialRows = dims.rows;
+    initialCols = dims.cols;
+  }
   
   // Now load the complete saved state with the correct dimensions
   const { grid: savedGrid, cellSize: savedCellSize } = loadSavedState(
-    rows,
-    cols,
+    initialRows,
+    initialCols,
     DEFAULT_FG,
     DEFAULT_BG,
     initialCellSize
   );
 
   const [cellSize, setCellSize] = useState<number>(savedCellSize);
+  const [gridRows, setGridRows] = useState<number>(initialRows);
+  const [gridCols, setGridCols] = useState<number>(initialCols);
   const [grid, setGrid, undo, redo, canUndo, canRedo, beginAction] = useUndoRedo<Cell[][]>(savedGrid);
 
   // Save grid state whenever it changes
   useEffect(() => {
-    const { rows, cols } = getGridDims(cellSize);
-    saveState(grid, rows, cols, cellSize);
-  }, [grid, cellSize, isMenuOpen]);
+    saveState(grid, gridRows, gridCols, cellSize);
+  }, [grid, gridRows, gridCols, cellSize]);
 
   // Handle zoom in/out
   const handleZoomIn = () => {
     beginAction();
-    const availableWidth = window.innerWidth - 2 - (isMenuOpen ? MENU_WIDTH : 0);
-    const availableHeight = window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT - 2; // 50px for footer (default collapsed state)
+    const availableWidth = window.innerWidth - 2;
+    const availableHeight = window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT - 2;
     
     const { newCellSize, newRows, newCols } = handleZoom(
       cellSize,
@@ -88,13 +101,15 @@ const App: React.FC = () => {
     );
 
     setCellSize(newCellSize);
+    setGridRows(newRows);
+    setGridCols(newCols);
     setGrid(prevGrid => expandGrid(prevGrid, newRows, newCols, DEFAULT_FG, DEFAULT_BG));
   };
 
   const handleZoomOut = () => {
     beginAction();
-    const availableWidth = window.innerWidth - 2 - (isMenuOpen ? MENU_WIDTH : 0);
-    const availableHeight = window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT - 2; // 50px for footer (default collapsed state)
+    const availableWidth = window.innerWidth - 2;
+    const availableHeight = window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT - 2;
     
     const { newCellSize, newRows, newCols } = handleZoom(
       cellSize,
@@ -104,6 +119,8 @@ const App: React.FC = () => {
     );
 
     setCellSize(newCellSize);
+    setGridRows(newRows);
+    setGridCols(newCols);
     setGrid(prevGrid => expandGrid(prevGrid, newRows, newCols, DEFAULT_FG, DEFAULT_BG));
   };
 
@@ -124,8 +141,7 @@ const App: React.FC = () => {
   // Clear map
   const clearMap = () => {
     beginAction();
-    const { rows, cols } = getGridDims(cellSize);
-    setGrid(getInitialGrid(rows, cols, DEFAULT_FG, DEFAULT_BG));
+    setGrid(getInitialGrid(gridRows, gridCols, DEFAULT_FG, DEFAULT_BG));
     clearSavedState();
   };
 

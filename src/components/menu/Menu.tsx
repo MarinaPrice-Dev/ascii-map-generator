@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import SelectionTool from '../tools/SelectionTool';
+import Settings from './Settings';
+import Help from './Help';
 import './Menu.css';
 
 interface MenuProps {
@@ -7,40 +9,17 @@ interface MenuProps {
   onClose: () => void;
 }
 
-const menuHeaders = [
-    "==> Enter Menu",
-    ":: Main Console ::",
-    "--[ ASCII MENU ]--",
-    "> Choose Your Path",
-    "LOAD_MENU.EXE",
-    "[*] Press Start",
-    "::: Options Hub :::",
-    "/ Menu Initialized \\",
-    "~*~ Control Central ~*~",
-    "<< Adventure Menu >>",
-    "--= Data Terminal =--",
-    ":: Choose Your Quest ::",
-    ">>> Accessing Menu",
-    "[MENU_STATUS: READY]",
-  ];
-  
-  
-
 const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
-  const [headerText, setHeaderText] = useState(menuHeaders[0]);
   const [activeSection, setActiveSection] = useState<string>('tools');
-
-  useEffect(() => {
-    if (isOpen) {
-      const randomIndex = Math.floor(Math.random() * menuHeaders.length);
-      setHeaderText(menuHeaders[randomIndex]);
-    }
-  }, [isOpen]);
 
   const renderSection = () => {
     switch (activeSection) {
       case 'tools':
         return <SelectionTool />;
+      case 'settings':
+        return <Settings />;
+      case 'help':
+        return <Help />;
       default:
         return <div className="menu-placeholder">Section coming soon...</div>;
     }
@@ -48,17 +27,12 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
 
   return (
     <div className={`menu-panel ${isOpen ? 'open' : ''}`}>
-      <div className="menu-header">
-        <h2>{headerText}</h2>
-        <button className="menu-close" onClick={onClose}>×</button>
-      </div>
-      
       <div className="menu-navigation">
         <button 
           className={`nav-button ${activeSection === 'tools' ? 'active' : ''}`}
           onClick={() => setActiveSection('tools')}
         >
-          Tools & Utilities
+          Tools
         </button>
         <button 
           className={`nav-button ${activeSection === 'settings' ? 'active' : ''}`}

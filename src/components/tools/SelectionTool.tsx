@@ -9,7 +9,8 @@ const SelectionTool: React.FC = () => {
     setActiveTool,
     setSelectionMode,
     clearSelection,
-    getSelectedCellsCount
+    getSelectedCellsCount,
+    isDrawMode
   } = useSelectionStore();
 
   const selectedCount = getSelectedCellsCount();
@@ -34,6 +35,11 @@ const SelectionTool: React.FC = () => {
 
   const modeOptions: { value: SelectionMode; label: string; description: string }[] = [
     {
+      value: 'draw',
+      label: 'Draw Mode',
+      description: 'Draw on the grid with selected character and colors'
+    },
+    {
       value: 'single',
       label: 'Single Selection',
       description: 'Each new selection replaces the previous one'
@@ -47,19 +53,38 @@ const SelectionTool: React.FC = () => {
 
   return (
     <div className="selection-tool">
-      <div className="selection-tool-header">
-        <h3>Selection Tools</h3>
-        <div className="selection-info">
-          <span className="selected-count">{selectedCount} cells selected</span>
-          {selectedCount > 0 && (
+      {selectedCount > 0 && (
+        <div className="selection-tool-section">
+          <div className="clear-selection-section">
             <button 
               className="clear-selection-btn"
               onClick={clearSelection}
               title="Clear all selections"
             >
-              Clear
+              Clear All Selections
             </button>
-          )}
+          </div>
+        </div>
+      )}
+
+    <div className="selection-tool-section">
+        <h4>Mode</h4>
+        <div className="mode-options">
+          {modeOptions.map((mode) => (
+            <label key={mode.value} className="mode-option">
+              <input
+                type="radio"
+                name="selectionMode"
+                value={mode.value}
+                checked={selectionMode === mode.value}
+                onChange={(e) => setSelectionMode(e.target.value as SelectionMode)}
+              />
+              <div className="mode-option-content">
+                <span className="mode-label">{mode.label}</span>
+                <span className="mode-description">{mode.description}</span>
+              </div>
+            </label>
+          ))}
         </div>
       </div>
 
@@ -85,31 +110,16 @@ const SelectionTool: React.FC = () => {
       </div>
 
       <div className="selection-tool-section">
-        <h4>Selection Mode</h4>
-        <div className="mode-options">
-          {modeOptions.map((mode) => (
-            <label key={mode.value} className="mode-option">
-              <input
-                type="radio"
-                name="selectionMode"
-                value={mode.value}
-                checked={selectionMode === mode.value}
-                onChange={(e) => setSelectionMode(e.target.value as SelectionMode)}
-              />
-              <div className="mode-option-content">
-                <span className="mode-label">{mode.label}</span>
-                <span className="mode-description">{mode.description}</span>
-              </div>
-            </label>
-          ))}
-        </div>
-      </div>
-
-      <div className="selection-tool-section">
         <h4>Instructions</h4>
         <div className="instructions">
           <div className="instruction-item">
-            <strong>Windows:</strong> Left-click to select, Right-click to unselect
+            <strong>Draw Mode:</strong> Use tools to draw on the grid with selected character and colors
+          </div>
+          <div className="instruction-item">
+            <strong>Selection Mode:</strong> Use tools to select cells for future operations
+          </div>
+          <div className="instruction-item">
+            <strong>Tools:</strong> Select Area (fill), Select Rectangle (border), Select Cells (individual)
           </div>
           <div className="instruction-item">
             <strong>Mac:</strong> One-finger click to select, Two-finger click to unselect

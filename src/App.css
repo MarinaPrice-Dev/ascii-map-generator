@@ -52,7 +52,7 @@
   --clear: #ee3333;
   --zoom: #f59e0b;
   --info: #007bff;
-  --menu: #e600e6;
+  --menu: #cf00cf;
 }
 
 body {
@@ -215,6 +215,7 @@ button:disabled {
 /* Custom scrollbar */
 .main-grid-area::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 
 .main-grid-area::-webkit-scrollbar-track {
@@ -225,8 +226,4 @@ button:disabled {
 .main-grid-area::-webkit-scrollbar-thumb {
   background: var(--border);
   border-radius: 4px;
-}
-
-.main-grid-area::-webkit-scrollbar-thumb:hover {
-  background: var(--text-secondary);
 }
