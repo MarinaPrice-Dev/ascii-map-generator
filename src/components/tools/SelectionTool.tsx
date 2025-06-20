@@ -1,5 +1,7 @@
 import React from 'react';
-import { useSelectionStore, type SelectionTool as SelectionToolType, type SelectionMode } from '../../store/selectionStore';
+import { useSelectionStore } from '../../store/selectionStore';
+import type { SelectionTool as Tool, SelectionMode } from '../../store/selectionStore';
+import { PencilIcon, SingleBoxIcon, MultipleBoxIcon } from '../icons/Icons';
 import './SelectionTool.css';
 
 const SelectionTool: React.FC = () => {
@@ -15,39 +17,42 @@ const SelectionTool: React.FC = () => {
 
   const selectedCount = getSelectedCellsCount();
 
-  const toolOptions: { value: SelectionToolType; label: string; description: string }[] = [
+  const toolOptions: { value: Tool; label: string; description: string }[] = [
     {
       value: 'select-area',
       label: 'Select Area',
-      description: 'Draw a rectangle to select all cells within the area'
+      description: 'Drag to select a rectangular area'
     },
     {
       value: 'select-rectangle',
       label: 'Select Rectangle',
-      description: 'Draw a rectangle to select only cells on the border'
+      description: 'Drag to select the border of a rectangle'
     },
     {
       value: 'select-cells',
       label: 'Select Cells',
       description: 'Click to select individual cells'
-    }
+    },
   ];
 
-  const modeOptions: { value: SelectionMode; label: string; description: string }[] = [
+  const modeOptions: { value: SelectionMode; label: string; description: string; icon: React.FC }[] = [
     {
       value: 'draw',
       label: 'Draw Mode',
-      description: 'Draw on the grid with selected character and colors'
+      description: 'Draw on the grid with selected character and colors',
+      icon: PencilIcon
     },
     {
       value: 'single',
       label: 'Single Selection',
-      description: 'Each new selection replaces the previous one'
+      description: 'Each new selection replaces the previous one',
+      icon: SingleBoxIcon
     },
     {
       value: 'multiple',
       label: 'Multiple Selection',
-      description: 'New selections are added to existing ones'
+      description: 'New selections are added to existing ones',
+      icon: MultipleBoxIcon
     }
   ];
 
@@ -78,7 +83,9 @@ const SelectionTool: React.FC = () => {
                 value={mode.value}
                 checked={selectionMode === mode.value}
                 onChange={(e) => setSelectionMode(e.target.value as SelectionMode)}
+                className="sr-only"
               />
+              <div className="mode-icon"><mode.icon /></div>
               <div className="mode-option-content">
                 <span className="mode-label">{mode.label}</span>
                 <span className="mode-description">{mode.description}</span>
@@ -89,7 +96,7 @@ const SelectionTool: React.FC = () => {
       </div>
 
       <div className="selection-tool-section">
-        <h4>Selection Tool</h4>
+        <h4>Shape Tool</h4>
         <div className="tool-options">
           {toolOptions.map((tool) => (
             <label key={tool.value} className="tool-option">
@@ -98,7 +105,7 @@ const SelectionTool: React.FC = () => {
                 name="selectionTool"
                 value={tool.value}
                 checked={activeTool === tool.value}
-                onChange={(e) => setActiveTool(e.target.value as SelectionToolType)}
+                onChange={(e) => setActiveTool(e.target.value as Tool)}
               />
               <div className="tool-option-content">
                 <span className="tool-label">{tool.label}</span>

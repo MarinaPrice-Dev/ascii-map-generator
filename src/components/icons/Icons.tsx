@@ -121,4 +121,24 @@ export const MenuIcon: React.FC = () => (
     <line x1="3" y1="6" x2="21" y2="6" />
     <line x1="3" y1="18" x2="21" y2="18" />
   </svg>
+);
+
+export const PencilIcon: React.FC = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
+    <path d="m15 5 4 4" />
+  </svg>
+);
+
+export const SingleBoxIcon: React.FC = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="4 4">
+    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+  </svg>
+);
+
+export const MultipleBoxIcon: React.FC = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="8" y="8" width="12" height="12" rx="2" ry="2" strokeDasharray="4 4" />
+    <path d="M4 16V4c0-1.1.9-2 2-2h10" strokeDasharray="4 4"/>
+  </svg>
 ); 
