@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelectionStore } from '../../store/selectionStore';
 import type { SelectionTool as Tool, SelectionMode } from '../../store/selectionStore';
-import { PencilIcon, SingleBoxIcon, MultipleBoxIcon } from '../icons/Icons';
+import { PencilIcon, SingleBoxIcon, MultipleBoxIcon, AreaIcon, RectangleIcon, CellsIcon } from '../icons/Icons';
 import './SelectionTool.css';
 
 const SelectionTool: React.FC = () => {
@@ -17,21 +17,24 @@ const SelectionTool: React.FC = () => {
 
   const selectedCount = getSelectedCellsCount();
 
-  const toolOptions: { value: Tool; label: string; description: string }[] = [
+  const toolOptions: { value: Tool; label: string; description: string; icon: React.FC }[] = [
     {
       value: 'select-area',
       label: 'Select Area',
-      description: 'Drag to select a rectangular area'
+      description: 'Drag to select a rectangular area',
+      icon: AreaIcon
     },
     {
       value: 'select-rectangle',
       label: 'Select Rectangle',
-      description: 'Drag to select the border of a rectangle'
+      description: 'Drag to select the border of a rectangle',
+      icon: RectangleIcon
     },
     {
       value: 'select-cells',
       label: 'Select Cells',
-      description: 'Click to select individual cells'
+      description: 'Click to select individual cells',
+      icon: CellsIcon
     },
   ];
 
@@ -106,7 +109,9 @@ const SelectionTool: React.FC = () => {
                 value={tool.value}
                 checked={activeTool === tool.value}
                 onChange={(e) => setActiveTool(e.target.value as Tool)}
+                className="sr-only"
               />
+              <div className="tool-icon"><tool.icon /></div>
               <div className="tool-option-content">
                 <span className="tool-label">{tool.label}</span>
                 <span className="tool-description">{tool.description}</span>

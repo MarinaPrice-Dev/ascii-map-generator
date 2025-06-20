@@ -90,6 +90,7 @@
   height: 0;
 }
 
+.tool-icon,
 .mode-icon {
   width: 24px;
   height: 24px;
@@ -98,6 +99,7 @@
   transition: color 0.2s;
 }
 
+.tool-option:hover .tool-icon,
 .mode-option:hover .mode-icon {
   color: white;
 }
@@ -112,6 +114,7 @@
   outline: 2px solid var(--fg);
 }
 
+.tool-option:has(input[type="radio"]:checked),
 .mode-option:has(input[type="radio"]:checked) {
   background: var(--bg-light);
   border-color: var(--border);
@@ -126,6 +129,13 @@
 .tool-option input[type="radio"]:disabled + .tool-option-content .tool-label,
 .mode-option input[type="radio"]:disabled + .mode-option-content .mode-label {
   color: #666;
+}
+
+.tool-option:has(input[type="radio"]:checked) .tool-icon,
+.mode-option:has(input[type="radio"]:checked) .mode-icon,
+.tool-option input[type="radio"]:checked + .tool-icon + .tool-option-content .tool-label,
+.mode-option input[type="radio"]:checked + .mode-icon + .mode-option-content .mode-label {
+  color: var(--save);
 }
 
 .tool-option input[type="radio"]:disabled + .tool-option-content .tool-description,
