@@ -285,6 +285,51 @@ const App: React.FC = () => {
     });
   };
 
+  const handleUpdateSelectedChar = (newChar: string) => {
+    if (selectedCells.size > 0) {
+      beginAction();
+      const newGrid = grid.map(row => row.map(cell => ({ ...cell })));
+      selectedCells.forEach(key => {
+        const [r, c] = key.split(',').map(Number);
+        if (newGrid[r]?.[c]) {
+          newGrid[r][c].char = newChar;
+        }
+      });
+      setGrid(newGrid);
+    }
+    setSelectedChar(newChar);
+  };
+
+  const handleUpdateSelectedFg = (newFg: string) => {
+    if (selectedCells.size > 0) {
+      beginAction();
+      const newGrid = grid.map(row => row.map(cell => ({ ...cell })));
+      selectedCells.forEach(key => {
+        const [r, c] = key.split(',').map(Number);
+        if (newGrid[r]?.[c]) {
+          newGrid[r][c].fg = newFg;
+        }
+      });
+      setGrid(newGrid);
+    }
+    setSelectedFg(newFg);
+  };
+
+  const handleUpdateSelectedBg = (newBg: string) => {
+    if (selectedCells.size > 0) {
+      beginAction();
+      const newGrid = grid.map(row => row.map(cell => ({ ...cell })));
+      selectedCells.forEach(key => {
+        const [r, c] = key.split(',').map(Number);
+        if (newGrid[r]?.[c]) {
+          newGrid[r][c].bg = newBg;
+        }
+      });
+      setGrid(newGrid);
+    }
+    setSelectedBg(newBg);
+  };
+
   return (
     <div className="App" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--bg)', color: 'var(--fg)' }}>
       <Header
@@ -325,11 +370,11 @@ const App: React.FC = () => {
         
         <Footer
           selectedChar={selectedChar}
-          setSelectedChar={setSelectedChar}
+          setSelectedChar={handleUpdateSelectedChar}
           selectedFg={selectedFg}
-          setSelectedFg={setSelectedFg}
+          setSelectedFg={handleUpdateSelectedFg}
           selectedBg={selectedBg}
-          setSelectedBg={setSelectedBg}
+          setSelectedBg={handleUpdateSelectedBg}
           isMenuOpen={isMenuOpen}
         />
         

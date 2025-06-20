@@ -32,65 +32,56 @@ interface SelectionState {
 export const useSelectionStore = create<SelectionState>((set, get) => ({
   selectedCells: new Set(),
   activeTool: 'select-area',
-  selectionMode: 'draw', // Default to draw mode
+  selectionMode: 'draw',
+
+  isDrawMode: () => get().selectionMode === 'draw',
 
   selectCell: (row: number, col: number) => {
     const { selectionMode, selectedCells } = get();
-    const cellKey = `${row},${col}`;
-    
-    if (selectionMode === 'single') {
-      set({ selectedCells: new Set([cellKey]) });
-    } else {
-      const newSelectedCells = new Set(selectedCells);
-      newSelectedCells.add(cellKey);
-      set({ selectedCells: newSelectedCells });
-    }
+    const newSelectedCells = selectionMode === 'multiple' ? new Set(selectedCells) : new Set<string>();
+    newSelectedCells.add(`${row},${col}`);
+    set({ selectedCells: newSelectedCells });
   },
 
   unselectCell: (row: number, col: number) => {
-    const { selectedCells } = get();
-    const cellKey = `${row},${col}`;
-    const newSelectedCells = new Set(selectedCells);
-    newSelectedCells.delete(cellKey);
-    set({ selectedCells: newSelectedCells });
+    set(state => {
+      const newSelectedCells = new Set(state.selectedCells);
+      newSelectedCells.delete(`${row},${col}`);
+      return { selectedCells: newSelectedCells };
+    });
   },
 
   selectArea: (startRow: number, startCol: number, endRow: number, endCol: number) => {
     const { selectionMode, selectedCells } = get();
-    const newSelectedCells = selectionMode === 'single' ? new Set<string>() : new Set(selectedCells);
-    
+    const newSelectedCells = selectionMode === 'multiple' ? new Set(selectedCells) : new Set<string>();
     const minRow = Math.min(startRow, endRow);
     const maxRow = Math.max(startRow, endRow);
     const minCol = Math.min(startCol, endCol);
     const maxCol = Math.max(startCol, endCol);
-    
-    for (let row = minRow; row <= maxRow; row++) {
-      for (let col = minCol; col <= maxCol; col++) {
-        newSelectedCells.add(`${row},${col}`);
+
+    for (let r = minRow; r <= maxRow; r++) {
+      for (let c = minCol; c <= maxCol; c++) {
+        newSelectedCells.add(`${r},${c}`);
       }
     }
-    
     set({ selectedCells: newSelectedCells });
   },
 
   selectRectangle: (startRow: number, startCol: number, endRow: number, endCol: number) => {
     const { selectionMode, selectedCells } = get();
-    const newSelectedCells = selectionMode === 'single' ? new Set<string>() : new Set(selectedCells);
-    
+    const newSelectedCells = selectionMode === 'multiple' ? new Set(selectedCells) : new Set<string>();
     const minRow = Math.min(startRow, endRow);
     const maxRow = Math.max(startRow, endRow);
     const minCol = Math.min(startCol, endCol);
     const maxCol = Math.max(startCol, endCol);
-    
-    // Only select cells on the rectangle border
-    for (let row = minRow; row <= maxRow; row++) {
-      for (let col = minCol; col <= maxCol; col++) {
-        if (row === minRow || row === maxRow || col === minCol || col === maxCol) {
-          newSelectedCells.add(`${row},${col}`);
+
+    for (let r = minRow; r <= maxRow; r++) {
+      for (let c = minCol; c <= maxCol; c++) {
+        if (r === minRow || r === maxRow || c === minCol || c === maxCol) {
+          newSelectedCells.add(`${r},${c}`);
         }
       }
     }
-    
     set({ selectedCells: newSelectedCells });
   },
 
@@ -100,26 +91,22 @@ export const useSelectionStore = create<SelectionState>((set, get) => ({
     set({ selectedCells: new Set() });
   },
 
-  setActiveTool: (tool: SelectionTool) => {
-    set({ activeTool: tool });
-  },
+  setActiveTool: (tool) => set({ activeTool: tool }),
 
   setSelectionMode: (mode: SelectionMode) => {
-    set({ selectionMode: mode });
+    if (mode === 'draw') {
+      set({ selectionMode: mode, selectedCells: new Set() });
+    } else {
+      set({ selectionMode: mode });
+    }
   },
 
   isCellSelected: (row: number, col: number) => {
-    const { selectedCells } = get();
-    return selectedCells.has(`${row},${col}`);
+    return get().selectedCells.has(`${row},${col}`);
   },
 
   getSelectedCellsCount: () => {
     const { selectedCells } = get();
     return selectedCells.size;
-  },
-
-  isDrawMode: () => {
-    const { selectionMode } = get();
-    return selectionMode === 'draw';
   },
 })); 

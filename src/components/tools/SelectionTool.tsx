@@ -157,6 +157,15 @@ const SelectionTool: React.FC<SelectionToolProps> = ({ onRotate, onMirror }) => 
           <div className="instruction-item">
             <strong>Right-click:</strong> Erase or unselect the cells on the grid
           </div>
+          <div className="instruction-item">
+            <strong>Selections:</strong> When in select mode, you can replace the current symbol or color with a new one by selecting from the footer
+          </div>
+          <div className="instruction-item">
+            <strong>Shift + Left-click:</strong> Select the cells on the grid
+          </div>
+          <div className="instruction-item">
+            <strong>Shift + Right-click:</strong> Unselect the cells on the grid
+          </div>
         </div>
       </div>
     </div>
