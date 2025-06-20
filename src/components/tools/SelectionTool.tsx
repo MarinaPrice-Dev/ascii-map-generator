@@ -21,7 +21,7 @@ const SelectionTool: React.FC = () => {
     {
       value: 'draw',
       label: 'Draw',
-      description: 'Draw on the grid with selected character and colors',
+      description: 'Draw on the grid with symbols and colors',
       icon: PencilIcon
     },
     {
@@ -54,7 +54,7 @@ const SelectionTool: React.FC = () => {
     {
       value: 'select-cells',
       label: 'Cells',
-      description: 'Click for individual cells',
+      description: 'Drag across individual cells',
       icon: CellsIcon
     },
   ];
@@ -99,7 +99,7 @@ const SelectionTool: React.FC = () => {
       </div>
 
       <div className="selection-tool-section">
-        <h4>Shape Tool</h4>
+        <h4>Shape</h4>
         <div className="tool-options">
           {toolOptions.map((tool) => (
             <label key={tool.value} className="tool-option">
@@ -122,13 +122,13 @@ const SelectionTool: React.FC = () => {
       </div>
 
       <div className="selection-tool-section">
-        <h4>Help</h4>
+        <h4>Tips</h4>
         <div className="instructions">
           <div className="instruction-item">
-            <strong>Draw Mode:</strong> Use tools to draw on the grid with selected character and colors
+            <strong>Left-click:</strong> Draw or Select the cells on the grid
           </div>
           <div className="instruction-item">
-            <strong>Select Mode:</strong> Use tools to select cells for future operations
+            <strong>Right-click:</strong> Erase or unselect the cells on the grid
           </div>
         </div>
       </div>

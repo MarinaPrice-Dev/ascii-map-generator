@@ -216,7 +216,17 @@ const App: React.FC = () => {
         {/* Main Grid Area */}
         <main ref={mainRef} className={`main-grid-area ${isMenuOpen ? 'menu-open' : ''}`}>
           {grid.length > 0 && (
-            <AsciiMapGrid grid={grid} updateCell={updateCell} beginAction={beginAction} selectedChar={selectedChar} selectedFg={selectedFg} selectedBg={selectedBg} cellSize={cellSize} />
+            <AsciiMapGrid
+              grid={grid}
+              updateCell={updateCell}
+              beginAction={beginAction}
+              selectedChar={selectedChar}
+              selectedFg={selectedFg}
+              selectedBg={selectedBg}
+              cellSize={cellSize}
+              defaultFg={DEFAULT_FG}
+              defaultBg={DEFAULT_BG}
+            />
           )}
         </main>
         

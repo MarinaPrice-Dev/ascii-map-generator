@@ -11,9 +11,11 @@ type AsciiMapGridProps = {
   selectedFg: string;
   selectedBg: string;
   cellSize: number;
+  defaultFg: string;
+  defaultBg: string;
 };
 
-const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, beginAction, selectedChar, selectedFg, selectedBg, cellSize }) => {
+const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, beginAction, selectedChar, selectedFg, selectedBg, cellSize, defaultFg, defaultBg }) => {
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [startCell, setStartCell] = useState<{ row: number; col: number } | null>(null);
   const [hoverCell, setHoverCell] = useState<{ row: number; col: number } | null>(null);
@@ -63,49 +65,48 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, beginActi
     return cells;
   };
 
+  const clearCell = (row: number, col: number) => {
+    updateCell(row, col, ' ', defaultFg, defaultBg);
+  };
+
   const processCell = (row: number, col: number) => {
     const cellKey = `${row},${col}`;
-    
-    // Only process if we haven't visited this cell yet
-    if (!visitedCells.has(cellKey)) {
-      if (isDrawMode()) {
-        // Drawing mode - draw on the cell
-        updateCell(row, col, selectedChar, selectedFg, selectedBg);
+    if (visitedCells.has(cellKey)) return;
+
+    if (isDrawMode()) {
+      if (isUnselectOperation) {
+        clearCell(row, col);
       } else {
-        // Selection mode - select/unselect the cell
-        if (isUnselectOperation) {
-          unselectCell(row, col);
-        } else {
-          selectCell(row, col);
-        }
+        updateCell(row, col, selectedChar, selectedFg, selectedBg);
       }
-      
-      // Mark this cell as visited
-      setVisitedCells(prev => new Set(prev).add(cellKey));
+    } else {
+      if (isUnselectOperation) {
+        unselectCell(row, col);
+      } else {
+        selectCell(row, col);
+      }
     }
+    
+    setVisitedCells(prev => new Set(prev).add(cellKey));
   };
 
   const handleStart = (row: number, col: number, isRightClick: boolean = false) => {
-    // Reset visited cells for new operation
     setVisitedCells(new Set());
     setPreviousCell({ row, col });
-    
-    // Check if we're in draw mode
+
     if (isDrawMode()) {
-      // Drawing mode - can use selection tools to draw
       beginAction();
       setIsMouseDown(true);
       setStartCell({ row, col });
       setHoverCell({ row, col });
-      
-      // For individual cell drawing
+      setIsUnselectOperation(isRightClick);
+
       if (activeTool === 'select-cells') {
         processCell(row, col);
       }
       return;
     }
 
-    // Selection mode
     setIsSelectionMode(true);
     setIsMouseDown(true);
     setIsUnselectOperation(isRightClick);
@@ -113,7 +114,6 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, beginActi
     setHoverCell({ row, col });
 
     if (activeTool === 'select-cells') {
-      // For individual cell selection
       processCell(row, col);
     }
   };
@@ -138,77 +138,77 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, beginActi
   };
 
   const handleEnd = () => {
-    if (isMouseDown && startCell && hoverCell && isSelectionMode) {
-      // Handle area and rectangle selection/unselection
-      if (activeTool === 'select-area') {
-        if (isUnselectOperation) {
-          // Unselect area - unselect all cells in the area
-          const minRow = Math.min(startCell.row, hoverCell.row);
-          const maxRow = Math.max(startCell.row, hoverCell.row);
-          const minCol = Math.min(startCell.col, hoverCell.col);
-          const maxCol = Math.max(startCell.col, hoverCell.col);
-          for (let r = minRow; r <= maxRow; r++) {
-            for (let c = minCol; c <= maxCol; c++) {
-              unselectCell(r, c);
-            }
-          }
-        } else {
-          selectArea(startCell.row, startCell.col, hoverCell.row, hoverCell.col);
-        }
-      } else if (activeTool === 'select-rectangle') {
-        if (isUnselectOperation) {
-          // Unselect rectangle - unselect cells on the border
-          const minRow = Math.min(startCell.row, hoverCell.row);
-          const maxRow = Math.max(startCell.row, hoverCell.row);
-          const minCol = Math.min(startCell.col, hoverCell.col);
-          const maxCol = Math.max(startCell.col, hoverCell.col);
-          for (let r = minRow; r <= maxRow; r++) {
-            for (let c = minCol; c <= maxCol; c++) {
-              if (r === minRow || r === maxRow || c === minCol || c === maxCol) {
+    if (isMouseDown && startCell && hoverCell) {
+      if (isSelectionMode) {
+        // Handle area and rectangle selection/unselection
+        if (activeTool === 'select-area') {
+          if (isUnselectOperation) {
+            // Unselect area - unselect all cells in the area
+            const minRow = Math.min(startCell.row, hoverCell.row);
+            const maxRow = Math.max(startCell.row, hoverCell.row);
+            const minCol = Math.min(startCell.col, hoverCell.col);
+            const maxCol = Math.max(startCell.col, hoverCell.col);
+            for (let r = minRow; r <= maxRow; r++) {
+              for (let c = minCol; c <= maxCol; c++) {
                 unselectCell(r, c);
               }
             }
+          } else {
+            selectArea(startCell.row, startCell.col, hoverCell.row, hoverCell.col);
           }
-        } else {
-          selectRectangle(startCell.row, startCell.col, hoverCell.row, hoverCell.col);
+        } else if (activeTool === 'select-rectangle') {
+          if (isUnselectOperation) {
+            // Unselect rectangle - unselect cells on the border
+            const minRow = Math.min(startCell.row, hoverCell.row);
+            const maxRow = Math.max(startCell.row, hoverCell.row);
+            const minCol = Math.min(startCell.col, hoverCell.col);
+            const maxCol = Math.max(startCell.col, hoverCell.col);
+            for (let r = minRow; r <= maxRow; r++) {
+              for (let c = minCol; c <= maxCol; c++) {
+                if (r === minRow || r === maxRow || c === minCol || c === maxCol) {
+                  unselectCell(r, c);
+                }
+              }
+            }
+          } else {
+            selectRectangle(startCell.row, startCell.col, hoverCell.row, hoverCell.col);
+          }
         }
-      }
-    } else if (isMouseDown && startCell && hoverCell && !isSelectionMode) {
-      // Drawing mode - handle different drawing tools
-      if (activeTool === 'select-area') {
-        // Draw area - fill all cells in the rectangle
+      } else { // This is Draw Mode
         const minRow = Math.min(startCell.row, hoverCell.row);
         const maxRow = Math.max(startCell.row, hoverCell.row);
         const minCol = Math.min(startCell.col, hoverCell.col);
         const maxCol = Math.max(startCell.col, hoverCell.col);
-        for (let r = minRow; r <= maxRow; r++) {
-          for (let c = minCol; c <= maxCol; c++) {
-            updateCell(r, c, selectedChar, selectedFg, selectedBg);
+
+        const action = isUnselectOperation 
+          ? clearCell 
+          : (r: number, c: number) => updateCell(r, c, selectedChar, selectedFg, selectedBg);
+
+        if (activeTool === 'select-area') {
+          for (let r = minRow; r <= maxRow; r++) {
+            for (let c = minCol; c <= maxCol; c++) {
+              action(r, c);
+            }
           }
-        }
-      } else if (activeTool === 'select-rectangle') {
-        // Draw rectangle - only draw on the border
-        const minRow = Math.min(startCell.row, hoverCell.row);
-        const maxRow = Math.max(startCell.row, hoverCell.row);
-        const minCol = Math.min(startCell.col, hoverCell.col);
-        const maxCol = Math.max(startCell.col, hoverCell.col);
-        for (let r = minRow; r <= maxRow; r++) {
-          for (let c = minCol; c <= maxCol; c++) {
-            if (r === minRow || r === maxRow || c === minCol || c === maxCol) {
-              updateCell(r, c, selectedChar, selectedFg, selectedBg);
+        } else if (activeTool === 'select-rectangle') {
+          for (let r = minRow; r <= maxRow; r++) {
+            for (let c = minCol; c <= maxCol; c++) {
+              if (r === minRow || r === maxRow || c === minCol || c === maxCol) {
+                action(r, c);
+              }
             }
           }
         }
       }
-      // Note: select-cells continuous drawing is now handled in handleMove
     }
+
     setIsMouseDown(false);
     setIsSelectionMode(false);
     setIsUnselectOperation(false);
     setStartCell(null);
     setHoverCell(null);
     setPreviousCell(null);
-    setVisitedCells(new Set()); // Reset visited cells
+    setVisitedCells(new Set());
   };
 
   const handleContextMenu = (e: React.MouseEvent, row: number, col: number) => {
