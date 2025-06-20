@@ -7,15 +7,17 @@ import './Menu.css';
 interface MenuProps {
   isOpen: boolean;
   onClose: () => void;
+  onRotate: (direction: 'left' | 'right') => void;
+  onMirror: (direction: 'horizontal' | 'vertical') => void;
 }
 
-const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
+const Menu: React.FC<MenuProps> = ({ isOpen, onClose, onRotate, onMirror }) => {
   const [activeSection, setActiveSection] = useState<string>('tools');
 
   const renderSection = () => {
     switch (activeSection) {
       case 'tools':
-        return <SelectionTool />;
+        return <SelectionTool onRotate={onRotate} onMirror={onMirror} />;
       case 'settings':
         return <Settings />;
       case 'help':

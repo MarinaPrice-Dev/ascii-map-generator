@@ -10,6 +10,7 @@ import { Footer } from './components/footer/Footer'
 import Menu from './components/menu/Menu'
 import type { Cell } from './types/cell'
 import { handleZoom, expandGrid } from './utils/zoomUtils'
+import { useSelectionStore } from './store/selectionStore'
 
 const HEADER_HEIGHT = 60;
 const FOOTER_HEIGHT = 200;
@@ -82,6 +83,8 @@ const App: React.FC = () => {
   const [gridRows, setGridRows] = useState<number>(initialRows);
   const [gridCols, setGridCols] = useState<number>(initialCols);
   const [grid, setGrid, undo, redo, canUndo, canRedo, beginAction] = useUndoRedo<Cell[][]>(savedGrid);
+
+  const { selectedCells, updateSelection, clearSelection } = useSelectionStore();
 
   // Save grid state whenever it changes
   useEffect(() => {
@@ -192,6 +195,96 @@ const App: React.FC = () => {
     setGrid(newGrid);
   };
 
+  const handleTransform = (
+    transformFn: (grid: Cell[][], selection: Set<string>) => { newGrid: Cell[][], newSelection?: Set<string> }
+  ) => {
+    beginAction();
+    const { newGrid, newSelection } = transformFn(grid, selectedCells);
+    setGrid(newGrid);
+
+    if (newSelection) {
+      updateSelection(newSelection);
+    } else {
+      clearSelection();
+    }
+  };
+
+  const handleRotate = (direction: 'left' | 'right') => {
+    handleTransform((currentGrid, currentSelection) => {
+      // Full grid rotation logic will be complex due to dimension changes,
+      // so for now we only handle selection rotation.
+      if (currentSelection.size === 0) return { newGrid: currentGrid };
+
+      const newGrid = currentGrid.map(row => [...row]); // Deep copy
+      const cellsToMove: { from: { r: number, c: number }, cell: Cell }[] = [];
+      let minR = Infinity, maxR = -Infinity, minC = Infinity, maxC = -Infinity;
+
+      currentSelection.forEach(key => {
+        const [r, c] = key.split(',').map(Number);
+        cellsToMove.push({ from: { r, c }, cell: newGrid[r][c] });
+        minR = Math.min(minR, r); maxR = Math.max(maxR, r);
+        minC = Math.min(minC, c); maxC = Math.max(maxC, c);
+        newGrid[r][c] = { char: ' ', fg: DEFAULT_FG, bg: DEFAULT_BG, selected: false };
+      });
+
+      const centerX = (minC + maxC) / 2;
+      const centerY = (minR + maxR) / 2;
+      const newSelection = new Set<string>();
+
+      cellsToMove.forEach(({ from, cell }) => {
+        const { r, c } = from;
+        const newR = Math.round(centerY + (direction === 'right' ? 1 : -1) * (c - centerX));
+        const newC = Math.round(centerX + (direction === 'right' ? -1 : 1) * (r - centerY));
+
+        if (newR >= 0 && newR < gridRows && newC >= 0 && newC < gridCols) {
+          newGrid[newR][newC] = { ...cell, selected: true };
+          newSelection.add(`${newR},${newC}`);
+        }
+      });
+      
+      return { newGrid, newSelection };
+    });
+  };
+
+  const handleMirror = (direction: 'horizontal' | 'vertical') => {
+    handleTransform((currentGrid, currentSelection) => {
+       if (currentSelection.size === 0) { // Full grid mirror
+         const newGrid = direction === 'horizontal' 
+           ? currentGrid.map(row => [...row].reverse())
+           : [...currentGrid].reverse();
+         return { newGrid };
+       }
+
+      // Selection mirror logic
+      const newGrid = currentGrid.map(row => [...row]);
+      const cellsToMove: { from: { r: number, c: number }, cell: Cell }[] = [];
+      let minR = Infinity, maxR = -Infinity, minC = Infinity, maxC = -Infinity;
+
+      currentSelection.forEach(key => {
+        const [r, c] = key.split(',').map(Number);
+        cellsToMove.push({ from: { r, c }, cell: newGrid[r][c] });
+        minR = Math.min(minR, r); maxR = Math.max(maxR, r);
+        minC = Math.min(minC, c); maxC = Math.max(maxC, c);
+        newGrid[r][c] = { char: ' ', fg: DEFAULT_FG, bg: DEFAULT_BG, selected: false };
+      });
+
+      const newSelection = new Set<string>();
+
+      cellsToMove.forEach(({ from, cell }) => {
+        const { r, c } = from;
+        const newR = direction === 'vertical' ? maxR - (r - minR) : r;
+        const newC = direction === 'horizontal' ? maxC - (c - minC) : c;
+        
+        if (newR >= 0 && newR < gridRows && newC >= 0 && newC < gridCols) {
+          newGrid[newR][newC] = { ...cell, selected: true };
+          newSelection.add(`${newR},${newC}`);
+        }
+      });
+
+      return { newGrid, newSelection };
+    });
+  };
+
   return (
     <div className="App" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--bg)', color: 'var(--fg)' }}>
       <Header
@@ -240,7 +333,12 @@ const App: React.FC = () => {
           isMenuOpen={isMenuOpen}
         />
         
-        <Menu isOpen={isMenuOpen} onClose={handleMenuToggle} />
+        <Menu 
+          isOpen={isMenuOpen} 
+          onClose={handleMenuToggle} 
+          onRotate={handleRotate} 
+          onMirror={handleMirror}
+        />
       </div>
     </div>
   )

@@ -1,10 +1,19 @@
 import React from 'react';
 import { useSelectionStore } from '../../store/selectionStore';
 import type { SelectionTool as Tool, SelectionMode } from '../../store/selectionStore';
-import { PencilIcon, SingleBoxIcon, MultipleBoxIcon, AreaIcon, RectangleIcon, CellsIcon } from '../icons/Icons';
+import { 
+  PencilIcon, SingleBoxIcon, MultipleBoxIcon, 
+  AreaIcon, RectangleIcon, CellsIcon,
+  RotateLeftIcon, RotateRightIcon, FlipHorizontalIcon, FlipVerticalIcon
+} from '../icons/Icons';
 import './SelectionTool.css';
 
-const SelectionTool: React.FC = () => {
+interface SelectionToolProps {
+  onRotate: (direction: 'left' | 'right') => void;
+  onMirror: (direction: 'horizontal' | 'vertical') => void;
+}
+
+const SelectionTool: React.FC<SelectionToolProps> = ({ onRotate, onMirror }) => {
   const {
     activeTool,
     selectionMode,
@@ -118,6 +127,24 @@ const SelectionTool: React.FC = () => {
               </div>
             </label>
           ))}
+        </div>
+      </div>
+
+      <div className="selection-tool-section">
+        <h4>Transform</h4>
+        <div className="transform-options">
+          <button onClick={() => onRotate('left')} title="Rotate Left" className="transform-button">
+            <RotateLeftIcon />
+          </button>
+          <button onClick={() => onRotate('right')} title="Rotate Right" className="transform-button">
+            <RotateRightIcon />
+          </button>
+          <button onClick={() => onMirror('horizontal')} title="Flip Horizontal" className="transform-button">
+            <FlipHorizontalIcon />
+          </button>
+          <button onClick={() => onMirror('vertical')} title="Flip Vertical" className="transform-button">
+            <FlipVerticalIcon />
+          </button>
         </div>
       </div>
 

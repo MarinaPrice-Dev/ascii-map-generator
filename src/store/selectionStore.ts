@@ -16,6 +16,7 @@ interface SelectionState {
   unselectCell: (row: number, col: number) => void;
   selectArea: (startRow: number, startCol: number, endRow: number, endCol: number) => void;
   selectRectangle: (startRow: number, startCol: number, endRow: number, endCol: number) => void;
+  updateSelection: (newSelection: Set<string>) => void;
   clearSelection: () => void;
   
   // Tool management
@@ -92,6 +93,8 @@ export const useSelectionStore = create<SelectionState>((set, get) => ({
     
     set({ selectedCells: newSelectedCells });
   },
+
+  updateSelection: (newSelection) => set({ selectedCells: newSelection }),
 
   clearSelection: () => {
     set({ selectedCells: new Set() });

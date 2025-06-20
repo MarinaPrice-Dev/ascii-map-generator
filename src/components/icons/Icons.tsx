@@ -161,4 +161,30 @@ export const CellsIcon: React.FC = () => (
     <rect x="14" y="4" width="6" height="6" rx="1" />
     <rect x="9" y="14" width="6" height="6" rx="1" />
   </svg>
+);
+
+export const RotateLeftIcon: React.FC = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M3 12a9 9 0 1 0 6.219-8.56" />
+    <polyline points="3 3 3 7 7 7" />
+  </svg>
+);
+
+export const RotateRightIcon: React.FC = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+    <polyline points="21 3 21 7 17 7" />
+  </svg>
+);
+
+export const FlipHorizontalIcon: React.FC = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 22V2M3 12l4 4V8l-4 4zM21 12l-4-4v8l4-4z"/>
+  </svg>
+);
+
+export const FlipVerticalIcon: React.FC = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M2 12h20M12 3l-4 4h8l-4-4zM12 21l4-4H8l4 4z"/>
+  </svg>
 ); 

@@ -196,4 +196,29 @@
 .tool-option input[type="radio"]:checked + .tool-option-content .tool-label,
 .mode-option input[type="radio"]:checked + .mode-option-content .mode-label {
   color: #00ff00;
+}
+
+.transform-options {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.transform-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: none;
+  border: 1px solid #444;
+  color: #ccc;
+  padding: 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.transform-button:hover {
+  background: var(--bg-light);
+  border-color: var(--border);
+  color: var(--fg);
 } 
