@@ -11,6 +11,7 @@ import Menu from './components/menu/Menu'
 import type { Cell } from './types/cell'
 import { handleZoom, expandGrid } from './utils/zoomUtils'
 import { useSelectionStore } from './store/selectionStore'
+import { setupKeyboardShortcuts } from './utils/shortcuts'
 
 const HEADER_HEIGHT = 60;
 const FOOTER_HEIGHT = 200;
@@ -84,7 +85,7 @@ const App: React.FC = () => {
   const [gridCols, setGridCols] = useState<number>(initialCols);
   const [grid, setGrid, undo, redo, canUndo, canRedo, beginAction] = useUndoRedo<Cell[][]>(savedGrid);
 
-  const { selectedCells, updateSelection, clearSelection } = useSelectionStore();
+  const { selectedCells, updateSelection, clearSelection, setSelectionMode, selectionMode } = useSelectionStore();
 
   // Save grid state whenever it changes
   useEffect(() => {
@@ -329,6 +330,37 @@ const App: React.FC = () => {
     }
     setSelectedBg(newBg);
   };
+
+  // Setup keyboard shortcuts
+  useEffect(() => {
+    const cleanup = setupKeyboardShortcuts({
+      undo,
+      redo,
+      handleZoomIn,
+      handleZoomOut,
+      handleExportPanelToggle,
+      handleMenuToggle,
+      clearSelection,
+      updateSelection,
+      gridRows,
+      gridCols,
+      handleImportMap,
+    });
+
+    return cleanup;
+  }, [
+    undo, 
+    redo, 
+    handleZoomIn, 
+    handleZoomOut, 
+    handleExportPanelToggle, 
+    handleMenuToggle, 
+    clearSelection, 
+    updateSelection, 
+    gridRows, 
+    gridCols, 
+    handleImportMap
+  ]);
 
   return (
     <div className="App" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--bg)', color: 'var(--fg)' }}>

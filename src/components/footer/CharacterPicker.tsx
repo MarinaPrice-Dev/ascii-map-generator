@@ -60,6 +60,7 @@ const characterCategories = {
 const CharacterPicker: React.FC<CharacterPickerProps> = ({ selectedChar, setSelectedChar }) => {
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.metaKey) return;
       if (e.target instanceof HTMLInputElement) return;
       
       if (e.key.length === 1) {

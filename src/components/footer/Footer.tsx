@@ -51,6 +51,12 @@ export const Footer: React.FC<FooterProps> = ({
                 type="text"
                 maxLength={1}
                 value={selectedChar}
+                onKeyDown={(e) => {
+                  if (e.ctrlKey || e.metaKey) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }
+                }}
                 onChange={e => setSelectedChar(e.target.value)}
                 className="character-input"
                 style={{ 

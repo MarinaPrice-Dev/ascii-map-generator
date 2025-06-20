@@ -35,6 +35,9 @@
   position: absolute;
   border: 2px solid #3b83f6a2;
   background: #11284c50;
-  pointer-events: none;
   z-index: 1;
+}
+
+.ascii-map-grid.selection-mode .ascii-map-grid-cell {
+  cursor: crosshair;
 } 

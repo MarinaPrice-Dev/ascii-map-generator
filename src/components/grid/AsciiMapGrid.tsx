@@ -31,7 +31,8 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, beginActi
     unselectCell,
     selectArea,
     selectRectangle,
-    isDrawMode
+    isDrawMode,
+    selectionMode
   } = useSelectionStore();
 
   // Line interpolation function using Bresenham's algorithm
@@ -274,7 +275,13 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, beginActi
   const selectionRect = getSelectionRectangle();
 
   return (
-    <div className="ascii-map-grid">
+    <div 
+      className={`ascii-map-grid ${selectionMode !== 'draw' ? 'selection-mode' : ''}`}
+      style={{
+        gridTemplateColumns: `repeat(${grid[0]?.length || 0}, ${cellSize}px)`,
+        gridTemplateRows: `repeat(${grid.length}, ${cellSize}px)`,
+      }}
+    >
       {grid.map((row, rowIndex) => (
         <div key={rowIndex} className="ascii-map-grid-row">
           {row.map((cell, colIndex) => {

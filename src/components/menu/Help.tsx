@@ -53,23 +53,23 @@ const Help: React.FC = () => {
                 <span>Select All</span>
               </div>
               <div className="shortcut-item">
-                <kbd>Delete</kbd>
+                <kbd>Esc</kbd>
                 <span>Clear Selection</span>
               </div>
               <div className="shortcut-item">
-                <kbd>+</kbd>
+                <kbd>Ctrl + +</kbd>
                 <span>Zoom In</span>
               </div>
               <div className="shortcut-item">
-                <kbd>-</kbd>
+                <kbd>Ctrl + -</kbd>
                 <span>Zoom Out</span>
               </div>
               <div className="shortcut-item">
-                <kbd>Space</kbd>
+                <kbd>Ctrl + Space</kbd>
                 <span>Toggle Draw/Select Mode</span>
               </div>
               <div className="shortcut-item">
-                <kbd>M</kbd>
+                <kbd>Ctrl + M</kbd>
                 <span>Toggle Menu</span>
               </div>
             </div>
