@@ -61,7 +61,7 @@ const SelectionTool: React.FC<SelectionToolProps> = ({ onRotate, onMirror }) => 
     },
     {
       value: 'select-cells',
-      label: 'Cells',
+      label: 'Pen',
       description: 'Drag across individual cells',
       icon: CellsIcon
     },

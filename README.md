@@ -13,6 +13,7 @@
 ## Bugs
 - Export on mobile
 - Export options dont look like buttons
+- Menu on tablet styling
 
 Map Management
 Save/Load Templates - Save frequently used patterns or layouts
