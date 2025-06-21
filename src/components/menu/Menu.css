@@ -45,10 +45,9 @@
 }
 
 .nav-button.active {
-  background: none;
   color: var(--fg);
   font-weight: bold;
-  border-color: var(--menu);
+  background: var(--menu);
 }
 
 .close-button {

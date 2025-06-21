@@ -1,17 +1,18 @@
 # Ascii Map Generator
 
 ## TO DO
+- Select and multiselect unclear, remove the first one
 - shortcuts for tool selections (Ctrl 1-0)
-- menu: documentation, example maps, blog, contact us
-- pen tools: fill, draw, replace fg/bg/symbol
+- menu: documentation, example maps, blog
 - copy/paste
-- email forwarding
-- more exports - rexpaint
-- add import - make the grid bigger if needed?
-- keyboard shortcuts (save, undo, etc)
-- replace colour function (paintbucket)
-- procedurally generated maps??
+- more exports
+- add import - make the grid bigger if needed
+- procedurally generated maps
 - infinite canvas
+
+## Bugs
+- Export on mobile
+- Export options dont look like buttons
 
 Map Management
 Save/Load Templates - Save frequently used patterns or layouts
