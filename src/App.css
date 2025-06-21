@@ -190,7 +190,7 @@ button:disabled {
   }
 }
 
-@media (max-width: 450px) {
+@media (max-width: 560px) {
   .zoom-controls {
     display: none!important;
   }

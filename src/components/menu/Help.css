@@ -138,30 +138,4 @@
   color: var(--menu);
   font-weight: 600;
 }
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .shortcut-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.3rem;
-  }
-  
-  .shortcut-item kbd {
-    align-self: flex-start;
-  }
-  
-  .help-tabs {
-    flex-direction: column;
-  }
-  
-  .help-tab {
-    border-bottom: none;
-    border-right: 2px solid transparent;
-  }
-  
-  .help-tab.active {
-    border-bottom-color: transparent;
-    border-right-color: var(--menu);
-  }
-} 
+ 

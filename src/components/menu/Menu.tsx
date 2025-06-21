@@ -11,7 +11,7 @@ interface MenuProps {
   onMirror: (direction: 'horizontal' | 'vertical') => void;
 }
 
-const Menu: React.FC<MenuProps> = ({ isOpen, onRotate, onMirror }) => {
+const Menu: React.FC<MenuProps> = ({ isOpen, onClose, onRotate, onMirror }) => {
   const [activeSection, setActiveSection] = useState<string>('tools');
 
   const renderSection = () => {
@@ -47,6 +47,13 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onRotate, onMirror }) => {
           onClick={() => setActiveSection('help')}
         >
           Help
+        </button>
+        <button 
+          className="nav-button close-button"
+          onClick={onClose}
+          title="Close menu"
+        >
+          ✕
         </button>
       </div>
       
