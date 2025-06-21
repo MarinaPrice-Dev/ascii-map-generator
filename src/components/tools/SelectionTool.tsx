@@ -29,7 +29,7 @@ const SelectionTool: React.FC<SelectionToolProps> = ({ onRotate, onMirror }) => 
     {
       value: 'draw',
       label: 'Draw',
-      description: 'Draw on the grid with symbols and colors',
+      description: 'Draw using symbols and colors',
       icon: PencilIcon
     },
     {
@@ -144,21 +144,6 @@ const SelectionTool: React.FC<SelectionToolProps> = ({ onRotate, onMirror }) => 
           <button onClick={() => onMirror('vertical')} title="Flip Vertical" className="transform-button">
             <FlipVerticalIcon />
           </button>
-        </div>
-      </div>
-
-      <div className="selection-tool-section">
-        <h4>Tips</h4>
-        <div className="instructions">
-          <div className="instruction-item">
-            <strong>Left-click:</strong> Draw or Select the cells on the grid
-          </div>
-          <div className="instruction-item">
-            <strong>Right-click:</strong> Erase or unselect the cells on the grid
-          </div>
-          <div className="instruction-item">
-            <strong>Selections:</strong> When in select mode, you can replace the current symbol or color with a new one by selecting from the footer
-          </div>
         </div>
       </div>
     </div>
