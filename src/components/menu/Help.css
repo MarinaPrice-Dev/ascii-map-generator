@@ -54,40 +54,6 @@
   padding-bottom: 0.5rem;
 }
 
-/* Shortcuts Section */
-.shortcut-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.shortcut-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5rem;
-  background: rgba(230, 0, 230, 0.05);
-  border-radius: 3px;
-  border: 1px solid rgba(230, 0, 230, 0.2);
-}
-
-.shortcut-item kbd {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 3px;
-  padding: 0.2rem 0.4rem;
-  font-size: 0.75rem;
-  font-family: monospace;
-  color: var(--fg);
-  min-width: 60px;
-  text-align: center;
-}
-
-.shortcut-item span {
-  font-size: 0.8rem;
-  color: var(--fg);
-}
-
 /* Tools Section */
 .tool-help,
 .mode-help {

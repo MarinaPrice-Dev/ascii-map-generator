@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import SelectionTool from '../tools/SelectionTool';
-import Settings from './Settings';
+import Shortcuts from './Shortcuts';
 import Help from './Help';
 import './Menu.css';
 
@@ -11,15 +11,15 @@ interface MenuProps {
   onMirror: (direction: 'horizontal' | 'vertical') => void;
 }
 
-const Menu: React.FC<MenuProps> = ({ isOpen, onClose, onRotate, onMirror }) => {
+const Menu: React.FC<MenuProps> = ({ isOpen, onRotate, onMirror }) => {
   const [activeSection, setActiveSection] = useState<string>('tools');
 
   const renderSection = () => {
     switch (activeSection) {
       case 'tools':
         return <SelectionTool onRotate={onRotate} onMirror={onMirror} />;
-      case 'settings':
-        return <Settings />;
+      case 'shortcuts':
+        return <Shortcuts />;
       case 'help':
         return <Help />;
       default:
@@ -37,10 +37,10 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose, onRotate, onMirror }) => {
           Tools
         </button>
         <button 
-          className={`nav-button ${activeSection === 'settings' ? 'active' : ''}`}
-          onClick={() => setActiveSection('settings')}
+          className={`nav-button ${activeSection === 'shortcuts' ? 'active' : ''}`}
+          onClick={() => setActiveSection('shortcuts')}
         >
-          Settings
+          Shortcuts
         </button>
         <button 
           className={`nav-button ${activeSection === 'help' ? 'active' : ''}`}

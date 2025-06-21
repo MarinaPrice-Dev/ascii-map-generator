@@ -16,7 +16,6 @@ import { setupKeyboardShortcuts } from './utils/shortcuts'
 const HEADER_HEIGHT = 60;
 const FOOTER_HEIGHT = 200;
 const CELL_SIZE = 20;
-const MENU_WIDTH = 340;
 
 const getCellSize = () => CELL_SIZE;
 
@@ -85,7 +84,7 @@ const App: React.FC = () => {
   const [gridCols, setGridCols] = useState<number>(initialCols);
   const [grid, setGrid, undo, redo, canUndo, canRedo, beginAction] = useUndoRedo<Cell[][]>(savedGrid);
 
-  const { selectedCells, updateSelection, clearSelection, setSelectionMode, selectionMode } = useSelectionStore();
+  const { selectedCells, updateSelection, clearSelection } = useSelectionStore();
 
   // Save grid state whenever it changes
   useEffect(() => {

@@ -31,7 +31,7 @@ export const setupKeyboardShortcuts = (props: ShortcutProps) => {
     handleImportMap,
   } = props;
 
-  const { setSelectionMode, selectionMode } = useSelectionStore.getState();
+  const { setSelectionMode } = useSelectionStore.getState();
 
   const handleKeyDown = (e: KeyboardEvent) => {
     const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;

@@ -78,8 +78,8 @@
 }
 
 .menu-footer {
-  padding: 0.8rem 1rem;
-  border-top: 2px dashed var(--menu);
+  padding: 0.5rem;
+  border-top: 1px dashed var(--menu);
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -91,6 +91,7 @@
   color: var(--fg);
   font-family: "Doto", sans-serif;
   font-weight: 700;
+  font-size: 0.9rem;
   text-align: left;
   margin-right: 1rem;
   flex-shrink: 0;

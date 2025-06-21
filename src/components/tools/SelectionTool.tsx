@@ -20,8 +20,7 @@ const SelectionTool: React.FC<SelectionToolProps> = ({ onRotate, onMirror }) => 
     setActiveTool,
     setSelectionMode,
     clearSelection,
-    getSelectedCellsCount,
-    isDrawMode
+    getSelectedCellsCount
   } = useSelectionStore();
 
   const selectedCount = getSelectedCellsCount();

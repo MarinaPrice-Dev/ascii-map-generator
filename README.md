@@ -1,8 +1,10 @@
 # Ascii Map Generator
 
 ## TO DO
+- shortcuts for tool selections (Ctrl 1-0)
 - menu: documentation, example maps, blog, contact us
 - pen tools: fill, draw, replace fg/bg/symbol
+- copy/paste
 - email forwarding
 - more exports - rexpaint
 - add import - make the grid bigger if needed?
@@ -23,6 +25,7 @@ Fill Tools - Flood fill, pattern fill, gradient fill
 Selection Tools - Copy/paste regions, move selections
 Mirror/Flip - Horizontal/vertical mirroring
 Rotate - 90°/180°/270° rotation
+Copy/Paste areas
 
 Character Sets
 Quick Character Sets - Dungeon tiles, landscape symbols, UI elements

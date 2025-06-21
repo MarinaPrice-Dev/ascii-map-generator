@@ -2,17 +2,11 @@ import React, { useState } from 'react';
 import './Help.css';
 
 const Help: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('shortcuts');
+  const [activeTab, setActiveTab] = useState('tools');
 
   return (
     <div className="help-container">
       <div className="help-tabs">
-        <button 
-          className={`help-tab ${activeTab === 'shortcuts' ? 'active' : ''}`}
-          onClick={() => setActiveTab('shortcuts')}
-        >
-          Shortcuts
-        </button>
         <button 
           className={`help-tab ${activeTab === 'tools' ? 'active' : ''}`}
           onClick={() => setActiveTab('tools')}
@@ -28,54 +22,6 @@ const Help: React.FC = () => {
       </div>
 
       <div className="help-content">
-        {activeTab === 'shortcuts' && (
-          <div className="help-section">
-            <h3>Keyboard Shortcuts</h3>
-            <div className="shortcut-list">
-              <div className="shortcut-item">
-                <kbd>Ctrl + Z</kbd>
-                <span>Undo</span>
-              </div>
-              <div className="shortcut-item">
-                <kbd>Ctrl + Y</kbd>
-                <span>Redo</span>
-              </div>
-              <div className="shortcut-item">
-                <kbd>Ctrl + S</kbd>
-                <span>Save/Export</span>
-              </div>
-              <div className="shortcut-item">
-                <kbd>Ctrl + O</kbd>
-                <span>Open/Import</span>
-              </div>
-              <div className="shortcut-item">
-                <kbd>Ctrl + A</kbd>
-                <span>Select All</span>
-              </div>
-              <div className="shortcut-item">
-                <kbd>Esc</kbd>
-                <span>Clear Selection</span>
-              </div>
-              <div className="shortcut-item">
-                <kbd>Ctrl + +</kbd>
-                <span>Zoom In</span>
-              </div>
-              <div className="shortcut-item">
-                <kbd>Ctrl + -</kbd>
-                <span>Zoom Out</span>
-              </div>
-              <div className="shortcut-item">
-                <kbd>Ctrl + Space</kbd>
-                <span>Toggle Draw/Select Mode</span>
-              </div>
-              <div className="shortcut-item">
-                <kbd>Ctrl + M</kbd>
-                <span>Toggle Menu</span>
-              </div>
-            </div>
-          </div>
-        )}
-
         {activeTab === 'tools' && (
           <div className="help-section">
             <h3>Selection Tools</h3>
