@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { AspectIcon } from '../icons/Icons';
 import './ImageImportDialog.css';
 
 interface ImageImportOptions {
@@ -174,16 +175,19 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
                 onBlur={(e) => handleInputBlur('targetRows', parseInt(e.target.value) || 0)}
               />
             </div>
+            <button 
+              type="button" 
+              className="auto-calculate-button" 
+              onClick={autoCalculateDimensions}
+              disabled={!imageDimensions}
+              title="Change the aspect ratio based on new input"
+            >
+              <AspectIcon />
+            </button>
           </div>
-          <button 
-            type="button" 
-            className="auto-calculate-button" 
-            onClick={autoCalculateDimensions}
-            disabled={!imageDimensions}
-            title="Change the aspect ratio based on new input"
-          >
-            Re-calculate aspect ratio
-          </button>
+          <div className="apply-button-container">
+            <button className="image-import-button" onClick={handleImport}>← Apply image to grid</button>
+          </div>
         </div>
         <div className="line"></div>
         <div className="option-group">

@@ -187,4 +187,27 @@ export const FlipVerticalIcon: React.FC = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M2 12h20M12 3l-4 4h8l-4-4zM12 21l4-4H8l4 4z"/>
   </svg>
+);
+
+export const AspectIcon: React.FC<IconProps> = ({ className, style }) => (
+  <svg
+    viewBox="0 0 24 24"
+    width="24"
+    height="24"
+    className={className}
+    style={style}
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    {/* Center rectangle */}
+    <rect x="8" y="6" width="8" height="12" rx="1" />
+    {/* Diagonal arrows pointing outward */}
+    <path d="M2 2l4 4M2 2l4 0M2 2l0 4" />
+    <path d="M22 2l-4 4M22 2l-4 0M22 2l0 4" />
+    <path d="M2 22l4-4M2 22l4 0M2 22l0-4" />
+    <path d="M22 22l-4-4M22 22l-4 0M22 22l0-4" />
+  </svg>
 ); 
