@@ -109,6 +109,10 @@ footer.menu-open {
   width: calc(100vw - 340px);
 }
 
+footer.imageimportdialog-open {
+  width: calc(100vw - 340px);
+}
+
 main {
   flex: 1;
   width: 100vw;
@@ -123,6 +127,10 @@ main {
 }
 
 main.menu-open {
+  width: calc(100vw - 340px);
+}
+
+main.imageimportdialog-open {
   width: calc(100vw - 340px);
 }
 
@@ -231,6 +239,10 @@ button:disabled {
 }
 
 .main-grid-area.menu-open {
+  width: calc(100vw - 340px);
+}
+
+.main-grid-area.imageimportdialog-open {
   width: calc(100vw - 340px);
 }
 

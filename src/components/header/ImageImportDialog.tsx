@@ -81,7 +81,7 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
     }
     
     onImport(options);
-    onClose();
+    // Removed onClose() to keep dialog open for further adjustments
   };
 
   useEffect(() => {
@@ -106,113 +106,111 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="image-import-overlay">
-      <div className="image-import-dialog">
-        <div className="dialog-header">
-          <h3>Import Image: {fileName}</h3>
-          <button className="close-button" onClick={onClose}>×</button>
+    <div className={`image-import-panel ${isOpen ? 'open' : ''}`}>
+      <div className="image-import-navigation">
+        <h3>Import Image: {fileName}</h3>
+        <button className="close-button" onClick={onClose} title="Close">×</button>
+      </div>
+      
+      {imageDimensions && (
+        <div className="image-info">
+          <p>Image size: {imageDimensions.width} × {imageDimensions.height} pixels</p>
+          <p>Grid size: {options.targetCols} × {options.targetRows} characters</p>
         </div>
-        
-        {imageDimensions && (
-          <div className="image-info">
-            <p>Image size: {imageDimensions.width} × {imageDimensions.height} pixels</p>
-            <p>Grid size: {options.targetCols} × {options.targetRows} characters</p>
-          </div>
-        )}
+      )}
 
-        <div className="dialog-content">
-          <div className="option-group">
-            <label>Color Mode:</label>
-            <select 
-              value={options.colorMode} 
-              onChange={(e) => handleOptionChange('colorMode', e.target.value)}
-            >
-              <option value="smart">Smart Both (for optimal results)</option>
-              <option value="foreground">Foreground only</option>
-              <option value="background">Background only</option>
-            </select>
-            <div className="option-description">
-              {options.colorMode === 'foreground' && (
-                <small>Uses image colors as foreground with default background</small>
-              )}
-              {options.colorMode === 'smart' && (
-                <small>Intelligently uses both foreground and background colors for optimal results</small>
-              )}
-              {options.colorMode === 'background' && (
-                <small>Uses image colors as background with default foreground</small>
-              )}
-            </div>
+      <div className="image-import-content">
+        <div className="option-group">
+          <label>Color Mode:</label>
+          <select 
+            value={options.colorMode} 
+            onChange={(e) => handleOptionChange('colorMode', e.target.value)}
+          >
+            <option value="smart">Smart Both (for optimal results)</option>
+            <option value="foreground">Foreground only</option>
+            <option value="background">Background only</option>
+          </select>
+          <div className="option-description">
+            {options.colorMode === 'foreground' && (
+              <small>Uses image colors as foreground with default background</small>
+            )}
+            {options.colorMode === 'smart' && (
+              <small>Intelligently uses both foreground and background colors for optimal results</small>
+            )}
+            {options.colorMode === 'background' && (
+              <small>Uses image colors as background with default foreground</small>
+            )}
           </div>
+        </div>
 
-          <div className="option-group">
-            <label>Target Resolution:</label>
-            <div className="resolution-inputs">
-              <input
-                type="number"
-                value={options.targetCols || ''}
-                onChange={(e) => handleOptionChange('targetCols', e.target.value === '' ? 0 : parseInt(e.target.value) || 0)}
-                min="20"
-                max="200"
-                placeholder="Width"
-              />
-              <span>×</span>
-              <input
-                type="number"
-                value={options.targetRows || ''}
-                onChange={(e) => handleOptionChange('targetRows', e.target.value === '' ? 0 : parseInt(e.target.value) || 0)}
-                min="20"
-                max="200"
-                placeholder="Height"
-              />
-            </div>
-            <button 
-              type="button" 
-              className="auto-calculate-button" 
-              onClick={autoCalculateDimensions}
-              disabled={!imageDimensions}
-            >
-              Auto-calculate
-            </button>
-          </div>
-
-          <div className="option-group">
-            <label>Contrast: {options.contrast}</label>
+        <div className="option-group">
+          <label>Target Resolution:</label>
+          <div className="resolution-inputs">
             <input
-              type="range"
-              min="-100"
-              max="100"
-              value={options.contrast}
-              onChange={(e) => handleOptionChange('contrast', parseInt(e.target.value))}
+              type="number"
+              value={options.targetCols || ''}
+              onChange={(e) => handleOptionChange('targetCols', e.target.value === '' ? 0 : parseInt(e.target.value) || 0)}
+              min="20"
+              max="200"
+              placeholder="Width"
+            />
+            <span>×</span>
+            <input
+              type="number"
+              value={options.targetRows || ''}
+              onChange={(e) => handleOptionChange('targetRows', e.target.value === '' ? 0 : parseInt(e.target.value) || 0)}
+              min="20"
+              max="200"
+              placeholder="Height"
             />
           </div>
+          <button 
+            type="button" 
+            className="auto-calculate-button" 
+            onClick={autoCalculateDimensions}
+            disabled={!imageDimensions}
+          >
+            Auto-calculate
+          </button>
+        </div>
 
-          <div className="option-group">
-            <label>Brightness: {options.brightness}</label>
+        <div className="option-group">
+          <label>Contrast: {options.contrast}</label>
+          <input
+            type="range"
+            min="-100"
+            max="100"
+            value={options.contrast}
+            onChange={(e) => handleOptionChange('contrast', parseInt(e.target.value))}
+          />
+        </div>
+
+        <div className="option-group">
+          <label>Brightness: {options.brightness}</label>
+          <input
+            type="range"
+            min="-100"
+            max="100"
+            value={options.brightness}
+            onChange={(e) => handleOptionChange('brightness', parseInt(e.target.value))}
+          />
+        </div>
+
+        <div className="option-group">
+          <label>
             <input
-              type="range"
-              min="-100"
-              max="100"
-              value={options.brightness}
-              onChange={(e) => handleOptionChange('brightness', parseInt(e.target.value))}
+              type="checkbox"
+              checked={options.invert}
+              onChange={(e) => handleOptionChange('invert', e.target.checked)}
             />
-          </div>
-
-          <div className="option-group">
-            <label>
-              <input
-                type="checkbox"
-                checked={options.invert}
-                onChange={(e) => handleOptionChange('invert', e.target.checked)}
-              />
-              Better contrast
-            </label>
-          </div>
+            Better contrast
+          </label>
         </div>
+      </div>
 
-        <div className="dialog-footer">
-          <button className="cancel-button" onClick={onClose}>Cancel</button>
-          <button className="image-import-button" onClick={handleImport}>Import Image</button>
-        </div>
+      <div className="image-import-footer">
+        <button className="cancel-button" onClick={onClose}>Close</button>
+        <button className="image-import-button" onClick={handleImport}>Generate</button>
       </div>
     </div>
   );

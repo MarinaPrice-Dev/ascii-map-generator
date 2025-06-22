@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { UndoIcon, RedoIcon, ClearIcon, InfoIcon, ZoomInIcon, ZoomOutIcon, ImportIcon, MenuIcon } from '../icons/Icons';
 import '../icons/Icons.css';
 import './Header.css';
@@ -27,6 +27,8 @@ interface HeaderProps {
   onMenuToggle: () => void;
   isExportPanelOpen: boolean;
   onExportPanelToggle: () => void;
+  isImageDialogOpen: boolean;
+  onImageDialogStateChange: (isOpen: boolean) => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -46,6 +48,8 @@ const Header: React.FC<HeaderProps> = ({
   onMenuToggle,
   isExportPanelOpen,
   onExportPanelToggle,
+  isImageDialogOpen,
+  onImageDialogStateChange,
 }) => {
   const isGridEmpty = grid.every(row => row.every(cell => cell.char === ' '));
   const [showInfoDialog, setShowInfoDialog] = useState(false);
@@ -53,6 +57,11 @@ const Header: React.FC<HeaderProps> = ({
   const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
   const [imageDimensions, setImageDimensions] = useState<{ width: number; height: number; gridRows: number; gridCols: number } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Update parent component when image dialog state changes
+  useEffect(() => {
+    onImageDialogStateChange(showImageDialog);
+  }, [showImageDialog, onImageDialogStateChange]);
 
   const handleImportClick = () => {
     fileInputRef.current?.click();
@@ -223,7 +232,7 @@ const Header: React.FC<HeaderProps> = ({
             />
           </div>
           <div className="desktop-only">
-            <button className="icon-button import-button" onClick={handleImportClick} title="Import Map">
+            <button className={`icon-button import-button ${showImageDialog ? 'open' : ''}`} onClick={handleImportClick} title="Import Map">
               <ImportIcon />
               <span className="button-label">Import</span>
             </button>
@@ -281,7 +290,7 @@ const Header: React.FC<HeaderProps> = ({
         <button className="icon-button clear-button" onClick={onClearMap} disabled={isGridEmpty} title="Clear Map">
           <ClearIcon />
         </button>
-        <button className="icon-button import-button" onClick={handleImportClick} title="Import Map">
+        <button className={`icon-button import-button ${showImageDialog ? 'open' : ''}`} onClick={handleImportClick} title="Import Map">
           <ImportIcon />
         </button>
         <input

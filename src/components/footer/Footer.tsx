@@ -11,6 +11,7 @@ interface FooterProps {
   selectedBg: string;
   setSelectedBg: (color: string) => void;
   isMenuOpen?: boolean;
+  isImageDialogOpen?: boolean;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -20,7 +21,8 @@ export const Footer: React.FC<FooterProps> = ({
   setSelectedFg,
   selectedBg,
   setSelectedBg,
-  isMenuOpen = false
+  isMenuOpen = false,
+  isImageDialogOpen = false
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -40,7 +42,7 @@ export const Footer: React.FC<FooterProps> = ({
   }, []);
 
   return (
-    <footer className={`footer ${isMenuOpen ? 'menu-open' : ''}`}>
+    <footer className={`footer ${isMenuOpen ? 'menu-open' : ''} ${isImageDialogOpen ? 'imageimportdialog-open' : ''}`}>
       <div className="footer-content">
         <div className="footer-sections w-full h-[460px] grid gap-4 grid-cols-1 md:grid-cols-[1fr_2fr] md:grid-rows-2 lg:grid-cols-3 lg:grid-rows-1">
         <div className="footer-section color-section min-h-[150px] md:row-span-2 md:min-h-0 lg:row-span-1">

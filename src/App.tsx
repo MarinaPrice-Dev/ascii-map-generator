@@ -28,6 +28,7 @@ const App: React.FC = () => {
   const [selectedBg, setSelectedBg] = useState<string>(DEFAULT_BG);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isExportPanelOpen, setIsExportPanelOpen] = useState(false);
+  const [isImageDialogOpen, setIsImageDialogOpen] = useState(false);
   const mainRef = useRef<HTMLDivElement>(null);
 
   // Calculate initial grid dimensions once
@@ -507,11 +508,13 @@ const App: React.FC = () => {
         onMenuToggle={handleMenuToggle}
         isExportPanelOpen={isExportPanelOpen}
         onExportPanelToggle={handleExportPanelToggle}
+        isImageDialogOpen={isImageDialogOpen}
+        onImageDialogStateChange={setIsImageDialogOpen}
       />
       
       <div className="main-content">
         {/* Main Grid Area */}
-        <main ref={mainRef} className={`main-grid-area ${isMenuOpen ? 'menu-open' : ''}`}>
+        <main ref={mainRef} className={`main-grid-area ${isMenuOpen ? 'menu-open' : ''} ${isImageDialogOpen ? 'imageimportdialog-open' : ''}`}>
           {grid.length > 0 && (
             <AsciiMapGrid
               grid={grid}
@@ -535,6 +538,7 @@ const App: React.FC = () => {
           selectedBg={selectedBg}
           setSelectedBg={handleUpdateSelectedBg}
           isMenuOpen={isMenuOpen}
+          isImageDialogOpen={isImageDialogOpen}
         />
         
         <Menu 
