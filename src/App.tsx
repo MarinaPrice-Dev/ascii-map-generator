@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import './App.css'
 import AsciiMapGrid from './components/grid/AsciiMapGrid'
 import { useUndoRedo } from './utils/useUndoRedo'
@@ -10,7 +10,6 @@ import { Footer } from './components/footer/Footer'
 import Menu from './components/menu/Menu'
 import type { Cell } from './types/cell'
 import { handleZoom, expandGrid } from './utils/zoomUtils'
-import { calculateOptimalZoom } from './utils/imageToAscii'
 import { useSelectionStore } from './store/selectionStore'
 import { setupKeyboardShortcuts } from './utils/shortcuts'
 
@@ -87,6 +86,37 @@ const App: React.FC = () => {
 
   const { selectedCells, updateSelection, clearSelection } = useSelectionStore();
 
+  // Safe setGrid function that validates the grid before setting it
+  const safeSetGrid = useCallback((newGrid: Cell[][] | ((prev: Cell[][]) => Cell[][])) => {
+    if (typeof newGrid === 'function') {
+      const currentGrid = grid; // Get current grid from state
+      const result = newGrid(currentGrid);
+      // Validate the result
+      if (!result || !Array.isArray(result) || result.length === 0) {
+        console.warn('Invalid grid generated, using fallback');
+        setGrid(getInitialGrid(gridRows, gridCols, DEFAULT_FG, DEFAULT_BG));
+      } else {
+        setGrid(result);
+      }
+    } else {
+      // Validate the new grid
+      if (!newGrid || !Array.isArray(newGrid) || newGrid.length === 0) {
+        console.warn('Invalid grid provided, using fallback');
+        setGrid(getInitialGrid(gridRows, gridCols, DEFAULT_FG, DEFAULT_BG));
+      } else {
+        setGrid(newGrid);
+      }
+    }
+  }, [grid, gridRows, gridCols]);
+
+  // Ensure grid is properly initialized
+  useEffect(() => {
+    if (!grid || !Array.isArray(grid) || grid.length === 0) {
+      console.warn('Grid was not properly initialized, creating new grid');
+      safeSetGrid(getInitialGrid(gridRows, gridCols, DEFAULT_FG, DEFAULT_BG));
+    }
+  }, [grid, gridRows, gridCols, safeSetGrid]);
+
   // Save grid state whenever it changes
   useEffect(() => {
     saveState(grid, gridRows, gridCols, cellSize);
@@ -108,7 +138,13 @@ const App: React.FC = () => {
     setCellSize(newCellSize);
     setGridRows(newRows);
     setGridCols(newCols);
-    setGrid(prevGrid => expandGrid(prevGrid, newRows, newCols, DEFAULT_FG, DEFAULT_BG));
+    safeSetGrid(prevGrid => {
+      // Safety check to ensure grid is properly initialized
+      if (!prevGrid || !Array.isArray(prevGrid) || prevGrid.length === 0) {
+        return getInitialGrid(newRows, newCols, DEFAULT_FG, DEFAULT_BG);
+      }
+      return expandGrid(prevGrid, newRows, newCols, DEFAULT_FG, DEFAULT_BG);
+    });
   };
 
   const handleZoomOut = () => {
@@ -126,12 +162,18 @@ const App: React.FC = () => {
     setCellSize(newCellSize);
     setGridRows(newRows);
     setGridCols(newCols);
-    setGrid(prevGrid => expandGrid(prevGrid, newRows, newCols, DEFAULT_FG, DEFAULT_BG));
+    safeSetGrid(prevGrid => {
+      // Safety check to ensure grid is properly initialized
+      if (!prevGrid || !Array.isArray(prevGrid) || prevGrid.length === 0) {
+        return getInitialGrid(newRows, newCols, DEFAULT_FG, DEFAULT_BG);
+      }
+      return expandGrid(prevGrid, newRows, newCols, DEFAULT_FG, DEFAULT_BG);
+    });
   };
 
   // Update a cell with char, fg, bg
   const updateCell = (row: number, col: number, char: string, fg: string, bg: string) => {
-    setGrid(prev => {
+    safeSetGrid(prev => {
       const newGrid = prev.map(arr => arr.slice())
       newGrid[row][col] = { 
         char, 
@@ -146,7 +188,7 @@ const App: React.FC = () => {
   // Clear map
   const clearMap = () => {
     beginAction();
-    setGrid(getInitialGrid(gridRows, gridCols, DEFAULT_FG, DEFAULT_BG));
+    safeSetGrid(getInitialGrid(gridRows, gridCols, DEFAULT_FG, DEFAULT_BG));
     clearSavedState();
   };
 
@@ -172,9 +214,17 @@ const App: React.FC = () => {
 
   const handleImportMap = (importedGrid: Cell[][]) => {
     beginAction();
+    
+    // Safety check for current grid
+    if (!grid || !Array.isArray(grid) || grid.length === 0) {
+      console.warn('Current grid is invalid, creating new grid with imported dimensions');
+      safeSetGrid(importedGrid);
+      return;
+    }
+    
     // Create a new grid with the same dimensions as the current grid
     const newGrid = Array.from({ length: grid.length }, (_, rowIndex) =>
-      Array.from({ length: grid[0].length }, (_, colIndex) => {
+      Array.from({ length: grid[0]?.length || 0 }, (_, colIndex) => {
         const importedCell = importedGrid[rowIndex]?.[colIndex];
         if (importedCell) {
           return {
@@ -193,11 +243,25 @@ const App: React.FC = () => {
       })
     );
 
-    setGrid(newGrid);
+    safeSetGrid(newGrid);
   };
 
   const handleImageImport = (importedGrid: Cell[][], imageDimensions?: { width: number; height: number; gridRows: number; gridCols: number }) => {
     beginAction();
+    
+    // Validate the imported grid structure
+    if (!importedGrid || !Array.isArray(importedGrid) || importedGrid.length === 0) {
+      console.error('Invalid imported grid structure');
+      return;
+    }
+    
+    // Validate each row in the imported grid
+    for (let r = 0; r < importedGrid.length; r++) {
+      if (!importedGrid[r] || !Array.isArray(importedGrid[r])) {
+        console.error(`Invalid row structure at index ${r}`);
+        return;
+      }
+    }
     
     if (imageDimensions && imageDimensions.gridRows > 0 && imageDimensions.gridCols > 0) {
       // Use the grid dimensions from the image conversion result
@@ -217,8 +281,13 @@ const App: React.FC = () => {
       setGridRows(newRows);
       setGridCols(newCols);
       
-      // Use the imported grid directly since it already has the correct dimensions
-      setGrid(importedGrid);
+      // Validate that the imported grid matches the expected dimensions
+      if (importedGrid.length === newRows && importedGrid[0]?.length === newCols) {
+        safeSetGrid(importedGrid);
+      } else {
+        console.warn('Imported grid dimensions do not match expected dimensions, creating new grid');
+        safeSetGrid(getInitialGrid(newRows, newCols, DEFAULT_FG, DEFAULT_BG));
+      }
     } else {
       // Fallback to regular import if no image dimensions
       handleImportMap(importedGrid);
@@ -230,7 +299,7 @@ const App: React.FC = () => {
   ) => {
     beginAction();
     const { newGrid, newSelection } = transformFn(grid, selectedCells);
-    setGrid(newGrid);
+    safeSetGrid(newGrid);
 
     if (newSelection) {
       updateSelection(newSelection);
@@ -325,7 +394,7 @@ const App: React.FC = () => {
           newGrid[r][c].char = newChar;
         }
       });
-      setGrid(newGrid);
+      safeSetGrid(newGrid);
     }
     setSelectedChar(newChar);
   };
@@ -340,7 +409,7 @@ const App: React.FC = () => {
           newGrid[r][c].fg = newFg;
         }
       });
-      setGrid(newGrid);
+      safeSetGrid(newGrid);
     }
     setSelectedFg(newFg);
   };
@@ -355,7 +424,7 @@ const App: React.FC = () => {
           newGrid[r][c].bg = newBg;
         }
       });
-      setGrid(newGrid);
+      safeSetGrid(newGrid);
     }
     setSelectedBg(newBg);
   };

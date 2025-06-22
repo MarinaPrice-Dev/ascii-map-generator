@@ -30,15 +30,6 @@ const getBrightness = (r: number, g: number, b: number): number => {
   return 0.299 * r + 0.587 * g + 0.114 * b;
 };
 
-// Calculate contrast ratio between two colors
-const getContrastRatio = (color1: { r: number; g: number; b: number }, color2: { r: number; g: number; b: number }): number => {
-  const brightness1 = getBrightness(color1.r, color1.g, color1.b);
-  const brightness2 = getBrightness(color2.r, color2.g, color2.b);
-  const lighter = Math.max(brightness1, brightness2);
-  const darker = Math.min(brightness1, brightness2);
-  return (lighter + 0.05) / (darker + 0.05);
-};
-
 // Generate a contrasting foreground color based on background color
 const getContrastingForeground = (bgColor: { r: number; g: number; b: number }): string => {
   const bgBrightness = getBrightness(bgColor.r, bgColor.g, bgColor.b);
@@ -59,35 +50,8 @@ const getContrastingForeground = (bgColor: { r: number; g: number; b: number }):
   }
 };
 
-// Generate a complementary foreground color based on background color
-const getComplementaryForeground = (bgColor: { r: number; g: number; b: number }): string => {
-  // Calculate complementary color (opposite on color wheel)
-  const compR = 255 - bgColor.r;
-  const compG = 255 - bgColor.g;
-  const compB = 255 - bgColor.b;
-  
-  // Adjust brightness to ensure good contrast
-  const bgBrightness = getBrightness(bgColor.r, bgColor.g, bgColor.b);
-  const compBrightness = getBrightness(compR, compG, compB);
-  
-  if (Math.abs(bgBrightness - compBrightness) < 50) {
-    // If contrast is too low, adjust the complementary color
-    if (bgBrightness > 128) {
-      // Darken the complementary color
-      return rgbToHex(compR * 0.7, compG * 0.7, compB * 0.7);
-    } else {
-      // Lighten the complementary color
-      return rgbToHex(Math.min(255, compR * 1.3), Math.min(255, compG * 1.3), Math.min(255, compB * 1.3));
-    }
-  }
-  
-  return rgbToHex(compR, compG, compB);
-};
-
 // Get the best foreground color for a given background
 const getOptimalForeground = (bgColor: { r: number; g: number; b: number }): string => {
-  const bgBrightness = getBrightness(bgColor.r, bgColor.g, bgColor.b);
-  
   // Always use contrasting foreground for background mode
   return getContrastingForeground(bgColor);
 };
@@ -171,7 +135,6 @@ const getAverageColor = (
   const avgR = totalR / nonTransparentPixels;
   const avgG = totalG / nonTransparentPixels;
   const avgB = totalB / nonTransparentPixels;
-  const avgA = totalA / nonTransparentPixels;
   const brightness = getBrightness(avgR, avgG, avgB);
 
   return { r: avgR, g: avgG, b: avgB, brightness, isTransparent: false };
@@ -339,7 +302,6 @@ export const calculateOptimalZoom = (
   currentCellSize: number,
   availableWidth: number,
   availableHeight: number,
-  targetCellSize: number = 10
 ): { newCellSize: number; newRows: number; newCols: number } => {
   // Ensure we have valid dimensions
   if (imageWidth <= 0 || imageHeight <= 0 || availableWidth <= 0 || availableHeight <= 0) {

@@ -29,8 +29,36 @@ export const expandGrid = (
   defaultFg: string,
   defaultBg: string
 ): Cell[][] => {
+  // Safety check for undefined or null grid
+  if (!grid || !Array.isArray(grid) || grid.length === 0) {
+    // Return a new grid with the requested dimensions
+    return Array(newRows).fill(null).map(() =>
+      Array(newCols).fill(null).map(() => ({
+        char: ' ',
+        fg: defaultFg,
+        bg: defaultBg,
+        selected: false
+      }))
+    );
+  }
+
   const currentRows = grid.length;
   const currentCols = grid[0]?.length || 0;
+
+  // Additional safety check: ensure all rows exist and have proper length
+  for (let r = 0; r < currentRows; r++) {
+    if (!grid[r] || !Array.isArray(grid[r])) {
+      // If any row is malformed, return a completely new grid
+      return Array(newRows).fill(null).map(() =>
+        Array(newCols).fill(null).map(() => ({
+          char: ' ',
+          fg: defaultFg,
+          bg: defaultBg,
+          selected: false
+        }))
+      );
+    }
+  }
 
   // If new dimensions are smaller, just return the existing grid
   if (newRows <= currentRows && newCols <= currentCols) {
@@ -47,10 +75,20 @@ export const expandGrid = (
     }))
   );
 
-  // Copy existing grid content
+  // Copy existing grid content with additional safety checks
   for (let r = 0; r < currentRows; r++) {
     for (let c = 0; c < currentCols; c++) {
-      newGrid[r][c] = grid[r][c];
+      if (grid[r] && grid[r][c]) {
+        newGrid[r][c] = grid[r][c];
+      } else {
+        // Fallback for any missing cells
+        newGrid[r][c] = {
+          char: ' ',
+          fg: defaultFg,
+          bg: defaultBg,
+          selected: false
+        };
+      }
     }
   }
 
