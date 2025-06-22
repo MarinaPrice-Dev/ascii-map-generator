@@ -11,9 +11,10 @@
 - infinite canvas
 
 ## Bugs
-- Export on mobile
-- Export options dont look like buttons
-- Menu on tablet styling
+- clear map doesnt work if you only use colours
+
+
+## Possible ideas:
 
 Map Management
 Save/Load Templates - Save frequently used patterns or layouts

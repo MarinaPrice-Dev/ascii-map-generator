@@ -177,7 +177,7 @@
 }
 
 .instruction-item strong {
-  color: var(--zoom);
+  color: var(--save);
   width: 100%;
   display: block;
 }

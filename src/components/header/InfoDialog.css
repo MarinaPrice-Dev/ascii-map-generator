@@ -74,6 +74,7 @@
 .info-dialog-body p, .info-dialog-body ul {
   color: var(--fg);
   font-size: 0.9em;
+  margin-bottom: 1rem;
 }
 
 .info-dialog-body ul{

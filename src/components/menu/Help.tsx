@@ -5,7 +5,7 @@ const Help: React.FC = () => {
   return (
       <div className="selection-tool">
         <div className="selection-tool-section">
-          <h4>Creating Your First Map</h4>
+          <h4>Creating Your ASCII Art</h4>
           <div className="instructions">
             <div className="instruction-item">
               <strong>Character Selection</strong>
@@ -43,16 +43,16 @@ const Help: React.FC = () => {
           <h4>Exporting Your Map</h4>
           <div className="instructions">
             <div className="instruction-item">
-              <strong>Text (.txt)</strong> Plain ASCII text file.
+              <strong>Text (.txt)</strong> Plain ASCII text file. Simple export without colors.
             </div>
             <div className="instruction-item">
-              <strong>JSON (.json)</strong> Structured data with colors and metadata
+              <strong>JSON (.json)</strong> Structured data with colors and metadata.
             </div>
             <div className="instruction-item">
-              <strong>ANSI (.ans)</strong> ANSI art format with colors
+              <strong>ANSI (.ans)</strong> ANSI art format with colors.
             </div>
             <div className="instruction-item">
-              <strong>ROT (.rot)</strong> ROT13 encoded text
+              <strong>ROT (.rot.txt)</strong> Designed to work with the Rot.js library. Using display.drawText() will display your ascii art including colors.
             </div>
           </div>
         </div>

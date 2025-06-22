@@ -42,12 +42,13 @@
 .nav-button:hover {
   background: var(--menu);
   color: var(--fg);
+  border-color: var(--menu);
 }
 
 .nav-button.active {
   color: var(--fg);
   font-weight: bold;
-  background: var(--menu);
+  background: #cf00cf3c;
 }
 
 .close-button {
@@ -136,7 +137,7 @@
   flex-shrink: 0;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .menu-panel {
     width: 100vw;
     right: -100vw;
