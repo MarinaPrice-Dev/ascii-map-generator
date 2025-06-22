@@ -39,7 +39,9 @@
   font-weight: 700;
   font-size: 1rem;
   text-align: left;
-  overflow-wrap: break-word;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
   max-width: calc(100% - 40px);
 }
 
@@ -60,12 +62,15 @@
   color: var(--fg);
 }
 
+.line {
+  border-bottom: 1px dashed var(--border);
+  margin-bottom: 10px;
+}
+
 .image-info {
-  border-bottom: 1px solid var(--border);
   padding: 0 0 0.75rem 0rem;
   flex-shrink: 0;
   text-align: left;
-  margin-bottom: 10px;
 }
 
 .image-info p {

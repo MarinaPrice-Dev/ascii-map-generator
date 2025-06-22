@@ -145,35 +145,10 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
       {imageDimensions && (
         <div className="image-info">
           <p>Image size: {imageDimensions.width} × {imageDimensions.height} pixels</p>
-          <p>Grid size: {options.targetCols} × {options.targetRows} characters</p>
         </div>
       )}
-        <div className="option-group">
-          <div className="color-mode-header">
-            <label>Color Mode:</label>
-            <select 
-              value={options.colorMode} 
-              onChange={(e) => handleOptionChange('colorMode', e.target.value)}
-            >
-              <option value="smart">Smart Mode</option>
-              <option value="foreground">Symbols only</option>
-              <option value="background">Background only</option>
-            </select>
-          </div>
-          <div className="option-description">
-            {options.colorMode === 'foreground' && (
-              <small>Uses image colors as foreground with default background</small>
-            )}
-            {options.colorMode === 'smart' && (
-              <small>Intelligently uses both foreground and background colors for optimal results</small>
-            )}
-            {options.colorMode === 'background' && (
-              <small>Uses image colors as background with default foreground</small>
-            )}
-          </div>
-        </div>
 
-        <div className="option-group">
+      <div className="option-group">
           <div className="resolution-header">
             <label>Resolution:</label>
             <div className="resolution-inputs">
@@ -209,6 +184,31 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
           >
             Re-calculate aspect ratio
           </button>
+        </div>
+        <div className="line"></div>
+        <div className="option-group">
+          <div className="color-mode-header">
+            <label>Color Mode:</label>
+            <select 
+              value={options.colorMode} 
+              onChange={(e) => handleOptionChange('colorMode', e.target.value)}
+            >
+              <option value="smart">Smart Mode</option>
+              <option value="foreground">Symbols only</option>
+              <option value="background">Background only</option>
+            </select>
+          </div>
+          <div className="option-description">
+            {options.colorMode === 'foreground' && (
+              <small>Uses image colors as foreground with default background</small>
+            )}
+            {options.colorMode === 'smart' && (
+              <small>Intelligently uses both foreground and background colors for optimal results</small>
+            )}
+            {options.colorMode === 'background' && (
+              <small>Uses image colors as background with default foreground</small>
+            )}
+          </div>
         </div>
 
         <div className="option-group">
