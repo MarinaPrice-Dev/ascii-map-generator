@@ -236,9 +236,14 @@ const App: React.FC = () => {
   };
 
   // Handle map export
-  const handleExport = (format: 'txt' | 'json' | 'ansi' | 'rot') => {
-    exportMap(grid, { format });
-    setIsExportPanelOpen(false); // Close panel after exporting
+  const handleExport = async (format: 'txt' | 'json' | 'ansi' | 'rot' | 'png') => {
+    try {
+      await exportMap(grid, { format });
+      setIsExportPanelOpen(false); // Close panel after exporting
+    } catch (error) {
+      console.error('Export failed:', error);
+      alert(`Export failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
   };
 
   const handleImportMap = (importedGrid: Cell[][]) => {

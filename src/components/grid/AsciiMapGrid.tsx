@@ -304,7 +304,7 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, beginActi
                   color: cell.fg,
                   background: cell.bg,
                   fontSize: Math.floor(cellSize * 0.8),
-                  borderColor: selected ? '#ddd' : '#444',
+                  borderColor: selected ? '#ddd' : '#2e2e2e',
                 }}
               >
                 {cell.char}

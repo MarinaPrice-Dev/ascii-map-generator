@@ -3,7 +3,7 @@ import { SaveIcon } from '../icons/Icons';
 import './ExportDropdown.css';
 
 interface ExportDropdownProps {
-  onExport: (format: 'txt' | 'json' | 'ansi' | 'rot') => void;
+  onExport: (format: 'txt' | 'json' | 'ansi' | 'rot' | 'png') => void;
   disabled?: boolean;
   isOpen: boolean;
   onToggle: () => void;
@@ -15,7 +15,7 @@ const ExportDropdown: React.FC<ExportDropdownProps> = ({
   isOpen,
   onToggle,
 }) => {
-  const handleExport = (format: 'txt' | 'json' | 'ansi' | 'rot') => {
+  const handleExport = (format: 'txt' | 'json' | 'ansi' | 'rot' | 'png') => {
     onExport(format);
     // The panel is now closed by the App component
   };
@@ -60,6 +60,12 @@ const ExportDropdown: React.FC<ExportDropdownProps> = ({
             <div className="export-item-content">
               <span className="export-label">ROT.js File (.rot.txt)</span>
               <span className="export-description">Special format for the ROT.js roguelike library.</span>
+            </div>
+          </div>
+          <div className="export-item" onClick={() => handleExport('png')}>
+            <div className="export-item-content">
+              <span className="export-label">PNG Image (.png)</span>
+              <span className="export-description">High-quality image with exact colors and styling.</span>
             </div>
           </div>
         </div>

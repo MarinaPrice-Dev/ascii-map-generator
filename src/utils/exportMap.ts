@@ -1,7 +1,8 @@
 import type { Cell } from '../types/cell'
+import html2canvas from 'html2canvas';
 
 interface ExportOptions {
-  format: 'txt' | 'json' | 'ansi' | 'rot';
+  format: 'txt' | 'json' | 'ansi' | 'rot' | 'png';
 }
 
 interface BoundingBox {
@@ -167,8 +168,92 @@ const exportAsRot = (grid: Cell[][]) => {
   downloadFile(content, generateFileName('map', 'rot.txt'));
 };
 
+const exportAsPng = async (grid: Cell[][]) => {
+  try {
+    // Find the ASCII grid element
+    const gridElement = document.querySelector('.ascii-map-grid');
+    if (!gridElement) {
+      throw new Error('Could not find the ASCII grid element');
+    }
+
+    // Calculate bounding box to only export the area with content
+    const { top, left, bottom, right } = findBoundingBox(grid);
+    
+    // If no content found, export a minimal area
+    if (top > bottom || left > right) {
+      throw new Error('No content found to export');
+    }
+
+    // Get cell size from the first cell element
+    const firstCell = gridElement.querySelector('.ascii-map-grid-cell') as HTMLElement;
+    if (!firstCell) {
+      throw new Error('Could not find grid cells');
+    }
+    const cellSize = firstCell.offsetWidth;
+
+    // Configure html2canvas options for best quality and proper character alignment
+    const canvas = await html2canvas(gridElement as HTMLElement, {
+      backgroundColor: null, // Transparent background
+      scale: 2, // Higher resolution
+      useCORS: true,
+      allowTaint: true,
+      logging: false,
+      // Calculate the area to capture based on bounding box
+      x: left * cellSize,
+      y: top * cellSize,
+      width: (right - left + 1) * cellSize,
+      height: (bottom - top + 1) * cellSize,
+      // Ensure proper font rendering and alignment
+      foreignObjectRendering: false,
+      removeContainer: false,
+      // Force proper character sizing and positioning
+      onclone: (clonedDoc) => {
+        const clonedGrid = clonedDoc.querySelector('.ascii-map-grid');
+        if (clonedGrid) {
+          // Ensure all cells have proper display and alignment
+          const cells = clonedGrid.querySelectorAll('.ascii-map-grid-cell');
+          cells.forEach((cell) => {
+            const cellElement = cell as HTMLElement;
+            // Force proper text alignment and sizing
+            cellElement.style.display = 'flex';
+            cellElement.style.alignItems = 'center';
+            cellElement.style.justifyContent = 'center';
+            cellElement.style.textAlign = 'center';
+            cellElement.style.lineHeight = '1';
+            cellElement.style.verticalAlign = 'middle';
+            // Ensure font size is properly applied
+            const fontSize = cellElement.style.fontSize;
+            if (fontSize) {
+              cellElement.style.fontSize = fontSize;
+            }
+          });
+        }
+      }
+    });
+
+    // Convert canvas to blob and download
+    canvas.toBlob((blob) => {
+      if (blob) {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = generateFileName('map', 'png');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      } else {
+        throw new Error('Failed to create PNG file');
+      }
+    }, 'image/png');
+  } catch (error) {
+    console.error('Error exporting PNG:', error);
+    throw new Error('Failed to export PNG. Please try again.');
+  }
+};
+
 // Main export function
-export const exportMap = (grid: Cell[][], options: ExportOptions) => {
+export const exportMap = async (grid: Cell[][], options: ExportOptions) => {
   if (!grid || !Array.isArray(grid) || grid.length === 0) {
     throw new Error('Invalid grid data');
   }
@@ -185,6 +270,9 @@ export const exportMap = (grid: Cell[][], options: ExportOptions) => {
       break;
     case 'rot':
       exportAsRot(grid);
+      break;
+    case 'png':
+      await exportAsPng(grid);
       break;
     default:
       throw new Error(`Unsupported export format: ${options.format}`);
