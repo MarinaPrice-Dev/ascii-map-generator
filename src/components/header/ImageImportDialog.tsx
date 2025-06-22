@@ -65,6 +65,20 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
     onImport(options);
   };
 
+  const handleResetRanges = () => {
+    const resetOptions = {
+      ...options,
+      contrast: 0,
+      brightness: 0,
+      saturation: 0,
+      hue: 0,
+      sepia: 0,
+      grayscale: 0
+    };
+    setOptions(resetOptions);
+    onImport(resetOptions);
+  };
+
   const handleInputFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     e.target.select();
   };
@@ -235,7 +249,17 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
         </div>
 
         <div className="option-group">
-          <label>Adjustments:</label>
+          <div className="adjustments-header">
+            <label>Adjustments:</label>
+            <button 
+              type="button" 
+              className="reset-ranges-button" 
+              onClick={handleResetRanges}
+              title="Reset all adjustments to 0"
+            >
+              Reset
+            </button>
+          </div>
         </div>
 
         <div className="option-group">

@@ -337,4 +337,37 @@
   .image-import-panel.open {
     right: 0;
   }
+}
+
+.adjustments-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.adjustments-header label {
+  margin-bottom: 0;
+  flex-shrink: 0;
+  white-space: nowrap;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.reset-ranges-button {
+  background: var(--border);
+  color: var(--fg);
+  border: none;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 500;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.reset-ranges-button:hover {
+  background: var(--info);
+  color: var(--fg);
 } 
