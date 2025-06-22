@@ -29,7 +29,7 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
     colorMode: 'smart',
     contrast: 0,
     brightness: 0,
-    invert: false,
+    invert: true,
     targetRows: 50,
     targetCols: 100
   });
@@ -204,14 +204,14 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
                 checked={options.invert}
                 onChange={(e) => handleOptionChange('invert', e.target.checked)}
               />
-              Invert Colors
+              Better contrast
             </label>
           </div>
         </div>
 
         <div className="dialog-footer">
           <button className="cancel-button" onClick={onClose}>Cancel</button>
-          <button className="import-button" onClick={handleImport}>Import Image</button>
+          <button className="image-import-button" onClick={handleImport}>Import Image</button>
         </div>
       </div>
     </div>

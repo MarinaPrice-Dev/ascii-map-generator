@@ -95,6 +95,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  position: relative;
 }
 
 .menu-footer h3 {
@@ -104,7 +105,6 @@
   font-weight: 700;
   font-size: 0.9rem;
   text-align: left;
-  margin-right: 1rem;
   flex-shrink: 0;
 }
 
@@ -112,6 +112,15 @@
   display: flex;
   gap: 0.5rem;
   align-items: center;
+  margin-left: 1rem;
+}
+
+.reset-link {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #dc3545!important;
 }
 
 .contact-link {
@@ -124,11 +133,20 @@
   border-radius: 4px;
   transition: all 0.2s ease;
   font-size: 0.9rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
 }
 
 .contact-link:hover {
   background: var(--menu);
   color: var(--fg);
+}
+
+.reset-link:hover {
+  background: #dc3545 !important;
+  color: white !important;
 }
 
 .contact-icon {

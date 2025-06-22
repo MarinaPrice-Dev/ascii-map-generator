@@ -36,25 +36,6 @@
   color: var(--fg);
 }
 
-.close-button {
-  background: none;
-  border: none;
-  color: var(--fg);
-  font-size: 24px;
-  cursor: pointer;
-  padding: 0;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-}
-
-.close-button:hover {
-  background: var(--border);
-}
-
 .image-info {
   padding: 12px 20px;
   background: var(--bg-light);
@@ -180,7 +161,7 @@
   background: #555;
 }
 
-.import-button {
+.image-import-button {
   background: var(--save);
   color: white;
   border: none;
@@ -191,7 +172,7 @@
   font-weight: 500;
 }
 
-.import-button:hover {
+.image-import-button:hover {
   background: #1a9e3e;
 }
 

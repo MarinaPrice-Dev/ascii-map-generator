@@ -1,0 +1,152 @@
+.reset-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(2px);
+}
+
+.reset-dialog {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  animation: dialogSlideIn 0.2s ease-out;
+}
+
+@keyframes dialogSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.reset-dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.reset-dialog-header h3 {
+  margin: 0;
+  color: var(--fg);
+  font-family: "Doto", sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.reset-dialog-close {
+  background: none;
+  border: none;
+  color: var(--fg);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.2rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reset-dialog-close:hover {
+  background: var(--menu);
+  color: var(--fg);
+}
+
+.reset-dialog-content {
+  padding: 1.5rem;
+  color: var(--fg);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.reset-dialog-content p {
+  margin: 0 0 1rem 0;
+}
+
+.reset-dialog-content ul {
+  margin: 0.5rem 0 1rem 1.5rem;
+  padding: 0;
+}
+
+.reset-dialog-content li {
+  margin: 0.3rem 0;
+  color: var(--fg);
+}
+
+.reset-warning {
+  color: #ff6b6b !important;
+  font-weight: 600;
+}
+
+.reset-dialog-actions {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border);
+  justify-content: flex-end;
+}
+
+.reset-dialog-button {
+  padding: 0.6rem 1.2rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 80px;
+}
+
+.reset-dialog-button.cancel {
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.reset-dialog-button.cancel:hover {
+  background: var(--menu);
+  border-color: var(--menu);
+}
+
+.reset-dialog-button.confirm {
+  background: #dc3545;
+  color: white;
+  border-color: #dc3545;
+}
+
+.reset-dialog-button.confirm:hover {
+  background: #c82333;
+  border-color: #bd2130;
+}
+
+@media (max-width: 480px) {
+  .reset-dialog {
+    width: 95%;
+    margin: 1rem;
+  }
+  
+  .reset-dialog-actions {
+    flex-direction: column;
+  }
+  
+  .reset-dialog-button {
+    width: 100%;
+  }
+} 

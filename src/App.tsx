@@ -192,6 +192,34 @@ const App: React.FC = () => {
     clearSavedState();
   };
 
+  // Reset grid to defaults
+  const handleReset = () => {
+    // Calculate initial grid dimensions based on default cell size
+    const defaultCellSize = 20;
+    const availableWidth = window.innerWidth - 2;
+    const availableHeight = window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT - 2;
+    const cols = Math.floor(availableWidth / defaultCellSize);
+    const rows = Math.floor(availableHeight / defaultCellSize);
+    const squareSize = Math.max(rows, cols);
+    
+    // Reset all state to defaults
+    setCellSize(defaultCellSize);
+    setGridRows(squareSize);
+    setGridCols(squareSize);
+    safeSetGrid(getInitialGrid(squareSize, squareSize, DEFAULT_FG, DEFAULT_BG));
+    
+    // Clear saved state and history
+    clearSavedState();
+    
+    // Clear selection
+    clearSelection();
+    
+    // Reset character and color selections to defaults
+    setSelectedChar('#');
+    setSelectedFg(DEFAULT_FG);
+    setSelectedBg(DEFAULT_BG);
+  };
+
   const handleMenuToggle = () => {
     setIsMenuOpen(prev => !prev);
     if (!isMenuOpen) {
@@ -514,6 +542,7 @@ const App: React.FC = () => {
           onClose={handleMenuToggle} 
           onRotate={handleRotate} 
           onMirror={handleMirror}
+          onReset={handleReset}
         />
       </div>
     </div>
