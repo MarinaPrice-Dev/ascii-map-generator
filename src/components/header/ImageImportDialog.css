@@ -195,6 +195,28 @@
   background: #1a9e3e;
 }
 
+.auto-calculate-button {
+  margin-top: 8px;
+  background: var(--info);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.auto-calculate-button:hover:not(:disabled) {
+  background: #0056b3;
+}
+
+.auto-calculate-button:disabled {
+  background: var(--border);
+  color: #666;
+  cursor: not-allowed;
+}
+
 @media (max-width: 600px) {
   .image-import-dialog {
     min-width: 90vw;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ImageImportDialog.css';
 
 interface ImageImportOptions {
@@ -30,7 +30,7 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
     contrast: 0,
     brightness: 0,
     invert: false,
-    targetRows: 100,
+    targetRows: 50,
     targetCols: 100
   });
 
@@ -38,10 +38,70 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
     setOptions(prev => ({ ...prev, [key]: value }));
   };
 
+  const autoCalculateDimensions = () => {
+    if (!imageDimensions) return;
+
+    const imageAspectRatio = imageDimensions.width / imageDimensions.height;
+    let newWidth: number;
+    let newHeight: number;
+
+    if (options.targetCols > 0 && options.targetRows > 0) {
+      // Both filled in - recalculate height based on width
+      newWidth = options.targetCols;
+      newHeight = Math.round(newWidth / imageAspectRatio);
+    } else if (options.targetCols > 0) {
+      // Only width filled in - calculate height
+      newWidth = options.targetCols;
+      newHeight = Math.round(newWidth / imageAspectRatio);
+    } else if (options.targetRows > 0) {
+      // Only height filled in - calculate width
+      newHeight = options.targetRows;
+      newWidth = Math.round(newHeight * imageAspectRatio);
+    } else {
+      // Both empty - set width to 100 and calculate height
+      newWidth = 100;
+      newHeight = Math.round(newWidth / imageAspectRatio);
+    }
+
+    // Ensure minimum dimensions
+    newWidth = Math.max(20, Math.min(200, newWidth));
+    newHeight = Math.max(20, Math.min(200, newHeight));
+
+    setOptions(prev => ({
+      ...prev,
+      targetCols: newWidth,
+      targetRows: newHeight
+    }));
+  };
+
   const handleImport = () => {
+    // Auto-calculate dimensions if any inputs are empty
+    if (options.targetCols <= 0 || options.targetRows <= 0) {
+      autoCalculateDimensions();
+    }
+    
     onImport(options);
     onClose();
   };
+
+  useEffect(() => {
+    if (isOpen && imageDimensions) {
+      // Auto-calculate on dialog open with image
+      const imageAspectRatio = imageDimensions.width / imageDimensions.height;
+      const newWidth = 100;
+      const newHeight = Math.round(newWidth / imageAspectRatio);
+      
+      // Ensure minimum dimensions
+      const finalWidth = Math.max(20, Math.min(200, newWidth));
+      const finalHeight = Math.max(20, Math.min(200, newHeight));
+      
+      setOptions(prev => ({
+        ...prev,
+        targetCols: finalWidth,
+        targetRows: finalHeight
+      }));
+    }
+  }, [isOpen, imageDimensions]);
 
   if (!isOpen) return null;
 
@@ -56,7 +116,7 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
         {imageDimensions && (
           <div className="image-info">
             <p>Image size: {imageDimensions.width} × {imageDimensions.height} pixels</p>
-            <p>Grid size: {options.targetRows} × {options.targetCols} characters</p>
+            <p>Grid size: {options.targetCols} × {options.targetRows} characters</p>
           </div>
         )}
 
@@ -89,22 +149,30 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
             <div className="resolution-inputs">
               <input
                 type="number"
-                value={options.targetRows}
-                onChange={(e) => handleOptionChange('targetRows', parseInt(e.target.value) || 50)}
+                value={options.targetCols || ''}
+                onChange={(e) => handleOptionChange('targetCols', e.target.value === '' ? 0 : parseInt(e.target.value) || 0)}
                 min="20"
                 max="200"
-                placeholder="Rows"
+                placeholder="Width"
               />
               <span>×</span>
               <input
                 type="number"
-                value={options.targetCols}
-                onChange={(e) => handleOptionChange('targetCols', parseInt(e.target.value) || 50)}
+                value={options.targetRows || ''}
+                onChange={(e) => handleOptionChange('targetRows', e.target.value === '' ? 0 : parseInt(e.target.value) || 0)}
                 min="20"
                 max="200"
-                placeholder="Columns"
+                placeholder="Height"
               />
             </div>
+            <button 
+              type="button" 
+              className="auto-calculate-button" 
+              onClick={autoCalculateDimensions}
+              disabled={!imageDimensions}
+            >
+              Auto-calculate
+            </button>
           </div>
 
           <div className="option-group">
