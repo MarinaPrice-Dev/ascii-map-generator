@@ -45,6 +45,24 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
 
   const handleOptionChange = (key: keyof ImageImportOptions, value: any) => {
     setOptions(prev => ({ ...prev, [key]: value }));
+    
+    // Auto-apply for color mode and adjustments (except range inputs)
+    if (key !== 'targetCols' && key !== 'targetRows') {
+      // For range inputs, we'll handle them separately with onMouseUp
+      if (key !== 'contrast' && key !== 'brightness' && key !== 'saturation' && key !== 'hue' && key !== 'sepia' && key !== 'grayscale') {
+        // Auto-apply for non-range inputs (color mode, invert)
+        setTimeout(() => onImport({ ...options, [key]: value }), 0);
+      }
+    }
+  };
+
+  const handleRangeChange = (key: keyof ImageImportOptions, value: number) => {
+    setOptions(prev => ({ ...prev, [key]: value }));
+  };
+
+  const handleRangeMouseUp = (key: keyof ImageImportOptions) => {
+    // Apply changes when user releases the range slider
+    onImport(options);
   };
 
   const handleInputFocus = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -190,6 +208,7 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
           </div>
         </div>
         <div className="line"></div>
+        
         <div className="option-group">
           <div className="color-mode-header">
             <label>Color Mode:</label>
@@ -227,7 +246,9 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
               min="-100"
               max="100"
               value={options.contrast}
-              onChange={(e) => handleOptionChange('contrast', parseInt(e.target.value))}
+              onChange={(e) => handleRangeChange('contrast', parseInt(e.target.value))}
+              onMouseUp={() => handleRangeMouseUp('contrast')}
+              onTouchEnd={() => handleRangeMouseUp('contrast')}
             />
           </div>
         </div>
@@ -240,7 +261,9 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
               min="-100"
               max="100"
               value={options.brightness}
-              onChange={(e) => handleOptionChange('brightness', parseInt(e.target.value))}
+              onChange={(e) => handleRangeChange('brightness', parseInt(e.target.value))}
+              onMouseUp={() => handleRangeMouseUp('brightness')}
+              onTouchEnd={() => handleRangeMouseUp('brightness')}
             />
           </div>
         </div>
@@ -253,7 +276,9 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
               min="-100"
               max="100"
               value={options.saturation}
-              onChange={(e) => handleOptionChange('saturation', parseInt(e.target.value))}
+              onChange={(e) => handleRangeChange('saturation', parseInt(e.target.value))}
+              onMouseUp={() => handleRangeMouseUp('saturation')}
+              onTouchEnd={() => handleRangeMouseUp('saturation')}
             />
           </div>
         </div>
@@ -266,7 +291,9 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
               min="-180"
               max="180"
               value={options.hue}
-              onChange={(e) => handleOptionChange('hue', parseInt(e.target.value))}
+              onChange={(e) => handleRangeChange('hue', parseInt(e.target.value))}
+              onMouseUp={() => handleRangeMouseUp('hue')}
+              onTouchEnd={() => handleRangeMouseUp('hue')}
             />
           </div>
         </div>
@@ -279,7 +306,9 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
               min="-100"
               max="100"
               value={options.sepia}
-              onChange={(e) => handleOptionChange('sepia', parseInt(e.target.value))}
+              onChange={(e) => handleRangeChange('sepia', parseInt(e.target.value))}
+              onMouseUp={() => handleRangeMouseUp('sepia')}
+              onTouchEnd={() => handleRangeMouseUp('sepia')}
             />
           </div>
         </div>
@@ -292,7 +321,9 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
               min="-100"
               max="100"
               value={options.grayscale}
-              onChange={(e) => handleOptionChange('grayscale', parseInt(e.target.value))}
+              onChange={(e) => handleRangeChange('grayscale', parseInt(e.target.value))}
+              onMouseUp={() => handleRangeMouseUp('grayscale')}
+              onTouchEnd={() => handleRangeMouseUp('grayscale')}
             />
           </div>
         </div>
