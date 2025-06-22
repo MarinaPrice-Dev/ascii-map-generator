@@ -150,6 +150,23 @@ const Header: React.FC<HeaderProps> = ({
         hue: options.hue,
         sepia: options.sepia,
         grayscale: options.grayscale,
+        characterDensity: options.characterDensity,
+        edgeDetection: options.edgeDetection,
+        threshold: options.threshold,
+        dithering: options.dithering,
+        vignette: options.vignette,
+        grain: options.grain,
+        blur: options.blur,
+        sharpen: options.sharpen,
+        pixelate: options.pixelate,
+        posterize: options.posterize,
+        vibrance: options.vibrance,
+        temperature: options.temperature,
+        exposure: options.exposure,
+        highlights: options.highlights,
+        shadows: options.shadows,
+        whites: options.whites,
+        blacks: options.blacks,
         invert: options.invert
       });
 

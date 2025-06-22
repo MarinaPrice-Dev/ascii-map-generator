@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AspectIcon } from '../icons/Icons';
+import ImageRangeSlider from './ImageRangeSlider';
 import './ImageImportDialog.css';
 
 interface ImageImportOptions {
@@ -10,6 +11,23 @@ interface ImageImportOptions {
   hue: number;
   sepia: number;
   grayscale: number;
+  characterDensity: number;
+  edgeDetection: number;
+  threshold: number;
+  dithering: number;
+  vignette: number;
+  grain: number;
+  blur: number;
+  sharpen: number;
+  pixelate: number;
+  posterize: number;
+  vibrance: number;
+  temperature: number;
+  exposure: number;
+  highlights: number;
+  shadows: number;
+  whites: number;
+  blacks: number;
   invert: boolean;
   targetRows: number;
   targetCols: number;
@@ -38,6 +56,23 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
     hue: 0,
     sepia: 0,
     grayscale: 0,
+    characterDensity: 0,
+    edgeDetection: 0,
+    threshold: 0,
+    dithering: 0,
+    vignette: 0,
+    grain: 0,
+    blur: 0,
+    sharpen: 0,
+    pixelate: 0,
+    posterize: 0,
+    vibrance: 0,
+    temperature: 0,
+    exposure: 0,
+    highlights: 0,
+    shadows: 0,
+    whites: 0,
+    blacks: 0,
     invert: true,
     targetRows: 50,
     targetCols: 100
@@ -73,7 +108,24 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
       saturation: 0,
       hue: 0,
       sepia: 0,
-      grayscale: 0
+      grayscale: 0,
+      characterDensity: 0,
+      edgeDetection: 0,
+      threshold: 0,
+      dithering: 0,
+      vignette: 0,
+      grain: 0,
+      blur: 0,
+      sharpen: 0,
+      pixelate: 0,
+      posterize: 0,
+      vibrance: 0,
+      temperature: 0,
+      exposure: 0,
+      highlights: 0,
+      shadows: 0,
+      whites: 0,
+      blacks: 0
     };
     setOptions(resetOptions);
     onImport(resetOptions);
@@ -249,6 +301,17 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
         </div>
 
         <div className="option-group">
+          <label>
+            <input
+              type="checkbox"
+              checked={options.invert}
+              onChange={(e) => handleOptionChange('invert', e.target.checked)}
+            />
+            Change ascii characters
+          </label>
+        </div>
+
+        <div className="option-group">
           <div className="adjustments-header">
             <label>Adjustments:</label>
             <button 
@@ -262,106 +325,225 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
           </div>
         </div>
 
-        <div className="option-group">
-          <div className="range-header">
-            <label>Contrast: {options.contrast}</label>
-            <input
-              type="range"
-              min="-100"
-              max="100"
-              value={options.contrast}
-              onChange={(e) => handleRangeChange('contrast', parseInt(e.target.value))}
-              onMouseUp={() => handleRangeMouseUp('contrast')}
-              onTouchEnd={() => handleRangeMouseUp('contrast')}
-            />
-          </div>
-        </div>
+        <ImageRangeSlider
+          label="Contrast"
+          value={options.contrast}
+          min={-100}
+          max={100}
+          onChange={(value) => handleRangeChange('contrast', value)}
+          onApply={() => handleRangeMouseUp('contrast')}
+        />
+
+        <ImageRangeSlider
+          label="Brightness"
+          value={options.brightness}
+          min={-100}
+          max={100}
+          onChange={(value) => handleRangeChange('brightness', value)}
+          onApply={() => handleRangeMouseUp('brightness')}
+        />
+
+        <ImageRangeSlider
+          label="Saturation"
+          value={options.saturation}
+          min={-100}
+          max={100}
+          onChange={(value) => handleRangeChange('saturation', value)}
+          onApply={() => handleRangeMouseUp('saturation')}
+        />
+
+        <ImageRangeSlider
+          label="Hue"
+          value={options.hue}
+          min={-180}
+          max={180}
+          onChange={(value) => handleRangeChange('hue', value)}
+          onApply={() => handleRangeMouseUp('hue')}
+        />
+
+        <ImageRangeSlider
+          label="Sepia"
+          value={options.sepia}
+          min={-100}
+          max={100}
+          onChange={(value) => handleRangeChange('sepia', value)}
+          onApply={() => handleRangeMouseUp('sepia')}
+        />
+
+        <ImageRangeSlider
+          label="Grayscale"
+          value={options.grayscale}
+          min={-100}
+          max={100}
+          onChange={(value) => handleRangeChange('grayscale', value)}
+          onApply={() => handleRangeMouseUp('grayscale')}
+        />
+
 
         <div className="option-group">
-          <div className="range-header">
-            <label>Brightness: {options.brightness}</label>
-            <input
-              type="range"
-              min="-100"
-              max="100"
-              value={options.brightness}
-              onChange={(e) => handleRangeChange('brightness', parseInt(e.target.value))}
-              onMouseUp={() => handleRangeMouseUp('brightness')}
-              onTouchEnd={() => handleRangeMouseUp('brightness')}
-            />
-          </div>
+          <label>Color & Tone:</label>
         </div>
 
-        <div className="option-group">
-          <div className="range-header">
-            <label>Saturation: {options.saturation}</label>
-            <input
-              type="range"
-              min="-100"
-              max="100"
-              value={options.saturation}
-              onChange={(e) => handleRangeChange('saturation', parseInt(e.target.value))}
-              onMouseUp={() => handleRangeMouseUp('saturation')}
-              onTouchEnd={() => handleRangeMouseUp('saturation')}
-            />
-          </div>
-        </div>
+        <ImageRangeSlider
+          label="Vibrance"
+          value={options.vibrance}
+          min={-100}
+          max={100}
+          onChange={(value) => handleRangeChange('vibrance', value)}
+          onApply={() => handleRangeMouseUp('vibrance')}
+        />
+
+        <ImageRangeSlider
+          label="Temperature"
+          value={options.temperature}
+          min={-100}
+          max={100}
+          onChange={(value) => handleRangeChange('temperature', value)}
+          onApply={() => handleRangeMouseUp('temperature')}
+        />
+
+        <ImageRangeSlider
+          label="Exposure"
+          value={options.exposure}
+          min={-100}
+          max={100}
+          onChange={(value) => handleRangeChange('exposure', value)}
+          onApply={() => handleRangeMouseUp('exposure')}
+        />
+
+        <ImageRangeSlider
+          label="Highlights"
+          value={options.highlights}
+          min={-100}
+          max={100}
+          onChange={(value) => handleRangeChange('highlights', value)}
+          onApply={() => handleRangeMouseUp('highlights')}
+        />
+
+        <ImageRangeSlider
+          label="Shadows"
+          value={options.shadows}
+          min={-100}
+          max={100}
+          onChange={(value) => handleRangeChange('shadows', value)}
+          onApply={() => handleRangeMouseUp('shadows')}
+        />
+
+        <ImageRangeSlider
+          label="Whites"
+          value={options.whites}
+          min={-100}
+          max={100}
+          onChange={(value) => handleRangeChange('whites', value)}
+          onApply={() => handleRangeMouseUp('whites')}
+        />
+
+        <ImageRangeSlider
+          label="Blacks"
+          value={options.blacks}
+          min={-100}
+          max={100}
+          onChange={(value) => handleRangeChange('blacks', value)}
+          onApply={() => handleRangeMouseUp('blacks')}
+        />
 
         <div className="option-group">
-          <div className="range-header">
-            <label>Hue: {options.hue}</label>
-            <input
-              type="range"
-              min="-180"
-              max="180"
-              value={options.hue}
-              onChange={(e) => handleRangeChange('hue', parseInt(e.target.value))}
-              onMouseUp={() => handleRangeMouseUp('hue')}
-              onTouchEnd={() => handleRangeMouseUp('hue')}
-            />
-          </div>
+          <label>Effects:</label>
         </div>
 
-        <div className="option-group">
-          <div className="range-header">
-            <label>Sepia: {options.sepia}</label>
-            <input
-              type="range"
-              min="-100"
-              max="100"
-              value={options.sepia}
-              onChange={(e) => handleRangeChange('sepia', parseInt(e.target.value))}
-              onMouseUp={() => handleRangeMouseUp('sepia')}
-              onTouchEnd={() => handleRangeMouseUp('sepia')}
-            />
-          </div>
-        </div>
+        <ImageRangeSlider
+          label="Vignette"
+          value={options.vignette}
+          min={0}
+          max={100}
+          onChange={(value) => handleRangeChange('vignette', value)}
+          onApply={() => handleRangeMouseUp('vignette')}
+        />
+
+        <ImageRangeSlider
+          label="Grain"
+          value={options.grain}
+          min={0}
+          max={100}
+          onChange={(value) => handleRangeChange('grain', value)}
+          onApply={() => handleRangeMouseUp('grain')}
+        />
+
+        <ImageRangeSlider
+          label="Blur"
+          value={options.blur}
+          min={0}
+          max={50}
+          onChange={(value) => handleRangeChange('blur', value)}
+          onApply={() => handleRangeMouseUp('blur')}
+        />
+
+        <ImageRangeSlider
+          label="Sharpen"
+          value={options.sharpen}
+          min={0}
+          max={100}
+          onChange={(value) => handleRangeChange('sharpen', value)}
+          onApply={() => handleRangeMouseUp('sharpen')}
+        />
+
+        <ImageRangeSlider
+          label="Pixelate"
+          value={options.pixelate}
+          min={0}
+          max={50}
+          onChange={(value) => handleRangeChange('pixelate', value)}
+          onApply={() => handleRangeMouseUp('pixelate')}
+        />
+
+        <ImageRangeSlider
+          label="Posterize"
+          value={options.posterize}
+          min={0}
+          max={100}
+          onChange={(value) => handleRangeChange('posterize', value)}
+          onApply={() => handleRangeMouseUp('posterize')}
+        />
 
         <div className="option-group">
-          <div className="range-header">
-            <label>Grayscale: {options.grayscale}</label>
-            <input
-              type="range"
-              min="-100"
-              max="100"
-              value={options.grayscale}
-              onChange={(e) => handleRangeChange('grayscale', parseInt(e.target.value))}
-              onMouseUp={() => handleRangeMouseUp('grayscale')}
-              onTouchEnd={() => handleRangeMouseUp('grayscale')}
-            />
-          </div>
+          <label>ASCII Conversion:</label>
         </div>
 
-        <div className="option-group">
-          <label>
-            <input
-              type="checkbox"
-              checked={options.invert}
-              onChange={(e) => handleOptionChange('invert', e.target.checked)}
-            />
-            Change ascii characters
-          </label>
-        </div>
+        <ImageRangeSlider
+          label="Character Density"
+          value={options.characterDensity}
+          min={0}
+          max={100}
+          onChange={(value) => handleRangeChange('characterDensity', value)}
+          onApply={() => handleRangeMouseUp('characterDensity')}
+        />
+
+        <ImageRangeSlider
+          label="Edge Detection"
+          value={options.edgeDetection}
+          min={0}
+          max={100}
+          onChange={(value) => handleRangeChange('edgeDetection', value)}
+          onApply={() => handleRangeMouseUp('edgeDetection')}
+        />
+
+        <ImageRangeSlider
+          label="Threshold"
+          value={options.threshold}
+          min={-100}
+          max={100}
+          onChange={(value) => handleRangeChange('threshold', value)}
+          onApply={() => handleRangeMouseUp('threshold')}
+        />
+
+        <ImageRangeSlider
+          label="Dithering"
+          value={options.dithering}
+          min={0}
+          max={100}
+          onChange={(value) => handleRangeChange('dithering', value)}
+          onApply={() => handleRangeMouseUp('dithering')}
+        />
       </div>
 
       <div className="image-import-footer">

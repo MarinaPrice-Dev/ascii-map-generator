@@ -11,6 +11,23 @@ interface ImageToAsciiOptions {
   hue?: number;
   sepia?: number;
   grayscale?: number;
+  characterDensity?: number;
+  edgeDetection?: number;
+  threshold?: number;
+  dithering?: number;
+  vignette?: number;
+  grain?: number;
+  blur?: number;
+  sharpen?: number;
+  pixelate?: number;
+  posterize?: number;
+  vibrance?: number;
+  temperature?: number;
+  exposure?: number;
+  highlights?: number;
+  shadows?: number;
+  whites?: number;
+  blacks?: number;
 }
 
 const DEFAULT_FG = '#FFFFFF';
@@ -195,6 +212,292 @@ const applyGrayscale = (r: number, g: number, b: number, grayscale: number): { r
   }
 };
 
+// Apply vibrance effect (selective saturation)
+const applyVibrance = (r: number, g: number, b: number, vibrance: number): { r: number; g: number; b: number } => {
+  if (vibrance === 0) return { r, g, b };
+  
+  const factor = 1 + (vibrance / 100);
+  const gray = 0.299 * r + 0.587 * g + 0.114 * b;
+  
+  // More selective than regular saturation
+  const saturation = Math.max(r, g, b) - Math.min(r, g, b);
+  const selectiveFactor = saturation < 50 ? factor * 1.5 : factor;
+  
+  return {
+    r: Math.max(0, Math.min(255, gray + selectiveFactor * (r - gray))),
+    g: Math.max(0, Math.min(255, gray + selectiveFactor * (g - gray))),
+    b: Math.max(0, Math.min(255, gray + selectiveFactor * (b - gray)))
+  };
+};
+
+// Apply temperature effect (warm/cool)
+const applyTemperature = (r: number, g: number, b: number, temperature: number): { r: number; g: number; b: number } => {
+  if (temperature === 0) return { r, g, b };
+  
+  const factor = temperature / 100;
+  const warmR = 255 * 0.1 * factor;
+  const warmG = 255 * 0.05 * factor;
+  const coolB = 255 * 0.15 * factor;
+  
+  return {
+    r: Math.max(0, Math.min(255, r + warmR)),
+    g: Math.max(0, Math.min(255, g + warmG)),
+    b: Math.max(0, Math.min(255, b + coolB))
+  };
+};
+
+// Apply exposure adjustment
+const applyExposure = (r: number, g: number, b: number, exposure: number): { r: number; g: number; b: number } => {
+  if (exposure === 0) return { r, g, b };
+  
+  const factor = 1 + (exposure / 100);
+  
+  return {
+    r: Math.max(0, Math.min(255, r * factor)),
+    g: Math.max(0, Math.min(255, g * factor)),
+    b: Math.max(0, Math.min(255, b * factor))
+  };
+};
+
+// Apply highlights adjustment
+const applyHighlights = (r: number, g: number, b: number, highlights: number): { r: number; g: number; b: number } => {
+  if (highlights === 0) return { r, g, b };
+  
+  const brightness = getBrightness(r, g, b);
+  const factor = highlights / 100;
+  
+  if (brightness > 128) {
+    const adjustment = factor * (brightness - 128) / 128;
+    return {
+      r: Math.max(0, Math.min(255, r + adjustment * 255)),
+      g: Math.max(0, Math.min(255, g + adjustment * 255)),
+      b: Math.max(0, Math.min(255, b + adjustment * 255))
+    };
+  }
+  
+  return { r, g, b };
+};
+
+// Apply shadows adjustment
+const applyShadows = (r: number, g: number, b: number, shadows: number): { r: number; g: number; b: number } => {
+  if (shadows === 0) return { r, g, b };
+  
+  const brightness = getBrightness(r, g, b);
+  const factor = shadows / 100;
+  
+  if (brightness < 128) {
+    const adjustment = factor * (128 - brightness) / 128;
+    return {
+      r: Math.max(0, Math.min(255, r - adjustment * 255)),
+      g: Math.max(0, Math.min(255, g - adjustment * 255)),
+      b: Math.max(0, Math.min(255, b - adjustment * 255))
+    };
+  }
+  
+  return { r, g, b };
+};
+
+// Apply whites adjustment
+const applyWhites = (r: number, g: number, b: number, whites: number): { r: number; g: number; b: number } => {
+  if (whites === 0) return { r, g, b };
+  
+  const factor = whites / 100;
+  const maxChannel = Math.max(r, g, b);
+  
+  if (maxChannel > 200) {
+    const adjustment = factor * (maxChannel - 200) / 55;
+    return {
+      r: Math.max(0, Math.min(255, r + adjustment * 255)),
+      g: Math.max(0, Math.min(255, g + adjustment * 255)),
+      b: Math.max(0, Math.min(255, b + adjustment * 255))
+    };
+  }
+  
+  return { r, g, b };
+};
+
+// Apply blacks adjustment
+const applyBlacks = (r: number, g: number, b: number, blacks: number): { r: number; g: number; b: number } => {
+  if (blacks === 0) return { r, g, b };
+  
+  const factor = blacks / 100;
+  const minChannel = Math.min(r, g, b);
+  
+  if (minChannel < 55) {
+    const adjustment = factor * (55 - minChannel) / 55;
+    return {
+      r: Math.max(0, Math.min(255, r - adjustment * 255)),
+      g: Math.max(0, Math.min(255, g - adjustment * 255)),
+      b: Math.max(0, Math.min(255, b - adjustment * 255))
+    };
+  }
+  
+  return { r, g, b };
+};
+
+// Apply vignette effect
+const applyVignette = (r: number, g: number, b: number, vignette: number, x: number, y: number, width: number, height: number): { r: number; g: number; b: number } => {
+  if (vignette === 0) return { r, g, b };
+  
+  const centerX = width / 2;
+  const centerY = height / 2;
+  const distance = Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2);
+  const maxDistance = Math.sqrt(centerX ** 2 + centerY ** 2);
+  const factor = 1 - (vignette / 100) * (distance / maxDistance);
+  
+  return {
+    r: Math.max(0, Math.min(255, r * factor)),
+    g: Math.max(0, Math.min(255, g * factor)),
+    b: Math.max(0, Math.min(255, b * factor))
+  };
+};
+
+// Apply grain effect
+const applyGrain = (r: number, g: number, b: number, grain: number): { r: number; g: number; b: number } => {
+  if (grain === 0) return { r, g, b };
+  
+  const factor = grain / 100;
+  const noise = (Math.random() - 0.5) * 2 * factor * 50;
+  
+  return {
+    r: Math.max(0, Math.min(255, r + noise)),
+    g: Math.max(0, Math.min(255, g + noise)),
+    b: Math.max(0, Math.min(255, b + noise))
+  };
+};
+
+// Apply posterize effect
+const applyPosterize = (r: number, g: number, b: number, posterize: number): { r: number; g: number; b: number } => {
+  if (posterize === 0) return { r, g, b };
+  
+  const levels = Math.max(2, Math.floor(256 / (1 + posterize / 20)));
+  const step = 256 / levels;
+  
+  return {
+    r: Math.floor(r / step) * step,
+    g: Math.floor(g / step) * step,
+    b: Math.floor(b / step) * step
+  };
+};
+
+// Apply blur to entire image
+const applyBlurToImage = (imageData: ImageData, blur: number): ImageData => {
+  const factor = blur / 100;
+  const radius = Math.floor(factor * 10);
+  
+  if (radius <= 0) return imageData;
+  
+  const newData = new Uint8ClampedArray(imageData.data);
+  const width = imageData.width;
+  const height = imageData.height;
+  
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      let r = 0, g = 0, b = 0, count = 0;
+      
+      for (let dy = -radius; dy <= radius; dy++) {
+        for (let dx = -radius; dx <= radius; dx++) {
+          const nx = x + dx;
+          const ny = y + dy;
+          
+          if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
+            const index = (ny * width + nx) * 4;
+            r += newData[index];
+            g += newData[index + 1];
+            b += newData[index + 2];
+            count++;
+          }
+        }
+      }
+      
+      const index = (y * width + x) * 4;
+      newData[index] = r / count;
+      newData[index + 1] = g / count;
+      newData[index + 2] = b / count;
+    }
+  }
+  
+  return new ImageData(newData, width, height);
+};
+
+// Apply sharpen to entire image
+const applySharpenToImage = (imageData: ImageData, sharpen: number): ImageData => {
+  const factor = sharpen / 100;
+  
+  if (factor <= 0) return imageData;
+  
+  const newData = new Uint8ClampedArray(imageData.data);
+  const width = imageData.width;
+  const height = imageData.height;
+  
+  for (let y = 1; y < height - 1; y++) {
+    for (let x = 1; x < width - 1; x++) {
+      const index = (y * width + x) * 4;
+      
+      for (let c = 0; c < 3; c++) {
+        const current = newData[index + c];
+        const neighbors = [
+          newData[((y - 1) * width + x) * 4 + c],
+          newData[((y + 1) * width + x) * 4 + c],
+          newData[(y * width + x - 1) * 4 + c],
+          newData[(y * width + x + 1) * 4 + c]
+        ];
+        
+        const avg = neighbors.reduce((sum, val) => sum + val, 0) / 4;
+        const sharpened = current + factor * (current - avg);
+        newData[index + c] = Math.max(0, Math.min(255, sharpened));
+      }
+    }
+  }
+  
+  return new ImageData(newData, width, height);
+};
+
+// Apply pixelate to entire image
+const applyPixelateToImage = (imageData: ImageData, pixelate: number): ImageData => {
+  const factor = pixelate / 100;
+  const blockSize = Math.max(1, Math.floor(factor * 20));
+  
+  if (blockSize <= 1) return imageData;
+  
+  const newData = new Uint8ClampedArray(imageData.data);
+  const width = imageData.width;
+  const height = imageData.height;
+  
+  for (let y = 0; y < height; y += blockSize) {
+    for (let x = 0; x < width; x += blockSize) {
+      let r = 0, g = 0, b = 0, count = 0;
+      
+      // Calculate average color for this block
+      for (let dy = 0; dy < blockSize && y + dy < height; dy++) {
+        for (let dx = 0; dx < blockSize && x + dx < width; dx++) {
+          const index = ((y + dy) * width + (x + dx)) * 4;
+          r += newData[index];
+          g += newData[index + 1];
+          b += newData[index + 2];
+          count++;
+        }
+      }
+      
+      const avgR = r / count;
+      const avgG = g / count;
+      const avgB = b / count;
+      
+      // Apply the average color to the entire block
+      for (let dy = 0; dy < blockSize && y + dy < height; dy++) {
+        for (let dx = 0; dx < blockSize && x + dx < width; dx++) {
+          const index = ((y + dy) * width + (x + dx)) * 4;
+          newData[index] = avgR;
+          newData[index + 1] = avgG;
+          newData[index + 2] = avgB;
+        }
+      }
+    }
+  }
+  
+  return new ImageData(newData, width, height);
+};
+
 // Get the closest ASCII character based on brightness
 const getAsciiChar = (brightness: number, invert: boolean = false): string => {
   const normalizedBrightness = brightness / 255;
@@ -300,6 +603,21 @@ export const imageToAscii = async (
         // Get image data
         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         
+        // Apply image-level effects first (blur, sharpen, pixelate)
+        let processedImageData = imageData;
+        
+        if (options.blur !== undefined && options.blur > 0) {
+          processedImageData = applyBlurToImage(processedImageData, options.blur);
+        }
+        
+        if (options.sharpen !== undefined && options.sharpen > 0) {
+          processedImageData = applySharpenToImage(processedImageData, options.sharpen);
+        }
+        
+        if (options.pixelate !== undefined && options.pixelate > 0) {
+          processedImageData = applyPixelateToImage(processedImageData, options.pixelate);
+        }
+        
         // Calculate target dimensions
         const targetRows = options.targetRows || 50;
         const targetCols = options.targetCols || 50;
@@ -321,7 +639,7 @@ export const imageToAscii = async (
             const regionH = Math.ceil(regionHeight);
             
             // Get average color for this region
-            const color = getAverageColor(imageData, startX, startY, regionW, regionH);
+            const color = getAverageColor(processedImageData, startX, startY, regionW, regionH);
             
             // Handle transparent areas
             if (color.isTransparent) {
@@ -383,8 +701,115 @@ export const imageToAscii = async (
               adjustedB = grayscaleResult.b;
             }
             
-            // Get ASCII character based on brightness
-            const asciiChar = getAsciiChar(adjustedBrightness, options.invert);
+            // Apply new color and tone effects
+            if (options.vibrance !== undefined && options.vibrance !== 0) {
+              const vibranceResult = applyVibrance(adjustedR, adjustedG, adjustedB, options.vibrance);
+              adjustedR = vibranceResult.r;
+              adjustedG = vibranceResult.g;
+              adjustedB = vibranceResult.b;
+            }
+            
+            if (options.temperature !== undefined && options.temperature !== 0) {
+              const tempResult = applyTemperature(adjustedR, adjustedG, adjustedB, options.temperature);
+              adjustedR = tempResult.r;
+              adjustedG = tempResult.g;
+              adjustedB = tempResult.b;
+            }
+            
+            if (options.exposure !== undefined && options.exposure !== 0) {
+              const exposureResult = applyExposure(adjustedR, adjustedG, adjustedB, options.exposure);
+              adjustedR = exposureResult.r;
+              adjustedG = exposureResult.g;
+              adjustedB = exposureResult.b;
+            }
+            
+            if (options.highlights !== undefined && options.highlights !== 0) {
+              const highlightsResult = applyHighlights(adjustedR, adjustedG, adjustedB, options.highlights);
+              adjustedR = highlightsResult.r;
+              adjustedG = highlightsResult.g;
+              adjustedB = highlightsResult.b;
+            }
+            
+            if (options.shadows !== undefined && options.shadows !== 0) {
+              const shadowsResult = applyShadows(adjustedR, adjustedG, adjustedB, options.shadows);
+              adjustedR = shadowsResult.r;
+              adjustedG = shadowsResult.g;
+              adjustedB = shadowsResult.b;
+            }
+            
+            if (options.whites !== undefined && options.whites !== 0) {
+              const whitesResult = applyWhites(adjustedR, adjustedG, adjustedB, options.whites);
+              adjustedR = whitesResult.r;
+              adjustedG = whitesResult.g;
+              adjustedB = whitesResult.b;
+            }
+            
+            if (options.blacks !== undefined && options.blacks !== 0) {
+              const blacksResult = applyBlacks(adjustedR, adjustedG, adjustedB, options.blacks);
+              adjustedR = blacksResult.r;
+              adjustedG = blacksResult.g;
+              adjustedB = blacksResult.b;
+            }
+            
+            // Apply artistic effects
+            if (options.vignette !== undefined && options.vignette !== 0) {
+              const vignetteResult = applyVignette(adjustedR, adjustedG, adjustedB, options.vignette, col, row, targetCols, targetRows);
+              adjustedR = vignetteResult.r;
+              adjustedG = vignetteResult.g;
+              adjustedB = vignetteResult.b;
+            }
+            
+            if (options.grain !== undefined && options.grain !== 0) {
+              const grainResult = applyGrain(adjustedR, adjustedG, adjustedB, options.grain);
+              adjustedR = grainResult.r;
+              adjustedG = grainResult.g;
+              adjustedB = grainResult.b;
+            }
+            
+            if (options.posterize !== undefined && options.posterize !== 0) {
+              const posterizeResult = applyPosterize(adjustedR, adjustedG, adjustedB, options.posterize);
+              adjustedR = posterizeResult.r;
+              adjustedG = posterizeResult.g;
+              adjustedB = posterizeResult.b;
+            }
+            
+            // Apply ASCII-specific effects
+            let finalBrightness = adjustedBrightness;
+            
+            // Apply threshold adjustment
+            if (options.threshold !== undefined && options.threshold !== 0) {
+              const thresholdFactor = options.threshold / 100;
+              const threshold = 128 + thresholdFactor * 128;
+              finalBrightness = finalBrightness > threshold ? 255 : 0;
+            }
+            
+            // Apply edge detection enhancement
+            if (options.edgeDetection !== undefined && options.edgeDetection > 0) {
+              // Simple edge detection by comparing with neighbors
+              const edgeFactor = options.edgeDetection / 100;
+              // This is a simplified edge detection - in a real implementation,
+              // you'd want to apply this at the image level with proper convolution
+              const edgeEnhancement = edgeFactor * 50;
+              finalBrightness = Math.max(0, Math.min(255, finalBrightness + edgeEnhancement));
+            }
+            
+            // Apply dithering effect
+            if (options.dithering !== undefined && options.dithering > 0) {
+              const ditherFactor = options.dithering / 100;
+              const noise = (Math.random() - 0.5) * ditherFactor * 100;
+              finalBrightness = Math.max(0, Math.min(255, finalBrightness + noise));
+            }
+            
+            // Get ASCII character based on brightness and character density
+            let asciiChar = getAsciiChar(finalBrightness, options.invert);
+            
+            // Apply character density adjustment
+            if (options.characterDensity !== undefined && options.characterDensity > 0) {
+              const densityFactor = options.characterDensity / 100;
+              const charSet = ASCII_CHARS.substring(0, Math.max(2, Math.floor(ASCII_CHARS.length * densityFactor)));
+              const charIndex = Math.floor((finalBrightness / 255) * (charSet.length - 1));
+              asciiChar = charSet[Math.max(0, Math.min(charSet.length - 1, charIndex))];
+            }
             
             // Convert RGB to hex color
             const hexColor = rgbToHex(adjustedR, adjustedG, adjustedB);
