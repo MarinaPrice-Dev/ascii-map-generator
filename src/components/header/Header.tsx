@@ -146,6 +146,10 @@ const Header: React.FC<HeaderProps> = ({
         colorMode: options.colorMode,
         contrast: options.contrast,
         brightness: options.brightness,
+        saturation: options.saturation,
+        hue: options.hue,
+        sepia: options.sepia,
+        grayscale: options.grayscale,
         invert: options.invert
       });
 

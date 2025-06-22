@@ -28,7 +28,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem 1rem;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px dashed var(--save);
   flex-shrink: 0;
 }
 
@@ -61,16 +61,16 @@
 }
 
 .image-info {
-  padding: 0.75rem 1.5rem;
-  background: var(--bg-light);
   border-bottom: 1px solid var(--border);
+  padding: 0 0 0.75rem 0rem;
   flex-shrink: 0;
+  text-align: left;
+  margin-bottom: 10px;
 }
 
 .image-info p {
   margin: 0 0 0.25rem 0;
   color: var(--fg);
-  font-size: 0.8rem;
 }
 
 .image-info p:last-child {
@@ -78,9 +78,10 @@
 }
 
 .image-import-content {
-  padding: 1rem;
+  padding: 0.75rem;
   flex-grow: 1;
   overflow-y: auto;
+  text-align: left;
 }
 
 /* Custom scrollbar for image import content */
@@ -99,7 +100,7 @@
 }
 
 .option-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .option-group:last-child {
@@ -108,21 +109,58 @@
 
 .option-group label {
   display: block;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
   color: var(--fg);
   font-weight: 500;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+}
+
+.color-mode-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.2rem;
+}
+
+.color-mode-header label {
+  margin-bottom: 0;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.color-mode-header select {
+  flex: 1;
+  min-width: 0;
+}
+
+.range-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.range-header label {
+  margin-bottom: 0;
+  flex-shrink: 0;
+  white-space: nowrap;
+  font-size: 0.85rem;
+}
+
+.range-header input[type="range"] {
+  flex: 1;
+  margin: 0;
+  min-width: 0;
 }
 
 .option-group select,
 .option-group input[type="number"] {
   width: 100%;
-  padding: 0.5rem 0.75rem;
+  padding: 0.4rem 0.6rem;
   background: var(--bg-light);
   border: 1px solid var(--border);
   border-radius: 4px;
   color: var(--fg);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-family: inherit;
 }
 
@@ -133,30 +171,48 @@
 }
 
 .option-description {
-  margin-top: 0.25rem;
+  margin-top: 0.2rem;
+  text-align: left;
 }
 
 .option-description small {
   color: #888;
-  font-size: 0.75rem;
-  font-style: italic;
+  font-size: 0.7rem;
 }
 
 .resolution-inputs {
   display: flex;
   align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.4rem;
+}
+
+.resolution-header {
+  display: flex;
+  align-items: center;
   gap: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+
+.resolution-header label {
+  margin-bottom: 0;
+  flex-shrink: 0;
+  white-space: nowrap;
+  font-size: 0.85rem;
 }
 
 .resolution-inputs input {
-  flex: 1;
+  flex: 0 0 60px;
+  width: 60px;
+  min-width: 60px;
+  max-width: 60px;
 }
 
 .resolution-inputs span {
   color: var(--fg);
   font-weight: bold;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  flex-shrink: 0;
 }
 
 .option-group input[type="range"] {
@@ -166,22 +222,22 @@
   border-radius: 3px;
   outline: none;
   -webkit-appearance: none;
-  margin-top: 0.25rem;
+  margin-top: 0.2rem;
 }
 
 .option-group input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   background: var(--info);
   border-radius: 50%;
   cursor: pointer;
 }
 
 .option-group input[type="range"]::-moz-range-thumb {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   background: var(--info);
   border-radius: 50%;
   cursor: pointer;
@@ -189,9 +245,9 @@
 }
 
 .option-group input[type="checkbox"] {
-  margin-right: 0.5rem;
-  width: 16px;
-  height: 16px;
+  margin-right: 0.4rem;
+  width: 14px;
+  height: 14px;
 }
 
 .image-import-footer {
@@ -237,21 +293,24 @@
 }
 
 .auto-calculate-button {
-  background: var(--info);
+  background: var(--border);
   color: white;
   border: none;
-  padding: 0.4rem 0.75rem;
+  padding: 0.3rem 0.6rem;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   font-weight: 500;
   font-family: inherit;
   transition: all 0.2s ease;
   width: 100%;
+  height: auto;
+  min-height: 0;
 }
 
 .auto-calculate-button:hover:not(:disabled) {
-  background: #0056b3;
+  background: var(--info);
+  color: var(--fg);
 }
 
 .auto-calculate-button:disabled {

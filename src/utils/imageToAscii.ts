@@ -7,6 +7,10 @@ interface ImageToAsciiOptions {
   contrast?: number;
   invert?: boolean;
   brightness?: number;
+  saturation?: number;
+  hue?: number;
+  sepia?: number;
+  grayscale?: number;
 }
 
 const DEFAULT_FG = '#FFFFFF';
@@ -65,6 +69,130 @@ const adjustContrast = (value: number, contrast: number): number => {
 // Adjust brightness of a value
 const adjustBrightness = (value: number, brightness: number): number => {
   return Math.max(0, Math.min(255, value + brightness));
+};
+
+// Adjust saturation of RGB values
+const adjustSaturation = (r: number, g: number, b: number, saturation: number): { r: number; g: number; b: number } => {
+  const factor = 1 + (saturation / 100);
+  const gray = 0.299 * r + 0.587 * g + 0.114 * b;
+  
+  return {
+    r: Math.max(0, Math.min(255, gray + factor * (r - gray))),
+    g: Math.max(0, Math.min(255, gray + factor * (g - gray))),
+    b: Math.max(0, Math.min(255, gray + factor * (b - gray)))
+  };
+};
+
+// Adjust hue of RGB values
+const adjustHue = (r: number, g: number, b: number, hue: number): { r: number; g: number; b: number } => {
+  // Normalize RGB values to 0-1
+  const rNorm = r / 255;
+  const gNorm = g / 255;
+  const bNorm = b / 255;
+  
+  // Convert RGB to HSL
+  const max = Math.max(rNorm, gNorm, bNorm);
+  const min = Math.min(rNorm, gNorm, bNorm);
+  const delta = max - min;
+  const lightness = (max + min) / 2;
+  
+  let h = 0;
+  let s = 0;
+  
+  if (delta !== 0) {
+    s = lightness > 0.5 ? delta / (2 - max - min) : delta / (max + min);
+    
+    if (max === rNorm) {
+      h = ((gNorm - bNorm) / delta) % 6;
+    } else if (max === gNorm) {
+      h = (bNorm - rNorm) / delta + 2;
+    } else {
+      h = (rNorm - gNorm) / delta + 4;
+    }
+    h *= 60;
+  }
+  
+  // Adjust hue
+  h = (h + hue + 360) % 360;
+  
+  // Convert back to RGB
+  const hueToRgb = (p: number, q: number, t: number): number => {
+    if (t < 0) t += 1;
+    if (t > 1) t -= 1;
+    if (t < 1/6) return p + (q - p) * 6 * t;
+    if (t < 1/2) return q;
+    if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+    return p;
+  };
+  
+  let newR, newG, newB;
+  
+  if (s === 0) {
+    // Achromatic (gray)
+    newR = newG = newB = lightness;
+  } else {
+    const q = lightness < 0.5 ? lightness * (1 + s) : lightness + s - lightness * s;
+    const p = 2 * lightness - q;
+    const hNorm = h / 360;
+    
+    newR = hueToRgb(p, q, hNorm + 1/3);
+    newG = hueToRgb(p, q, hNorm);
+    newB = hueToRgb(p, q, hNorm - 1/3);
+  }
+  
+  return {
+    r: Math.max(0, Math.min(255, newR * 255)),
+    g: Math.max(0, Math.min(255, newG * 255)),
+    b: Math.max(0, Math.min(255, newB * 255))
+  };
+};
+
+// Apply sepia effect to RGB values
+const applySepia = (r: number, g: number, b: number, sepia: number): { r: number; g: number; b: number } => {
+  const factor = sepia / 100;
+  const newR = r * (1 - 0.607 * factor) + g * 0.769 * factor + b * 0.189 * factor;
+  const newG = r * 0.349 * factor + g * (1 - 0.314 * factor) + b * 0.168 * factor;
+  const newB = r * 0.272 * factor + g * 0.534 * factor + b * (1 - 0.869 * factor);
+  
+  return {
+    r: Math.max(0, Math.min(255, newR)),
+    g: Math.max(0, Math.min(255, newG)),
+    b: Math.max(0, Math.min(255, newB))
+  };
+};
+
+// Apply grayscale effect to RGB values
+const applyGrayscale = (r: number, g: number, b: number, grayscale: number): { r: number; g: number; b: number } => {
+  if (grayscale === 0) {
+    return { r, g, b };
+  }
+  
+  const factor = Math.abs(grayscale) / 100;
+  const grayValue = 0.299 * r + 0.587 * g + 0.114 * b; // Standard luminance formula
+  
+  if (grayscale > 0) {
+    // Convert to grayscale
+    const newR = r + (grayValue - r) * factor;
+    const newG = g + (grayValue - g) * factor;
+    const newB = b + (grayValue - b) * factor;
+    
+    return {
+      r: Math.max(0, Math.min(255, newR)),
+      g: Math.max(0, Math.min(255, newG)),
+      b: Math.max(0, Math.min(255, newB))
+    };
+  } else {
+    // Convert from grayscale (add color back)
+    const newR = r + (r - grayValue) * factor;
+    const newG = g + (g - grayValue) * factor;
+    const newB = b + (b - grayValue) * factor;
+    
+    return {
+      r: Math.max(0, Math.min(255, newR)),
+      g: Math.max(0, Math.min(255, newG)),
+      b: Math.max(0, Math.min(255, newB))
+    };
+  }
 };
 
 // Get the closest ASCII character based on brightness
@@ -225,6 +353,34 @@ export const imageToAscii = async (
               adjustedR = adjustBrightness(adjustedR, options.brightness);
               adjustedG = adjustBrightness(adjustedG, options.brightness);
               adjustedB = adjustBrightness(adjustedB, options.brightness);
+            }
+            
+            if (options.saturation !== undefined && options.saturation !== 0) {
+              const satResult = adjustSaturation(adjustedR, adjustedG, adjustedB, options.saturation);
+              adjustedR = satResult.r;
+              adjustedG = satResult.g;
+              adjustedB = satResult.b;
+            }
+            
+            if (options.hue !== undefined && options.hue !== 0) {
+              const hueResult = adjustHue(adjustedR, adjustedG, adjustedB, options.hue);
+              adjustedR = hueResult.r;
+              adjustedG = hueResult.g;
+              adjustedB = hueResult.b;
+            }
+            
+            if (options.sepia !== undefined && options.sepia !== 0) {
+              const sepiaResult = applySepia(adjustedR, adjustedG, adjustedB, options.sepia);
+              adjustedR = sepiaResult.r;
+              adjustedG = sepiaResult.g;
+              adjustedB = sepiaResult.b;
+            }
+            
+            if (options.grayscale !== undefined && options.grayscale !== 0) {
+              const grayscaleResult = applyGrayscale(adjustedR, adjustedG, adjustedB, options.grayscale);
+              adjustedR = grayscaleResult.r;
+              adjustedG = grayscaleResult.g;
+              adjustedB = grayscaleResult.b;
             }
             
             // Get ASCII character based on brightness

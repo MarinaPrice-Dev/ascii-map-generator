@@ -5,6 +5,10 @@ interface ImageImportOptions {
   colorMode: 'smart' | 'foreground' | 'background';
   contrast: number;
   brightness: number;
+  saturation: number;
+  hue: number;
+  sepia: number;
+  grayscale: number;
   invert: boolean;
   targetRows: number;
   targetCols: number;
@@ -29,6 +33,10 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
     colorMode: 'smart',
     contrast: 0,
     brightness: 0,
+    saturation: 0,
+    hue: 0,
+    sepia: 0,
+    grayscale: 0,
     invert: true,
     targetRows: 50,
     targetCols: 100
@@ -36,6 +44,27 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
 
   const handleOptionChange = (key: keyof ImageImportOptions, value: any) => {
     setOptions(prev => ({ ...prev, [key]: value }));
+  };
+
+  const handleInputFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    e.target.select();
+  };
+
+  const handleInputBlur = (key: 'targetCols' | 'targetRows', value: number) => {
+    let constrainedValue = value;
+    
+    // Handle invalid or empty values
+    if (isNaN(value) || value <= 0) {
+      constrainedValue = 20;
+    } else if (value > 200) {
+      constrainedValue = 200;
+    } else if (value < 20) {
+      constrainedValue = 20;
+    }
+    
+    if (constrainedValue !== value) {
+      setOptions(prev => ({ ...prev, [key]: constrainedValue }));
+    }
   };
 
   const autoCalculateDimensions = () => {
@@ -108,28 +137,29 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
   return (
     <div className={`image-import-panel ${isOpen ? 'open' : ''}`}>
       <div className="image-import-navigation">
-        <h3>Import Image: {fileName}</h3>
+        <h3>{fileName}</h3>
         <button className="close-button" onClick={onClose} title="Close">×</button>
       </div>
-      
+
+      <div className="image-import-content">
       {imageDimensions && (
         <div className="image-info">
           <p>Image size: {imageDimensions.width} × {imageDimensions.height} pixels</p>
           <p>Grid size: {options.targetCols} × {options.targetRows} characters</p>
         </div>
       )}
-
-      <div className="image-import-content">
         <div className="option-group">
-          <label>Color Mode:</label>
-          <select 
-            value={options.colorMode} 
-            onChange={(e) => handleOptionChange('colorMode', e.target.value)}
-          >
-            <option value="smart">Smart Both (for optimal results)</option>
-            <option value="foreground">Foreground only</option>
-            <option value="background">Background only</option>
-          </select>
+          <div className="color-mode-header">
+            <label>Color Mode:</label>
+            <select 
+              value={options.colorMode} 
+              onChange={(e) => handleOptionChange('colorMode', e.target.value)}
+            >
+              <option value="smart">Smart Mode</option>
+              <option value="foreground">Symbols only</option>
+              <option value="background">Background only</option>
+            </select>
+          </div>
           <div className="option-description">
             {options.colorMode === 'foreground' && (
               <small>Uses image colors as foreground with default background</small>
@@ -144,56 +174,123 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
         </div>
 
         <div className="option-group">
-          <label>Target Resolution:</label>
-          <div className="resolution-inputs">
-            <input
-              type="number"
-              value={options.targetCols || ''}
-              onChange={(e) => handleOptionChange('targetCols', e.target.value === '' ? 0 : parseInt(e.target.value) || 0)}
-              min="20"
-              max="200"
-              placeholder="Width"
-            />
-            <span>×</span>
-            <input
-              type="number"
-              value={options.targetRows || ''}
-              onChange={(e) => handleOptionChange('targetRows', e.target.value === '' ? 0 : parseInt(e.target.value) || 0)}
-              min="20"
-              max="200"
-              placeholder="Height"
-            />
+          <div className="resolution-header">
+            <label>Resolution:</label>
+            <div className="resolution-inputs">
+              <input
+                type="number"
+                value={options.targetCols || ''}
+                onChange={(e) => handleOptionChange('targetCols', e.target.value === '' ? 0 : parseInt(e.target.value) || 0)}
+                min="20"
+                max="200"
+                placeholder="Width"
+                onFocus={handleInputFocus}
+                onBlur={(e) => handleInputBlur('targetCols', parseInt(e.target.value) || 0)}
+              />
+              <span>×</span>
+              <input
+                type="number"
+                value={options.targetRows || ''}
+                onChange={(e) => handleOptionChange('targetRows', e.target.value === '' ? 0 : parseInt(e.target.value) || 0)}
+                min="20"
+                max="200"
+                placeholder="Height"
+                onFocus={handleInputFocus}
+                onBlur={(e) => handleInputBlur('targetRows', parseInt(e.target.value) || 0)}
+              />
+            </div>
           </div>
           <button 
             type="button" 
             className="auto-calculate-button" 
             onClick={autoCalculateDimensions}
             disabled={!imageDimensions}
+            title="Change the aspect ratio based on new input"
           >
-            Auto-calculate
+            Re-calculate aspect ratio
           </button>
         </div>
 
         <div className="option-group">
-          <label>Contrast: {options.contrast}</label>
-          <input
-            type="range"
-            min="-100"
-            max="100"
-            value={options.contrast}
-            onChange={(e) => handleOptionChange('contrast', parseInt(e.target.value))}
-          />
+          <label>Adjustments:</label>
         </div>
 
         <div className="option-group">
-          <label>Brightness: {options.brightness}</label>
-          <input
-            type="range"
-            min="-100"
-            max="100"
-            value={options.brightness}
-            onChange={(e) => handleOptionChange('brightness', parseInt(e.target.value))}
-          />
+          <div className="range-header">
+            <label>Contrast: {options.contrast}</label>
+            <input
+              type="range"
+              min="-100"
+              max="100"
+              value={options.contrast}
+              onChange={(e) => handleOptionChange('contrast', parseInt(e.target.value))}
+            />
+          </div>
+        </div>
+
+        <div className="option-group">
+          <div className="range-header">
+            <label>Brightness: {options.brightness}</label>
+            <input
+              type="range"
+              min="-100"
+              max="100"
+              value={options.brightness}
+              onChange={(e) => handleOptionChange('brightness', parseInt(e.target.value))}
+            />
+          </div>
+        </div>
+
+        <div className="option-group">
+          <div className="range-header">
+            <label>Saturation: {options.saturation}</label>
+            <input
+              type="range"
+              min="-100"
+              max="100"
+              value={options.saturation}
+              onChange={(e) => handleOptionChange('saturation', parseInt(e.target.value))}
+            />
+          </div>
+        </div>
+
+        <div className="option-group">
+          <div className="range-header">
+            <label>Hue: {options.hue}</label>
+            <input
+              type="range"
+              min="-180"
+              max="180"
+              value={options.hue}
+              onChange={(e) => handleOptionChange('hue', parseInt(e.target.value))}
+            />
+          </div>
+        </div>
+
+        <div className="option-group">
+          <div className="range-header">
+            <label>Sepia: {options.sepia}</label>
+            <input
+              type="range"
+              min="-100"
+              max="100"
+              value={options.sepia}
+              onChange={(e) => handleOptionChange('sepia', parseInt(e.target.value))}
+            />
+          </div>
+        </div>
+
+        <div className="option-group">
+          <div className="range-header">
+            <label>Grayscale: {options.grayscale}</label>
+            <input
+              type="range"
+              min="-100"
+              max="100"
+              value={options.grayscale}
+              onChange={(e) => handleOptionChange('grayscale', parseInt(e.target.value))}
+            />
+          </div>
         </div>
 
         <div className="option-group">
@@ -203,14 +300,14 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
               checked={options.invert}
               onChange={(e) => handleOptionChange('invert', e.target.checked)}
             />
-            Better contrast
+            Change ascii characters
           </label>
         </div>
       </div>
 
       <div className="image-import-footer">
         <button className="cancel-button" onClick={onClose}>Close</button>
-        <button className="image-import-button" onClick={handleImport}>Generate</button>
+        <button className="image-import-button" onClick={handleImport}>Apply</button>
       </div>
     </div>
   );
