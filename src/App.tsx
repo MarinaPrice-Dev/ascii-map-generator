@@ -10,6 +10,7 @@ import { Footer } from './components/footer/Footer'
 import Menu from './components/menu/Menu'
 import type { Cell } from './types/cell'
 import { handleZoom, expandGrid } from './utils/zoomUtils'
+import { calculateOptimalZoom } from './utils/imageToAscii'
 import { useSelectionStore } from './store/selectionStore'
 import { setupKeyboardShortcuts } from './utils/shortcuts'
 
@@ -195,6 +196,35 @@ const App: React.FC = () => {
     setGrid(newGrid);
   };
 
+  const handleImageImport = (importedGrid: Cell[][], imageDimensions?: { width: number; height: number; gridRows: number; gridCols: number }) => {
+    beginAction();
+    
+    if (imageDimensions && imageDimensions.gridRows > 0 && imageDimensions.gridCols > 0) {
+      // Use the grid dimensions from the image conversion result
+      const { gridRows: newRows, gridCols: newCols } = imageDimensions;
+      
+      // Calculate optimal cell size based on available space
+      const availableWidth = window.innerWidth - 2;
+      const availableHeight = window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT - 2;
+      
+      // Calculate cell size to fit the grid in the viewport, but allow it to be larger
+      const cellSizeForCols = availableWidth / newCols;
+      const cellSizeForRows = availableHeight / newRows;
+      const newCellSize = Math.max(10, Math.min(cellSizeForCols, cellSizeForRows));
+      
+      // Update zoom and grid dimensions
+      setCellSize(newCellSize);
+      setGridRows(newRows);
+      setGridCols(newCols);
+      
+      // Use the imported grid directly since it already has the correct dimensions
+      setGrid(importedGrid);
+    } else {
+      // Fallback to regular import if no image dimensions
+      handleImportMap(importedGrid);
+    }
+  };
+
   const handleTransform = (
     transformFn: (grid: Cell[][], selection: Set<string>) => { newGrid: Cell[][], newSelection?: Set<string> }
   ) => {
@@ -375,6 +405,7 @@ const App: React.FC = () => {
         onZoomIn={handleZoomIn}
         onZoomOut={handleZoomOut}
         onImportMap={handleImportMap}
+        onImageImport={handleImageImport}
         isMenuOpen={isMenuOpen}
         onMenuToggle={handleMenuToggle}
         isExportPanelOpen={isExportPanelOpen}

@@ -1,7 +1,8 @@
 import type { Cell } from '../types/cell';
+import { imageToAscii } from './imageToAscii';
 
 interface ImportOptions {
-  format: 'txt' | 'json' | 'ansi' | 'rot';
+  format: 'txt' | 'json' | 'ansi' | 'rot' | 'image';
 }
 
 interface ImportedData {
@@ -234,11 +235,37 @@ const parseRotFile = async (file: File): Promise<ImportedData> => {
 export const importMap = async (file: File, options: ImportOptions): Promise<ImportedData> => {
   // Validate file type
   const extension = file.name.split('.').pop()?.toLowerCase();
+  
+  // Check if it's an image file
+  const isImageFile = ['png', 'jpg', 'jpeg', 'gif', 'bmp', 'webp'].includes(extension || '');
+  
+  if (isImageFile) {
+    // Handle image files
+    if (file.size > 10 * 1024 * 1024) { // 10MB limit for images
+      throw new Error('Image file too large (max 10MB)');
+    }
+    
+    try {
+      const result = await imageToAscii(file, {
+        targetRows: 100, // Default to 100x100 for good resolution
+        targetCols: 100,
+        colorMode: 'smart', // Default to smart mode
+        contrast: 0, // No contrast adjustment by default
+        brightness: 0 // No brightness adjustment by default
+      });
+      
+      return result;
+    } catch (error) {
+      throw new Error(`Failed to convert image: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }
+  
+  // Handle text-based formats
   if (!extension || !['txt', 'json', 'ansi', 'rot'].includes(extension)) {
     throw new Error('Unsupported file type');
   }
   
-  // Validate file size (max 1MB)
+  // Validate file size (max 1MB for text files)
   if (file.size > 1024 * 1024) {
     throw new Error('File too large (max 1MB)');
   }
