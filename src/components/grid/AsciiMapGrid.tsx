@@ -25,6 +25,7 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, updateGri
   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [isUnselectOperation, setIsUnselectOperation] = useState(false);
   const [visitedCells, setVisitedCells] = useState<Set<string>>(new Set());
+  const [previewCell, setPreviewCell] = useState<{ row: number; col: number } | null>(null);
 
   const {
     activeTool,
@@ -311,6 +312,8 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, updateGri
                 data-col={colIndex}
                 onMouseDown={(e) => handleStart(rowIndex, colIndex, e.button === 2)}
                 onMouseOver={() => handleMove(rowIndex, colIndex)}
+                onMouseEnter={() => setPreviewCell({ row: rowIndex, col: colIndex })}
+                onMouseLeave={() => setPreviewCell(null)}
                 onContextMenu={(e) => handleContextMenu(e, rowIndex, colIndex)}
                 onTouchStart={() => handleStart(rowIndex, colIndex)}
                 onTouchMove={handleTouchMove}
@@ -339,6 +342,28 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, updateGri
             height: selectionRect.height
           }}
         />
+      )}
+      {previewCell && isDrawMode() && (
+        <div
+          className="cell-preview"
+          style={{
+            position: 'absolute',
+            top: previewCell.row * cellSize,
+            left: previewCell.col * cellSize,
+            width: cellSize,
+            height: cellSize,
+            backgroundColor: selectedBg,
+            color: selectedFg,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: Math.floor(cellSize * 0.8),
+            zIndex: 2,
+            pointerEvents: 'none',
+          }}
+        >
+          {selectedChar}
+        </div>
       )}
     </div>
   );

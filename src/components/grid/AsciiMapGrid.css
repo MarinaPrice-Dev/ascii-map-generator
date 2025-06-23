@@ -49,4 +49,19 @@
 
 .ascii-map-grid.no-borders .ascii-map-grid-cell {
   border: none !important;
+}
+
+.cell-preview {
+  animation: preview-pulse 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes preview-pulse {
+  0% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.9;
+    transform: scale(1.05);
+  }
 } 
