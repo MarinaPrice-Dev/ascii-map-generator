@@ -17,7 +17,7 @@ const InfoDialog: React.FC<InfoDialogProps> = ({ onClose }) => (
         <h3>Getting Started</h3>
         <p>Just click on any square in the grid to start drawing your very own art. You can easily change any of the symbols and colors by selecting from the footer.</p>
         <p>For more advanced features, click the Menu button in the top right corner of the screen. This will open the tools menu. From here, you can select any of the shapes tools to start creating more customisable art. Use the "Selection Tool" to select and manipulate areas of the grid.</p>
-        <p>You can export your art in a variety of formats, including .txt, .json, .ansi, and .rot.txt. These same formats can be imported to continue your work.</p>
+        <p>You can export your art in a variety of formats, including .txt, .json, .ansi, .rot.txt, and .png. These same formats can be imported to continue your work.</p>
         <h3>Features</h3>
         <ul className="feature">
           <li>

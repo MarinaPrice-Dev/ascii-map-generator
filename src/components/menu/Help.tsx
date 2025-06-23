@@ -55,7 +55,18 @@ const Help: React.FC = () => {
               <strong>ROT (.rot.txt)</strong> Designed to work with the Rot.js library. Using display.drawText() will display your ascii art including colors.
             </div>
             <div className="instruction-item">
-              <strong>PNG (.png)</strong> PNG image of your image.
+              <strong>PNG (.png)</strong> PNG image of your ascii art.
+            </div>
+          </div>
+        </div>
+        <div className="selection-tool-section">
+          <h4>Importing data</h4>
+          <div className="instructions">
+            <div className="instruction-item">
+              <strong>Image Import</strong> Import multiple image types (png, jpg, jpeg, gif, webp) and convert them to ASCII art.
+            </div>
+            <div className="instruction-item">
+              <strong>Re-importing</strong> Support for re-importing the files you've exported.
             </div>
           </div>
         </div>
