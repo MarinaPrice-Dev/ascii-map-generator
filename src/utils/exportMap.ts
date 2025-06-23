@@ -1,5 +1,6 @@
+// @ts-ignore
+import domtoimage from 'dom-to-image-more';
 import type { Cell } from '../types/cell'
-import html2canvas from 'html2canvas';
 
 interface ExportOptions {
   format: 'txt' | 'json' | 'ansi' | 'rot' | 'png';
@@ -170,85 +171,75 @@ const exportAsRot = (grid: Cell[][]) => {
 
 const exportAsPng = async (grid: Cell[][]) => {
   try {
-    // Find the ASCII grid element
-    const gridElement = document.querySelector('.ascii-map-grid');
+    const gridElement = document.querySelector('.ascii-map-grid') as HTMLElement;
     if (!gridElement) {
       throw new Error('Could not find the ASCII grid element');
     }
 
     // Calculate bounding box to only export the area with content
     const { top, left, bottom, right } = findBoundingBox(grid);
-    
-    // If no content found, export a minimal area
+
     if (top > bottom || left > right) {
-      throw new Error('No content found to export');
+      console.warn('No content found to export as PNG.');
+      return;
     }
 
-    // Get cell size from the first cell element
     const firstCell = gridElement.querySelector('.ascii-map-grid-cell') as HTMLElement;
     if (!firstCell) {
-      throw new Error('Could not find grid cells');
+      throw new Error('Could not find grid cells to determine size.');
     }
-    const cellSize = firstCell.offsetWidth;
+    const cellRect = firstCell.getBoundingClientRect();
+    const cellWidth = cellRect.width;
+    const cellHeight = cellRect.height;
 
-    // Configure html2canvas options for best quality and proper character alignment
-    const canvas = await html2canvas(gridElement as HTMLElement, {
-      backgroundColor: null, // Transparent background
-      scale: 2, // Higher resolution
-      useCORS: true,
-      allowTaint: true,
-      logging: false,
-      // Calculate the area to capture based on bounding box
-      x: left * cellSize,
-      y: top * cellSize,
-      width: (right - left + 1) * cellSize,
-      height: (bottom - top + 1) * cellSize,
-      // Ensure proper font rendering and alignment
-      foreignObjectRendering: false,
-      removeContainer: false,
-      // Force proper character sizing and positioning
-      onclone: (clonedDoc) => {
-        const clonedGrid = clonedDoc.querySelector('.ascii-map-grid');
-        if (clonedGrid) {
-          // Ensure all cells have proper display and alignment
-          const cells = clonedGrid.querySelectorAll('.ascii-map-grid-cell');
-          cells.forEach((cell) => {
-            const cellElement = cell as HTMLElement;
-            // Force proper text alignment and sizing
-            cellElement.style.display = 'flex';
-            cellElement.style.alignItems = 'center';
-            cellElement.style.justifyContent = 'center';
-            cellElement.style.textAlign = 'center';
-            cellElement.style.lineHeight = '1';
-            cellElement.style.verticalAlign = 'middle';
-            // Ensure font size is properly applied
-            const fontSize = cellElement.style.fontSize;
-            if (fontSize) {
-              cellElement.style.fontSize = fontSize;
-            }
-          });
+    // dom-to-image-more does not support cropping directly.
+    // The strategy is to render the whole grid, then crop it using a canvas.
+    const dataUrl = await domtoimage.toPng(gridElement);
+
+    const img = new Image();
+    img.src = dataUrl;
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      
+      const cropX = left * cellWidth;
+      const cropY = top * cellHeight;
+      const cropWidth = (right - left + 1) * cellWidth;
+      const cropHeight = (bottom - top + 1) * cellHeight;
+
+      canvas.width = cropWidth;
+      canvas.height = cropHeight;
+
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        throw new Error('Failed to get canvas context');
+      }
+      
+      // Draw the cropped portion of the generated image onto the canvas
+      ctx.drawImage(img, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
+      
+      canvas.toBlob((blob) => {
+        if (blob) {
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = generateFileName('map', 'png');
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
+        } else {
+          throw new Error('Failed to create PNG blob for download.');
         }
-      }
-    });
+      }, 'image/png');
+    };
+    img.onerror = (err) => {
+      console.error('Failed to load image for cropping:', err);
+      throw new Error('Failed to load generated image for cropping.');
+    };
 
-    // Convert canvas to blob and download
-    canvas.toBlob((blob) => {
-      if (blob) {
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = generateFileName('map', 'png');
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-      } else {
-        throw new Error('Failed to create PNG file');
-      }
-    }, 'image/png');
   } catch (error) {
     console.error('Error exporting PNG:', error);
-    throw new Error('Failed to export PNG. Please try again.');
+    // TODO: show a user-friendly error message
   }
 };
 

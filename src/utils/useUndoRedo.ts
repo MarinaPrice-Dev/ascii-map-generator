@@ -9,8 +9,8 @@ export function useUndoRedo<T>(initial: T) {
   const beginAction = useCallback(() => {
     // Only save to history if state is valid
     if (state !== undefined && state !== null) {
-      setHistory(h => [...h, state]);
-      setFuture([]);
+    setHistory(h => [...h, state]);
+    setFuture([]);
     }
   }, [state]);
 
@@ -20,7 +20,7 @@ export function useUndoRedo<T>(initial: T) {
       const previousState = h[h.length - 1];
       // Only restore if the previous state is valid
       if (previousState !== undefined && previousState !== null) {
-        setFuture(f => [state, ...f]);
+      setFuture(f => [state, ...f]);
         setState(previousState);
       }
       return h.slice(0, -1);
@@ -33,7 +33,7 @@ export function useUndoRedo<T>(initial: T) {
       const nextState = f[0];
       // Only restore if the next state is valid
       if (nextState !== undefined && nextState !== null) {
-        setHistory(h => [...h, state]);
+      setHistory(h => [...h, state]);
         setState(nextState);
       }
       return f.slice(1);

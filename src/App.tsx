@@ -12,6 +12,7 @@ import type { Cell } from './types/cell'
 import { handleZoom, expandGrid } from './utils/zoomUtils'
 import { useSelectionStore } from './store/selectionStore'
 import { setupKeyboardShortcuts } from './utils/shortcuts'
+import Loader from './components/loader/Loader'
 
 const HEADER_HEIGHT = 60;
 const FOOTER_HEIGHT = 200;
@@ -29,6 +30,7 @@ const App: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isExportPanelOpen, setIsExportPanelOpen] = useState(false);
   const [isImageDialogOpen, setIsImageDialogOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const mainRef = useRef<HTMLDivElement>(null);
 
   // Calculate initial grid dimensions once
@@ -237,12 +239,15 @@ const App: React.FC = () => {
 
   // Handle map export
   const handleExport = async (format: 'txt' | 'json' | 'ansi' | 'rot' | 'png') => {
+    setIsLoading(true);
     try {
       await exportMap(grid, { format });
-      setIsExportPanelOpen(false); // Close panel after exporting
+    setIsExportPanelOpen(false); // Close panel after exporting
     } catch (error) {
       console.error('Export failed:', error);
       alert(`Export failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -496,6 +501,7 @@ const App: React.FC = () => {
 
   return (
     <div className="App" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--bg)', color: 'var(--fg)' }}>
+      {isLoading && <Loader message="Exporting..." />}
       <Header
         onSaveMap={handleExport}
         onClearMap={clearMap}

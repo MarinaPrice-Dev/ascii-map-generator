@@ -48,7 +48,6 @@ const Header: React.FC<HeaderProps> = ({
   onMenuToggle,
   isExportPanelOpen,
   onExportPanelToggle,
-  isImageDialogOpen,
   onImageDialogStateChange,
 }) => {
   const isGridEmpty = grid.every(row => row.every(cell => cell.char === ' '));
@@ -131,29 +130,29 @@ const Header: React.FC<HeaderProps> = ({
       }
     } else {
       // For text-based formats, process immediately
-      try {
-        const result = await importMap(file, { format });
-        
+    try {
+      const result = await importMap(file, { format });
+      
         // Validate dimensions for text-based formats
-        if (format !== 'rot') {
-          const currentRows = grid.length;
-          const currentCols = grid[0]?.length || 0;
-          
-          if (result.dimensions) {
-            if (result.dimensions.rows > currentRows || result.dimensions.cols > currentCols) {
-              alert(`The imported map is too large. Maximum dimensions are ${currentRows}x${currentCols}`);
-              return;
-            }
+      if (format !== 'rot') {
+        const currentRows = grid.length;
+        const currentCols = grid[0]?.length || 0;
+        
+        if (result.dimensions) {
+          if (result.dimensions.rows > currentRows || result.dimensions.cols > currentCols) {
+            alert(`The imported map is too large. Maximum dimensions are ${currentRows}x${currentCols}`);
+            return;
           }
         }
-        onImportMap(result.grid);
-      } catch (error) {
-        if (error instanceof Error) {
-          alert(error.message);
-        } else {
-          alert('Failed to import map');
-        }
       }
+      onImportMap(result.grid);
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert('Failed to import map');
+      }
+    }
     }
   };
 

@@ -250,22 +250,24 @@
 }
 
 .option-group input[type="checkbox"] {
-  margin-right: 0.4rem;
-  width: 14px;
-  height: 14px;
+  margin-right: 8px;
 }
 
 .image-import-footer {
   display: flex;
-  justify-content: flex-end;
-  gap: 0.75rem;
-  padding: 1rem 1.5rem;
-  border-top: 1px solid var(--border);
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-top: 1px dashed var(--save);
+  background: var(--bg);
   flex-shrink: 0;
 }
 
+.footer-spacer {
+  flex-grow: 1;
+}
+
 .cancel-button {
-  background: var(--border);
+  background: var(--bg-light);
   color: var(--fg);
   border: none;
   padding: 0.5rem 1rem;
@@ -278,23 +280,7 @@
 
 .cancel-button:hover {
   background: #555;
-}
-
-.image-import-button {
-  background: var(--save);
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.85rem;
-  font-weight: 500;
-  font-family: inherit;
-  transition: all 0.2s ease;
-}
-
-.image-import-button:hover {
-  background: #1a9e3e;
+  color: var(--fg);
 }
 
 .auto-calculate-button {
@@ -362,7 +348,7 @@
   padding: 0.3rem 0.6rem;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   font-weight: 500;
   font-family: inherit;
   transition: all 0.2s ease;

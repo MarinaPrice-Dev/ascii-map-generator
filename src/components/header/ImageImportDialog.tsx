@@ -304,14 +304,6 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
         <div className="option-group">
           <div className="adjustments-header">
             <label>Adjustments:</label>
-            <button 
-              type="button" 
-              className="reset-ranges-button" 
-              onClick={handleResetRanges}
-              title="Reset all adjustments to 0"
-            >
-              Reset
-            </button>
           </div>
         </div>
 
@@ -545,8 +537,14 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
       </div>
 
       <div className="image-import-footer">
+        <button 
+          type="button" 
+          className="reset-ranges-button" 
+          onClick={handleResetRanges}>
+          Reset
+        </button>
+        <div className="footer-spacer"></div>
         <button className="cancel-button" onClick={onClose}>Close</button>
-        <button className="image-import-button" onClick={handleImport}>Apply</button>
       </div>
     </div>
   );
