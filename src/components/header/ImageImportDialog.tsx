@@ -176,28 +176,6 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
     onImport(newOptions);
   };
 
-  const handleImport = () => {
-    let finalOptions = { ...options };
-    
-    // Auto-calculate dimensions if any inputs are empty
-    if (options.targetCols <= 0 || options.targetRows <= 0) {
-      if (imageDimensions) {
-        const imageAspectRatio = imageDimensions.width / imageDimensions.height;
-        const newWidth = 100;
-        const newHeight = Math.round(newWidth / imageAspectRatio);
-
-        finalOptions = {
-          ...options,
-          targetCols: Math.max(20, Math.min(200, newWidth)),
-          targetRows: Math.max(20, Math.min(200, newHeight)),
-        };
-      }
-    }
-    
-    onImport(finalOptions);
-    // Removed onClose() to keep dialog open for further adjustments
-  };
-
   useEffect(() => {
     if (isOpen && imageDimensions) {
       // Reset all options to default, then set dimensions from the initial import

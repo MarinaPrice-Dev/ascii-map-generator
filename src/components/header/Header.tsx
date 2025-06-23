@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { UndoIcon, RedoIcon, ClearIcon, InfoIcon, ZoomInIcon, ZoomOutIcon, ImportIcon, MenuIcon } from '../icons/Icons';
 import '../icons/Icons.css';
 import './Header.css';
