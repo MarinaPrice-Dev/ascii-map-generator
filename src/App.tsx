@@ -189,6 +189,11 @@ const App: React.FC = () => {
     })
   }
 
+  // Update entire grid
+  const updateGrid = (newGrid: Cell[][]) => {
+    safeSetGrid(newGrid);
+  }
+
   // Clear map
   const clearMap = () => {
     beginAction();
@@ -540,6 +545,7 @@ const App: React.FC = () => {
             <AsciiMapGrid
               grid={grid}
               updateCell={updateCell}
+              updateGrid={updateGrid}
               beginAction={beginAction}
               selectedChar={selectedChar}
               selectedFg={selectedFg}
