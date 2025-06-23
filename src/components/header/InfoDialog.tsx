@@ -59,6 +59,12 @@ const InfoDialog: React.FC<InfoDialogProps> = ({ onClose }) => (
         <h3>Example ASCII Maps (coming soon)</h3>
         <p>Here are some examples of what you can create with ASCII Studio:</p>
         <h3>Latest Updates</h3>
+        <h5>2025-06-23</h5>
+        <ul>
+            <li><strong>Image Import:</strong> Import images from your computer and convert them to ASCII art.</li>
+            <li><strong>Image Export:</strong> Export your ASCII art as a PNG image.</li>
+            <li><strong>Bug fixes</strong></li>
+        </ul>
         <h5>2025-06-21</h5>
         <ul>
             <li><strong>Selection Tool:</strong> Added a selection tool to the menu. Select and manipulate areas of the grid.</li>

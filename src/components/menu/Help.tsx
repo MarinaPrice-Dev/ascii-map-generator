@@ -54,6 +54,9 @@ const Help: React.FC = () => {
             <div className="instruction-item">
               <strong>ROT (.rot.txt)</strong> Designed to work with the Rot.js library. Using display.drawText() will display your ascii art including colors.
             </div>
+            <div className="instruction-item">
+              <strong>PNG (.png)</strong> PNG image of your image.
+            </div>
           </div>
         </div>
       </div>

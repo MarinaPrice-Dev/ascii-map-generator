@@ -237,6 +237,15 @@ const App: React.FC = () => {
     }
   };
 
+  const openImageDialog = () => {
+    setIsMenuOpen(false); // Close menu when opening image dialog
+    setIsImageDialogOpen(true);
+  };
+
+  const closeImageDialog = () => {
+    setIsImageDialogOpen(false);
+  };
+
   // Handle map export
   const handleExport = async (format: 'txt' | 'json' | 'ansi' | 'rot' | 'png') => {
     setIsLoading(true);
@@ -306,14 +315,7 @@ const App: React.FC = () => {
       // Use the grid dimensions from the image conversion result
       const { gridRows: newRows, gridCols: newCols } = imageDimensions;
       
-      // Calculate optimal cell size based on available space
-      const availableWidth = window.innerWidth - 2;
-      const availableHeight = window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT - 2;
-      
-      // Calculate cell size to fit the grid in the viewport, but allow it to be larger
-      const cellSizeForCols = availableWidth / newCols;
-      const cellSizeForRows = availableHeight / newRows;
-      const newCellSize = Math.max(10, Math.min(cellSizeForCols, cellSizeForRows));
+      const newCellSize = 10;
       
       // Update zoom and grid dimensions
       setCellSize(newCellSize);
@@ -520,7 +522,8 @@ const App: React.FC = () => {
         isExportPanelOpen={isExportPanelOpen}
         onExportPanelToggle={handleExportPanelToggle}
         isImageDialogOpen={isImageDialogOpen}
-        onImageDialogStateChange={setIsImageDialogOpen}
+        onOpenImageDialog={openImageDialog}
+        onCloseImageDialog={closeImageDialog}
       />
       
       <div className="main-content">
