@@ -61,6 +61,8 @@ const InfoDialog: React.FC<InfoDialogProps> = ({ onClose }) => (
         <h3>Latest Updates</h3>
         <h5>2025-06-23</h5>
         <ul>
+            <li><strong>Preview:</strong> Preview the cell you are drawing.</li>
+            <li><strong>Grid Borders:</strong> Toggle grid borders on and off.</li>
             <li><strong>Image Import:</strong> Import images from your computer and convert them to ASCII art.</li>
             <li><strong>Image Export:</strong> Export your ASCII art as a PNG image.</li>
             <li><strong>Bug fixes</strong></li>
