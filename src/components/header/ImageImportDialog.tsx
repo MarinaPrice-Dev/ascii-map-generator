@@ -38,8 +38,38 @@ interface ImageImportDialogProps {
   onClose: () => void;
   onImport: (options: ImageImportOptions) => void;
   fileName: string;
-  imageDimensions?: { width: number; height: number };
+  imageDimensions?: { width: number; height: number; gridRows: number; gridCols: number };
 }
+
+const defaultOptions: ImageImportOptions = {
+  colorMode: 'smart',
+  contrast: 0,
+  brightness: 0,
+  saturation: 0,
+  hue: 0,
+  sepia: 0,
+  grayscale: 0,
+  characterDensity: 0,
+  edgeDetection: 0,
+  threshold: 0,
+  dithering: 0,
+  vignette: 0,
+  grain: 0,
+  blur: 0,
+  sharpen: 0,
+  pixelate: 0,
+  posterize: 0,
+  vibrance: 0,
+  temperature: 0,
+  exposure: 0,
+  highlights: 0,
+  shadows: 0,
+  whites: 0,
+  blacks: 0,
+  invert: true,
+  targetRows: 50,
+  targetCols: 100
+};
 
 const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
   isOpen,
@@ -48,35 +78,7 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
   fileName,
   imageDimensions
 }) => {
-  const [options, setOptions] = useState<ImageImportOptions>({
-    colorMode: 'smart',
-    contrast: 0,
-    brightness: 0,
-    saturation: 0,
-    hue: 0,
-    sepia: 0,
-    grayscale: 0,
-    characterDensity: 0,
-    edgeDetection: 0,
-    threshold: 0,
-    dithering: 0,
-    vignette: 0,
-    grain: 0,
-    blur: 0,
-    sharpen: 0,
-    pixelate: 0,
-    posterize: 0,
-    vibrance: 0,
-    temperature: 0,
-    exposure: 0,
-    highlights: 0,
-    shadows: 0,
-    whites: 0,
-    blacks: 0,
-    invert: true,
-    targetRows: 50,
-    targetCols: 100
-  });
+  const [options, setOptions] = useState<ImageImportOptions>(defaultOptions);
 
   const handleOptionChange = (key: keyof ImageImportOptions, value: any) => {
     setOptions(prev => ({ ...prev, [key]: value }));
@@ -95,38 +97,21 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
     setOptions(prev => ({ ...prev, [key]: value }));
   };
 
-  const handleRangeMouseUp = (key: keyof ImageImportOptions) => {
+  const handleRangeMouseUp = () => {
     // Apply changes when user releases the range slider
     onImport(options);
   };
 
   const handleResetRanges = () => {
-    const resetOptions = {
+    const resetOptions: ImageImportOptions = {
       ...options,
-      contrast: 0,
-      brightness: 0,
-      saturation: 0,
-      hue: 0,
-      sepia: 0,
-      grayscale: 0,
-      characterDensity: 0,
-      edgeDetection: 0,
-      threshold: 0,
-      dithering: 0,
-      vignette: 0,
-      grain: 0,
-      blur: 0,
-      sharpen: 0,
-      pixelate: 0,
-      posterize: 0,
-      vibrance: 0,
-      temperature: 0,
-      exposure: 0,
-      highlights: 0,
-      shadows: 0,
-      whites: 0,
-      blacks: 0
+      ...defaultOptions
     };
+    
+    // Keep the current dimensions
+    resetOptions.targetCols = options.targetCols;
+    resetOptions.targetRows = options.targetRows;
+    
     setOptions(resetOptions);
     onImport(resetOptions);
   };
@@ -134,7 +119,7 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
   const handleInputFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     e.target.select();
   };
-
+  
   const handleInputBlur = (key: 'targetCols' | 'targetRows', value: number) => {
     let constrainedValue = value;
     
@@ -181,39 +166,46 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
     newWidth = Math.max(20, Math.min(200, newWidth));
     newHeight = Math.max(20, Math.min(200, newHeight));
 
-    setOptions(prev => ({
-      ...prev,
+    const newOptions = {
+      ...options,
       targetCols: newWidth,
-      targetRows: newHeight
-    }));
+      targetRows: newHeight,
+    };
+    
+    setOptions(newOptions);
+    onImport(newOptions);
   };
 
   const handleImport = () => {
+    let finalOptions = { ...options };
+    
     // Auto-calculate dimensions if any inputs are empty
     if (options.targetCols <= 0 || options.targetRows <= 0) {
-      autoCalculateDimensions();
+      if (imageDimensions) {
+        const imageAspectRatio = imageDimensions.width / imageDimensions.height;
+        const newWidth = 100;
+        const newHeight = Math.round(newWidth / imageAspectRatio);
+
+        finalOptions = {
+          ...options,
+          targetCols: Math.max(20, Math.min(200, newWidth)),
+          targetRows: Math.max(20, Math.min(200, newHeight)),
+        };
+      }
     }
     
-    onImport(options);
+    onImport(finalOptions);
     // Removed onClose() to keep dialog open for further adjustments
   };
 
   useEffect(() => {
     if (isOpen && imageDimensions) {
-      // Auto-calculate on dialog open with image
-      const imageAspectRatio = imageDimensions.width / imageDimensions.height;
-      const newWidth = 100;
-      const newHeight = Math.round(newWidth / imageAspectRatio);
-      
-      // Ensure minimum dimensions
-      const finalWidth = Math.max(20, Math.min(200, newWidth));
-      const finalHeight = Math.max(20, Math.min(200, newHeight));
-      
-      setOptions(prev => ({
-        ...prev,
-        targetCols: finalWidth,
-        targetRows: finalHeight
-      }));
+      // Reset all options to default, then set dimensions from the initial import
+      setOptions({
+        ...defaultOptions,
+        targetCols: imageDimensions.gridCols,
+        targetRows: imageDimensions.gridRows,
+      });
     }
   }, [isOpen, imageDimensions]);
 
@@ -269,9 +261,6 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
               <AspectIcon />
             </button>
           </div>
-          <div className="apply-button-container">
-            <button className="image-import-button" onClick={handleImport}>← Apply image to grid</button>
-          </div>
         </div>
         <div className="line"></div>
         
@@ -300,7 +289,7 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
           </div>
         </div>
 
-        <div className="option-group">
+        <div className="option-group" style={{ display: 'none' }}>
           <label>
             <input
               type="checkbox"
@@ -311,6 +300,7 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
           </label>
         </div>
 
+        <div className="line"></div>
         <div className="option-group">
           <div className="adjustments-header">
             <label>Adjustments:</label>
@@ -326,80 +316,21 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
         </div>
 
         <ImageRangeSlider
-          label="Contrast"
-          value={options.contrast}
-          min={-100}
-          max={100}
-          onChange={(value) => handleRangeChange('contrast', value)}
-          onApply={() => handleRangeMouseUp('contrast')}
-        />
-
-        <ImageRangeSlider
           label="Brightness"
           value={options.brightness}
           min={-100}
           max={100}
           onChange={(value) => handleRangeChange('brightness', value)}
-          onApply={() => handleRangeMouseUp('brightness')}
+          onApply={() => handleRangeMouseUp()}
         />
-
+        
         <ImageRangeSlider
-          label="Saturation"
-          value={options.saturation}
+          label="Contrast"
+          value={options.contrast}
           min={-100}
           max={100}
-          onChange={(value) => handleRangeChange('saturation', value)}
-          onApply={() => handleRangeMouseUp('saturation')}
-        />
-
-        <ImageRangeSlider
-          label="Hue"
-          value={options.hue}
-          min={-180}
-          max={180}
-          onChange={(value) => handleRangeChange('hue', value)}
-          onApply={() => handleRangeMouseUp('hue')}
-        />
-
-        <ImageRangeSlider
-          label="Sepia"
-          value={options.sepia}
-          min={-100}
-          max={100}
-          onChange={(value) => handleRangeChange('sepia', value)}
-          onApply={() => handleRangeMouseUp('sepia')}
-        />
-
-        <ImageRangeSlider
-          label="Grayscale"
-          value={options.grayscale}
-          min={-100}
-          max={100}
-          onChange={(value) => handleRangeChange('grayscale', value)}
-          onApply={() => handleRangeMouseUp('grayscale')}
-        />
-
-
-        <div className="option-group">
-          <label>Color & Tone:</label>
-        </div>
-
-        <ImageRangeSlider
-          label="Vibrance"
-          value={options.vibrance}
-          min={-100}
-          max={100}
-          onChange={(value) => handleRangeChange('vibrance', value)}
-          onApply={() => handleRangeMouseUp('vibrance')}
-        />
-
-        <ImageRangeSlider
-          label="Temperature"
-          value={options.temperature}
-          min={-100}
-          max={100}
-          onChange={(value) => handleRangeChange('temperature', value)}
-          onApply={() => handleRangeMouseUp('temperature')}
+          onChange={(value) => handleRangeChange('contrast', value)}
+          onApply={() => handleRangeMouseUp()}
         />
 
         <ImageRangeSlider
@@ -408,7 +339,7 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
           min={-100}
           max={100}
           onChange={(value) => handleRangeChange('exposure', value)}
-          onApply={() => handleRangeMouseUp('exposure')}
+          onApply={() => handleRangeMouseUp()}
         />
 
         <ImageRangeSlider
@@ -417,7 +348,7 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
           min={-100}
           max={100}
           onChange={(value) => handleRangeChange('highlights', value)}
-          onApply={() => handleRangeMouseUp('highlights')}
+          onApply={() => handleRangeMouseUp()}
         />
 
         <ImageRangeSlider
@@ -426,7 +357,7 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
           min={-100}
           max={100}
           onChange={(value) => handleRangeChange('shadows', value)}
-          onApply={() => handleRangeMouseUp('shadows')}
+          onApply={() => handleRangeMouseUp()}
         />
 
         <ImageRangeSlider
@@ -435,7 +366,7 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
           min={-100}
           max={100}
           onChange={(value) => handleRangeChange('whites', value)}
-          onApply={() => handleRangeMouseUp('whites')}
+          onApply={() => handleRangeMouseUp()}
         />
 
         <ImageRangeSlider
@@ -444,29 +375,84 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
           min={-100}
           max={100}
           onChange={(value) => handleRangeChange('blacks', value)}
-          onApply={() => handleRangeMouseUp('blacks')}
+          onApply={() => handleRangeMouseUp()}
         />
 
+        <div className="line"></div>
         <div className="option-group">
-          <label>Effects:</label>
+          <div className="adjustments-header">
+            <label>Color & Tone:</label>
+          </div>
         </div>
 
         <ImageRangeSlider
-          label="Vignette"
-          value={options.vignette}
-          min={0}
+          label="Saturation"
+          value={options.saturation}
+          min={-100}
           max={100}
-          onChange={(value) => handleRangeChange('vignette', value)}
-          onApply={() => handleRangeMouseUp('vignette')}
+          onChange={(value) => handleRangeChange('saturation', value)}
+          onApply={() => handleRangeMouseUp()}
         />
 
         <ImageRangeSlider
-          label="Grain"
-          value={options.grain}
+          label="Vibrance"
+          value={options.vibrance}
+          min={-100}
+          max={100}
+          onChange={(value) => handleRangeChange('vibrance', value)}
+          onApply={() => handleRangeMouseUp()}
+        />
+
+        <ImageRangeSlider
+          label="Temperature"
+          value={options.temperature}
+          min={-100}
+          max={100}
+          onChange={(value) => handleRangeChange('temperature', value)}
+          onApply={() => handleRangeMouseUp()}
+        />
+
+        <ImageRangeSlider
+          label="Hue"
+          value={options.hue}
+          min={-180}
+          max={180}
+          onChange={(value) => handleRangeChange('hue', value)}
+          onApply={() => handleRangeMouseUp()}
+        />
+
+        <ImageRangeSlider
+          label="Sepia"
+          value={options.sepia}
+          min={-100}
+          max={100}
+          onChange={(value) => handleRangeChange('sepia', value)}
+          onApply={() => handleRangeMouseUp()}
+        />
+
+        <ImageRangeSlider
+          label="Grayscale"
+          value={options.grayscale}
+          min={-100}
+          max={100}
+          onChange={(value) => handleRangeChange('grayscale', value)}
+          onApply={() => handleRangeMouseUp()}
+        />
+
+        <div className="line"></div>
+        <div className="option-group">
+          <div className="adjustments-header">
+            <label>Effects:</label>
+          </div>
+        </div>
+
+        <ImageRangeSlider
+          label="Sharpen"
+          value={options.sharpen}
           min={0}
           max={100}
-          onChange={(value) => handleRangeChange('grain', value)}
-          onApply={() => handleRangeMouseUp('grain')}
+          onChange={(value) => handleRangeChange('sharpen', value)}
+          onApply={() => handleRangeMouseUp()}
         />
 
         <ImageRangeSlider
@@ -475,16 +461,25 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
           min={0}
           max={50}
           onChange={(value) => handleRangeChange('blur', value)}
-          onApply={() => handleRangeMouseUp('blur')}
+          onApply={() => handleRangeMouseUp()}
         />
 
         <ImageRangeSlider
-          label="Sharpen"
-          value={options.sharpen}
+          label="Vignette"
+          value={options.vignette}
           min={0}
           max={100}
-          onChange={(value) => handleRangeChange('sharpen', value)}
-          onApply={() => handleRangeMouseUp('sharpen')}
+          onChange={(value) => handleRangeChange('vignette', value)}
+          onApply={() => handleRangeMouseUp()}
+        />
+
+        <ImageRangeSlider
+          label="Grain"
+          value={options.grain}
+          min={0}
+          max={100}
+          onChange={(value) => handleRangeChange('grain', value)}
+          onApply={() => handleRangeMouseUp()}
         />
 
         <ImageRangeSlider
@@ -493,7 +488,7 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
           min={0}
           max={50}
           onChange={(value) => handleRangeChange('pixelate', value)}
-          onApply={() => handleRangeMouseUp('pixelate')}
+          onApply={() => handleRangeMouseUp()}
         />
 
         <ImageRangeSlider
@@ -502,11 +497,14 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
           min={0}
           max={100}
           onChange={(value) => handleRangeChange('posterize', value)}
-          onApply={() => handleRangeMouseUp('posterize')}
+          onApply={() => handleRangeMouseUp()}
         />
 
+        <div className="line"></div>
         <div className="option-group">
-          <label>ASCII Conversion:</label>
+          <div className="adjustments-header">
+            <label>ASCII Conversion:</label>
+          </div>
         </div>
 
         <ImageRangeSlider
@@ -515,7 +513,7 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
           min={0}
           max={100}
           onChange={(value) => handleRangeChange('characterDensity', value)}
-          onApply={() => handleRangeMouseUp('characterDensity')}
+          onApply={() => handleRangeMouseUp()}
         />
 
         <ImageRangeSlider
@@ -524,7 +522,7 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
           min={0}
           max={100}
           onChange={(value) => handleRangeChange('edgeDetection', value)}
-          onApply={() => handleRangeMouseUp('edgeDetection')}
+          onApply={() => handleRangeMouseUp()}
         />
 
         <ImageRangeSlider
@@ -533,7 +531,7 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
           min={-100}
           max={100}
           onChange={(value) => handleRangeChange('threshold', value)}
-          onApply={() => handleRangeMouseUp('threshold')}
+          onApply={() => handleRangeMouseUp()}
         />
 
         <ImageRangeSlider
@@ -542,7 +540,7 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
           min={0}
           max={100}
           onChange={(value) => handleRangeChange('dithering', value)}
-          onApply={() => handleRangeMouseUp('dithering')}
+          onApply={() => handleRangeMouseUp()}
         />
       </div>
 

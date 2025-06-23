@@ -11,7 +11,7 @@ import { imageToAscii } from '../../utils/imageToAscii';
 import type { Cell } from '../../types/cell';
 
 interface HeaderProps {
-  onSaveMap: (format: 'txt' | 'json' | 'ansi' | 'rot') => void;
+  onSaveMap: (format: 'txt' | 'json' | 'ansi' | 'rot' | 'png') => void;
   onClearMap: () => void;
   onUndo: () => void;
   onRedo: () => void;
@@ -99,14 +99,35 @@ const Header: React.FC<HeaderProps> = ({
     }
 
     if (format === 'image') {
-      // For image files, show the import dialog
       try {
         const dimensions = await getImageDimensions(file);
+        const imageAspectRatio = dimensions.width / dimensions.height;
+        const newWidth = 100;
+        const newHeight = Math.round(newWidth / imageAspectRatio);
+
+        const result = await imageToAscii(file, {
+          targetCols: newWidth,
+          targetRows: newHeight,
+          colorMode: 'smart',
+          invert: true,
+        });
+
+        const updatedDimensions = {
+          width: dimensions.width,
+          height: dimensions.height,
+          gridRows: result.dimensions.rows,
+          gridCols: result.dimensions.cols,
+        };
+
+        onImageImport(result.grid, updatedDimensions);
+
+        // Now show the dialog for adjustments
         setSelectedImageFile(file);
-        setImageDimensions(dimensions);
+        setImageDimensions(updatedDimensions);
         setShowImageDialog(true);
       } catch (error) {
-        alert('Failed to load image');
+        alert('Failed to load or process image');
+        console.error(error);
       }
     } else {
       // For text-based formats, process immediately
@@ -344,11 +365,7 @@ const Header: React.FC<HeaderProps> = ({
       
       <ImageImportDialog
         isOpen={showImageDialog}
-        onClose={() => {
-          setShowImageDialog(false);
-          setSelectedImageFile(null);
-          setImageDimensions(null);
-        }}
+        onClose={() => setShowImageDialog(false)}
         onImport={handleImageImport}
         fileName={selectedImageFile?.name || ''}
         imageDimensions={imageDimensions || undefined}
