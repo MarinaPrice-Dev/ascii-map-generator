@@ -328,6 +328,12 @@ const Header: React.FC<HeaderProps> = ({
         <button className="icon-button clear-button" onClick={onClearMap} disabled={isGridEmpty} title="Clear Map">
           <ClearIcon />
         </button>
+        <ExportDropdown
+              onExport={onSaveMap}
+              disabled={isGridEmpty}
+              isOpen={isExportPanelOpen}
+              onToggle={onExportPanelToggle}
+            />
         <button className={`icon-button import-button ${isImageDialogOpen ? 'open' : ''}`} onClick={handleImportClick} title="Import Map">
           <ImportIcon />
         </button>
