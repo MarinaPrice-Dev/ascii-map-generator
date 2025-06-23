@@ -97,17 +97,19 @@
 }
 
 .border-button {
-  color: var(--cells);
+  color: var(--border);
   border: 1px solid var(--cells);
-  transition: all 0.2s ease;
+  opacity: 0.5;
 }
 
 .border-button:hover {
   background: var(--cells);
   color: var(--fg);
+  opacity: 0.75;
 }
 
 .border-button.active {
   background: var(--cells);
   color: var(--fg);
+  opacity: 1;
 }
