@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { UndoIcon, RedoIcon, ClearIcon, InfoIcon, ZoomInIcon, ZoomOutIcon, ImportIcon, MenuIcon } from '../icons/Icons';
+import { UndoIcon, RedoIcon, ClearIcon, InfoIcon, ZoomInIcon, ZoomOutIcon, ImportIcon, MenuIcon, BorderIcon } from '../icons/Icons';
 import '../icons/Icons.css';
 import './Header.css';
 import InfoDialog from './InfoDialog';
@@ -30,6 +30,8 @@ interface HeaderProps {
   isImageDialogOpen: boolean;
   onOpenImageDialog: () => void;
   onCloseImageDialog: () => void;
+  showBorders: boolean;
+  onBorderToggle: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -52,6 +54,8 @@ const Header: React.FC<HeaderProps> = ({
   isImageDialogOpen,
   onOpenImageDialog,
   onCloseImageDialog,
+  showBorders,
+  onBorderToggle,
 }) => {
   const isGridEmpty = grid.every(row => row.every(cell => cell.char === ' '));
   const [showInfoDialog, setShowInfoDialog] = useState(false);
@@ -233,6 +237,13 @@ const Header: React.FC<HeaderProps> = ({
       <header className="app-header">
         <h1>ASCII Studio</h1>
         <div className="header-actions">
+          <button 
+            className={`icon-button border-button ${showBorders ? 'active' : ''}`}
+            onClick={onBorderToggle}
+            title={showBorders ? "Hide Grid Borders" : "Show Grid Borders"}
+          >
+            <BorderIcon />
+          </button>
           <div className="zoom-controls">
             <button 
               className="icon-button zoom-button" 
@@ -300,6 +311,13 @@ const Header: React.FC<HeaderProps> = ({
       </header>
       {/* Toolbar for mobile/tablet */}
       <div className="toolbar-actions">
+        <button 
+          className={`icon-button border-button ${showBorders ? 'active' : ''}`}
+          onClick={onBorderToggle}
+          title={showBorders ? "Hide Grid Borders" : "Show Grid Borders"}
+        >
+          <BorderIcon />
+        </button>
         <div className="zoom-controls">
             <button 
               className="icon-button zoom-button" 

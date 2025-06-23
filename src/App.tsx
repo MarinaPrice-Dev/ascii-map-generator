@@ -31,6 +31,7 @@ const App: React.FC = () => {
   const [isExportPanelOpen, setIsExportPanelOpen] = useState(false);
   const [isImageDialogOpen, setIsImageDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showBorders, setShowBorders] = useState(true);
   const mainRef = useRef<HTMLDivElement>(null);
 
   // Calculate initial grid dimensions once
@@ -244,6 +245,10 @@ const App: React.FC = () => {
 
   const closeImageDialog = () => {
     setIsImageDialogOpen(false);
+  };
+
+  const handleBorderToggle = () => {
+    setShowBorders(prev => !prev);
   };
 
   // Handle map export
@@ -524,6 +529,8 @@ const App: React.FC = () => {
         isImageDialogOpen={isImageDialogOpen}
         onOpenImageDialog={openImageDialog}
         onCloseImageDialog={closeImageDialog}
+        showBorders={showBorders}
+        onBorderToggle={handleBorderToggle}
       />
       
       <div className="main-content">
@@ -540,6 +547,7 @@ const App: React.FC = () => {
               cellSize={cellSize}
               defaultFg={DEFAULT_FG}
               defaultBg={DEFAULT_BG}
+              showBorders={showBorders}
             />
           )}
         </main>

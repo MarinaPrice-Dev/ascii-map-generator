@@ -12,7 +12,7 @@
 }
 
 .ascii-map-grid-cell {
-  border: 1px solid #333;
+  border: 1px solid #373737;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -40,4 +40,12 @@
 
 .ascii-map-grid.selection-mode .ascii-map-grid-cell {
   cursor: crosshair;
+}
+
+.ascii-map-grid.no-borders {
+  border: none;
+}
+
+.ascii-map-grid.no-borders .ascii-map-grid-cell {
+  border: none !important;
 } 

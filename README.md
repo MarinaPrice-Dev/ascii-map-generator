@@ -49,6 +49,8 @@ A powerful ASCII art editor with support for creating, editing, and converting i
 - **ROT.js**: ROT.js library compatible format
 
 ## TO DO
+- grid border on/off
+- preview on mouse hover
 - Select and multiselect unclear, remove the first one
 - shortcuts for tool selections (Ctrl 1-0)
 - menu: documentation, example maps, blog

@@ -95,3 +95,19 @@
   background: var(--menu);
   color: var(--bg);
 }
+
+.border-button {
+  color: var(--cells);
+  border: 1px solid var(--cells);
+  transition: all 0.2s ease;
+}
+
+.border-button:hover {
+  background: var(--cells);
+  color: var(--fg);
+}
+
+.border-button.active {
+  background: var(--cells);
+  color: var(--fg);
+}

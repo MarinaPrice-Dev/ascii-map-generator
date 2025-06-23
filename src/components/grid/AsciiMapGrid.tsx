@@ -13,9 +13,10 @@ type AsciiMapGridProps = {
   cellSize: number;
   defaultFg: string;
   defaultBg: string;
+  showBorders: boolean;
 };
 
-const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, beginAction, selectedChar, selectedFg, selectedBg, cellSize, defaultFg, defaultBg }) => {
+const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, beginAction, selectedChar, selectedFg, selectedBg, cellSize, defaultFg, defaultBg, showBorders }) => {
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [startCell, setStartCell] = useState<{ row: number; col: number } | null>(null);
   const [hoverCell, setHoverCell] = useState<{ row: number; col: number } | null>(null);
@@ -276,7 +277,7 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, beginActi
 
   return (
     <div 
-      className={`ascii-map-grid ${selectionMode !== 'draw' ? 'selection-mode' : ''}`}
+      className={`ascii-map-grid ${selectionMode !== 'draw' ? 'selection-mode' : ''} ${!showBorders ? 'no-borders' : ''}`}
       style={{
         gridTemplateColumns: `repeat(${grid[0]?.length || 0}, ${cellSize}px)`,
         gridTemplateRows: `repeat(${grid.length}, ${cellSize}px)`,
@@ -303,8 +304,7 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, beginActi
                   height: cellSize,
                   color: cell.fg,
                   background: cell.bg,
-                  fontSize: Math.floor(cellSize * 0.8),
-                  borderColor: selected ? '#ddd' : '#2e2e2e',
+                  fontSize: Math.floor(cellSize * 0.8)
                 }}
               >
                 {cell.char}
