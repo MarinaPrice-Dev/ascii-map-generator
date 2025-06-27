@@ -1,8 +1,35 @@
 {
   "name": "ascii-map-generator",
-  "private": true,
-  "version": "0.0.0",
+  "private": false,
+  "version": "1.0.0",
   "type": "module",
+  "description": "A powerful ASCII art editor with support for creating, editing, and converting images to ASCII art with color support",
+  "keywords": [
+    "ascii",
+    "art",
+    "editor",
+    "map",
+    "generator",
+    "text-art",
+    "image-converter",
+    "dungeon-maps",
+    "roguelike",
+    "react",
+    "typescript"
+  ],
+  "author": {
+    "name": "ASCII Studio",
+    "email": "contact@asciistudio.app"
+  },
+  "license": "MIT",
+  "homepage": "https://asciistudio.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MarinaPrice-Dev/ascii-map-generator"
+  },
+  "bugs": {
+    "url": "https://github.com/MarinaPrice-Dev/ascii-map-generator/issues"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

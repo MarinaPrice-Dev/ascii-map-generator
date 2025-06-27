@@ -27,6 +27,13 @@ A powerful ASCII art editor with support for creating, editing, and converting i
 - **ROT.js Format**: Import/export ROT.js compatible maps
 - **Image Files**: Import images and convert to ASCII art
 
+### SEO & Performance
+- **SEO Optimized**: Comprehensive meta tags, structured data, and sitemap
+- **Progressive Web App**: Installable as a desktop/mobile app
+- **Service Worker**: Offline functionality and performance caching
+- **Social Media Ready**: Open Graph and Twitter Card support
+- **Fast Loading**: Optimized for Core Web Vitals
+
 ## Usage
 
 ### Basic Editing
@@ -47,6 +54,19 @@ A powerful ASCII art editor with support for creating, editing, and converting i
 - **JSON**: Structured format with colors and metadata
 - **ANSI**: Terminal-compatible with color codes
 - **ROT.js**: ROT.js library compatible format
+
+## SEO Features
+
+This application is fully optimized for search engines with:
+
+- **Meta Tags**: Comprehensive title, description, and keyword optimization
+- **Structured Data**: JSON-LD schema markup for rich snippets
+- **Social Media**: Open Graph and Twitter Card tags for better sharing
+- **Technical SEO**: Sitemap, robots.txt, and canonical URLs
+- **PWA Support**: Manifest and service worker for app-like experience
+- **Performance**: Optimized loading and caching strategies
+
+For detailed SEO information, see [SEO.md](./SEO.md).
 
 ## TO DO
 - grid border on/off

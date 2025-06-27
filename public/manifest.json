@@ -1,0 +1,27 @@
+{
+  "name": "ASCII Studio - ASCII Art Editor & Map Generator",
+  "short_name": "ASCII Studio",
+  "description": "Create beautiful ASCII art, convert images to ASCII, and generate maps with our free online editor",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "orientation": "landscape-primary",
+  "icons": [
+    {
+      "src": "/src/assets/AS.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/src/assets/AS.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["productivity", "utilities", "design"],
+  "lang": "en",
+  "dir": "ltr"
+} 
