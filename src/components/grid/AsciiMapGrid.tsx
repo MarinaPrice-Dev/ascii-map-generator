@@ -282,7 +282,7 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, updateGri
     const maxRow = Math.max(startCell.row, hoverCell.row);
     const minCol = Math.min(startCell.col, hoverCell.col);
     const maxCol = Math.max(startCell.col, hoverCell.col);
-    const cellWidth = Math.floor(cellSize * 0.6);
+    const cellWidth = Math.floor(cellSize * 0.5);
     return {
       top: minRow * cellSize,
       left: minCol * cellWidth,
@@ -297,7 +297,7 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, updateGri
     <div 
       className={`ascii-map-grid ${selectionMode !== 'draw' ? 'selection-mode' : ''} ${!showBorders ? 'no-borders' : ''}`}
       style={{
-        gridTemplateColumns: `repeat(${grid[0]?.length || 0}, ${Math.floor(cellSize * 0.6)}px)`,
+        gridTemplateColumns: `repeat(${grid[0]?.length || 0}, ${Math.floor(cellSize * 0.5)}px)`,
         gridTemplateRows: `repeat(${grid.length}, ${cellSize}px)`,
       }}
     >
@@ -320,7 +320,7 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, updateGri
                 onTouchMove={handleTouchMove}
                 className={`ascii-map-grid-cell ${selected ? 'selected' : ''} ${inSelection ? 'in-selection' : ''}`}
                 style={{
-                  width: Math.floor(cellSize * 0.6),
+                  width: Math.floor(cellSize * 0.5),
                   height: cellSize,
                   color: cell.fg,
                   background: cell.bg,
@@ -355,8 +355,8 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, updateGri
           style={{
             position: 'absolute',
             top: previewCell.row * cellSize,
-            left: previewCell.col * Math.floor(cellSize * 0.6),
-            width: Math.floor(cellSize * 0.6),
+            left: previewCell.col * Math.floor(cellSize * 0.5),
+            width: Math.floor(cellSize * 0.5),
             height: cellSize,
             backgroundColor: selectedBg,
             color: selectedFg,
