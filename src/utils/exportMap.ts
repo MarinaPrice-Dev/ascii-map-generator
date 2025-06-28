@@ -3,7 +3,7 @@ import domtoimage from 'dom-to-image-more';
 import type { Cell } from '../types/cell'
 
 interface ExportOptions {
-  format: 'txt' | 'json' | 'ansi' | 'rot' | 'png';
+  format: 'txt' | 'json' | 'ansi' | 'rot' | 'png' | 'html';
 }
 
 interface BoundingBox {
@@ -169,6 +169,41 @@ const exportAsRot = (grid: Cell[][]) => {
   downloadFile(content, generateFileName('map', 'rot.txt'));
 };
 
+const exportAsHtml = (grid: Cell[][], fontSize: number = 14) => {
+  const { top, left, bottom, right } = findBoundingBox(grid);
+  let asciiContent = '';
+  
+  for (let row = top; row <= bottom; row++) {
+    let line = '';
+    for (let col = left; col <= right; col++) {
+      line += grid[row][col].char;
+    }
+    asciiContent += `<div>${line}</div>`;
+  }
+  
+  const htmlContent = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASCII Map Export</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #ffffff;
+            font-family: 'Fira Mono', 'Consolas', 'Menlo', 'Monaco', 'Liberation Mono', monospace;
+            font-size: ${fontSize}px;
+            white-space: pre;
+            color: #000000;
+        }
+    </style>
+</head>
+<body>${asciiContent}</body>
+</html>`;
+  
+  downloadFile(htmlContent, generateFileName('map', 'html'));
+};
+
 const exportAsPng = async (grid: Cell[][]) => {
   try {
     const gridElement = document.querySelector('.ascii-map-grid') as HTMLElement;
@@ -244,7 +279,7 @@ const exportAsPng = async (grid: Cell[][]) => {
 };
 
 // Main export function
-export const exportMap = async (grid: Cell[][], options: ExportOptions) => {
+export const exportMap = async (grid: Cell[][], options: ExportOptions, fontSize: number = 14) => {
   if (!grid || !Array.isArray(grid) || grid.length === 0) {
     throw new Error('Invalid grid data');
   }
@@ -261,6 +296,9 @@ export const exportMap = async (grid: Cell[][], options: ExportOptions) => {
       break;
     case 'rot':
       exportAsRot(grid);
+      break;
+    case 'html':
+      exportAsHtml(grid, fontSize);
       break;
     case 'png':
       await exportAsPng(grid);

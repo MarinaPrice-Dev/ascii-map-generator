@@ -257,10 +257,12 @@ const App: React.FC = () => {
   };
 
   // Handle map export
-  const handleExport = async (format: 'txt' | 'json' | 'ansi' | 'rot' | 'png') => {
+  const handleExport = async (format: 'txt' | 'json' | 'ansi' | 'rot' | 'png' | 'html') => {
     setIsLoading(true);
     try {
-      await exportMap(grid, { format });
+      // Calculate font size based on cell size for HTML export
+      const fontSize = Math.floor(cellSize * 0.8);
+      await exportMap(grid, { format }, fontSize);
     setIsExportPanelOpen(false); // Close panel after exporting
     } catch (error) {
       console.error('Export failed:', error);
