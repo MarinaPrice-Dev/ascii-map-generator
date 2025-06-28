@@ -257,7 +257,7 @@ const App: React.FC = () => {
   };
 
   // Handle map export
-  const handleExport = async (format: 'txt' | 'json' | 'ansi' | 'rot' | 'png' | 'html') => {
+  const handleExport = async (format: 'txt' | 'json' | 'ansi' | 'rot' | 'png' | 'html' | 'html-color') => {
     setIsLoading(true);
     try {
       // Calculate font size based on cell size for HTML export

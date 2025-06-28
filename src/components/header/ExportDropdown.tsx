@@ -3,7 +3,7 @@ import { SaveIcon } from '../icons/Icons';
 import './ExportDropdown.css';
 
 interface ExportDropdownProps {
-  onExport: (format: 'txt' | 'json' | 'ansi' | 'rot' | 'png' | 'html') => void;
+  onExport: (format: 'txt' | 'json' | 'ansi' | 'rot' | 'png' | 'html' | 'html-color') => void;
   disabled?: boolean;
   isOpen: boolean;
   onToggle: () => void;
@@ -15,7 +15,7 @@ const ExportDropdown: React.FC<ExportDropdownProps> = ({
   isOpen,
   onToggle,
 }) => {
-  const handleExport = (format: 'txt' | 'json' | 'ansi' | 'rot' | 'png' | 'html') => {
+  const handleExport = (format: 'txt' | 'json' | 'ansi' | 'rot' | 'png' | 'html' | 'html-color') => {
     onExport(format);
     // The panel is now closed by the App component
   };
@@ -66,6 +66,12 @@ const ExportDropdown: React.FC<ExportDropdownProps> = ({
             <div className="export-item-content">
               <span className="export-label">HTML File (.html)</span>
               <span className="export-description">Web-ready HTML with monospaced font styling.</span>
+            </div>
+          </div>
+          <div className="export-item" onClick={() => handleExport('html-color')}>
+            <div className="export-item-content">
+              <span className="export-label">Colored HTML File (.html)</span>
+              <span className="export-description">HTML with individual character colors preserved.</span>
             </div>
           </div>
           <div className="export-item" onClick={() => handleExport('png')}>
