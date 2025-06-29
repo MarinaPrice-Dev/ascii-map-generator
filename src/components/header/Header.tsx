@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { UndoIcon, RedoIcon, ClearIcon, InfoIcon, ZoomInIcon, ZoomOutIcon, ImportIcon, MenuIcon, BorderIcon } from '../icons/Icons';
+import { UndoIcon, RedoIcon, ClearIcon, InfoIcon, ZoomInIcon, ZoomOutIcon, ImportIcon, MenuIcon, BorderIcon, ResizeIcon } from '../icons/Icons';
 import '../icons/Icons.css';
 import './Header.css';
 import InfoDialog from './InfoDialog';
@@ -11,7 +11,7 @@ import { imageToAscii } from '../../utils/imageToAscii';
 import type { Cell } from '../../types/cell';
 
 interface HeaderProps {
-  onSaveMap: (format: 'txt' | 'json' | 'ansi' | 'rot' | 'png') => void;
+  onSaveMap: (format: 'txt' | 'json' | 'ansi' | 'rot' | 'png' | 'html' | 'html-color') => void;
   onClearMap: () => void;
   onUndo: () => void;
   onRedo: () => void;
@@ -19,10 +19,13 @@ interface HeaderProps {
   canRedo: boolean;
   grid: Array<Array<{ char: string }>>;
   cellSize: number;
+  gridRows: number;
+  gridCols: number;
   onZoomIn: () => void;
   onZoomOut: () => void;
   onImportMap: (grid: Cell[][]) => void;
   onImageImport: (grid: Cell[][], imageDimensions?: { width: number; height: number; gridRows: number; gridCols: number }) => void;
+  onResizeGrid: (newRows: number, newCols: number) => void;
   isMenuOpen: boolean;
   onMenuToggle: () => void;
   isExportPanelOpen: boolean;
@@ -43,10 +46,13 @@ const Header: React.FC<HeaderProps> = ({
   canRedo,
   grid = [],
   cellSize,
+  gridRows,
+  gridCols,
   onZoomIn,
   onZoomOut,
   onImportMap,
   onImageImport,
+  onResizeGrid,
   isMenuOpen,
   onMenuToggle,
   isExportPanelOpen,
@@ -62,6 +68,28 @@ const Header: React.FC<HeaderProps> = ({
   const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
   const [imageDimensions, setImageDimensions] = useState<{ width: number; height: number; gridRows: number; gridCols: number } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  // Grid dimension input state
+  const [rowsInput, setRowsInput] = useState(gridRows.toString());
+  const [colsInput, setColsInput] = useState(gridCols.toString());
+
+  // Update input values when grid dimensions change
+  React.useEffect(() => {
+    setRowsInput(gridRows.toString());
+    setColsInput(gridCols.toString());
+  }, [gridRows, gridCols]);
+
+  const handleResizeGrid = () => {
+    const newRows = parseInt(rowsInput, 10);
+    const newCols = parseInt(colsInput, 10);
+    
+    if (isNaN(newRows) || isNaN(newCols) || newRows < 1 || newCols < 1) {
+      alert('Please enter valid positive numbers for rows and columns');
+      return;
+    }
+    
+    onResizeGrid(newRows, newCols);
+  };
 
   const handleImportClick = () => {
     fileInputRef.current?.click();
@@ -237,6 +265,36 @@ const Header: React.FC<HeaderProps> = ({
       <header className="app-header">
         <h1>ASCII Studio</h1>
         <div className="header-actions">
+          <div className="desktop-only grid-dimensions">
+            <div className="dimension-inputs">
+              <input
+                type="number"
+                min="1"
+                value={colsInput}
+                onChange={(e) => setColsInput(e.target.value)}
+                className="dimension-input"
+                placeholder="Cols"
+                title="Number of columns"
+              />
+              <span className="dimension-separator">×</span>
+              <input
+                type="number"
+                min="1"
+                value={rowsInput}
+                onChange={(e) => setRowsInput(e.target.value)}
+                className="dimension-input"
+                placeholder="Rows"
+                title="Number of rows"
+              />
+            </div>
+            <button
+              className="icon-button resize-button"
+              onClick={handleResizeGrid}
+              title="Resize Grid"
+            >
+              <ResizeIcon />
+            </button>
+          </div>
           <button 
             className={`icon-button border-button ${showBorders ? 'active' : ''}`}
             onClick={onBorderToggle}

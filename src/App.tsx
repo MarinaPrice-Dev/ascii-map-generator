@@ -481,6 +481,30 @@ const App: React.FC = () => {
     setSelectedBg(newBg);
   };
 
+  // Handle grid resizing
+  const handleResizeGrid = (newRows: number, newCols: number) => {
+    beginAction();
+    
+    // Create new grid with the new dimensions
+    const newGrid = getInitialGrid(newRows, newCols, DEFAULT_FG, DEFAULT_BG);
+    
+    // Copy existing content, expanding or shrinking as needed
+    const minRows = Math.min(grid.length, newRows);
+    const minCols = Math.min(grid[0]?.length || 0, newCols);
+    
+    for (let row = 0; row < minRows; row++) {
+      for (let col = 0; col < minCols; col++) {
+        if (grid[row] && grid[row][col]) {
+          newGrid[row][col] = { ...grid[row][col] };
+        }
+      }
+    }
+    
+    setGridRows(newRows);
+    setGridCols(newCols);
+    setGrid(newGrid);
+  };
+
   // Setup keyboard shortcuts
   useEffect(() => {
     const cleanup = setupKeyboardShortcuts({
@@ -524,10 +548,13 @@ const App: React.FC = () => {
         canRedo={canRedo}
         grid={grid}
         cellSize={cellSize}
+        gridRows={gridRows}
+        gridCols={gridCols}
         onZoomIn={handleZoomIn}
         onZoomOut={handleZoomOut}
         onImportMap={handleImportMap}
         onImageImport={handleImageImport}
+        onResizeGrid={handleResizeGrid}
         isMenuOpen={isMenuOpen}
         onMenuToggle={handleMenuToggle}
         isExportPanelOpen={isExportPanelOpen}
