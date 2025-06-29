@@ -886,10 +886,11 @@ export const calculateOptimalZoom = (
 ): { newCellSize: number; newRows: number; newCols: number } => {
   // Ensure we have valid dimensions
   if (imageWidth <= 0 || imageHeight <= 0 || availableWidth <= 0 || availableHeight <= 0) {
+    const cellWidth = Math.floor(Math.max(10, currentCellSize) * 0.5);
     return {
       newCellSize: Math.max(10, currentCellSize),
       newRows: Math.floor(availableHeight / Math.max(10, currentCellSize)),
-      newCols: Math.floor(availableWidth / Math.max(10, currentCellSize))
+      newCols: Math.floor(availableWidth / cellWidth)
     };
   }
   
@@ -918,7 +919,7 @@ export const calculateOptimalZoom = (
   targetRows = Math.max(targetRows, 20);
   
   // Calculate the cell size needed to fit the image
-  const cellSizeForCols = availableWidth / targetCols;
+  const cellSizeForCols = (availableWidth / targetCols) * 2; // Multiply by 2 because cell width is 0.5 * cellSize
   const cellSizeForRows = availableHeight / targetRows;
   
   // Use the smaller cell size to ensure the image fits in the viewport

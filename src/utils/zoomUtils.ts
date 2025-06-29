@@ -15,11 +15,10 @@ export const calculateGridDimensions = (
   availableWidth: number,
   availableHeight: number
 ): { rows: number; cols: number } => {
-  const cols = Math.floor(availableWidth / cellSize);
+  const cellWidth = Math.floor(cellSize * 0.5);
+  const cols = Math.floor(availableWidth / cellWidth);
   const rows = Math.floor(availableHeight / cellSize);
-  // Make it square by using the smaller dimension for both rows and columns
-  const squareSize = Math.max(rows, cols);
-  return { rows: squareSize, cols: squareSize };
+  return { rows: rows, cols: cols };
 };
 
 export const expandGrid = (

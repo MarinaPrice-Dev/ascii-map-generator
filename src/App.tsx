@@ -37,12 +37,11 @@ const App: React.FC = () => {
   // Calculate initial grid dimensions once
   const getInitialGridDims = (currentCellSize: number) => {
     const availableWidth = window.innerWidth - 2;
-    const availableHeight = window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT - 2;
-    const cols = Math.floor(availableWidth / currentCellSize);
+    const availableHeight = window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT;
+    const cellWidth = Math.floor(currentCellSize * 0.5);
+    const cols = Math.floor(availableWidth / cellWidth);
     const rows = Math.floor(availableHeight / currentCellSize);
-    // Make it square by using the smaller dimension for both rows and columns
-    const squareSize = Math.max(rows, cols);
-    return { rows: squareSize, cols: squareSize };
+    return { rows: rows, cols: cols };
   };
 
   // First, try to load saved zoom level and dimensions
@@ -130,7 +129,7 @@ const App: React.FC = () => {
   const handleZoomIn = () => {
     beginAction();
     const availableWidth = window.innerWidth - 2;
-    const availableHeight = window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT - 2;
+    const availableHeight = window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT;
     
     const { newCellSize, newRows, newCols } = handleZoom(
       cellSize,
@@ -154,7 +153,7 @@ const App: React.FC = () => {
   const handleZoomOut = () => {
     beginAction();
     const availableWidth = window.innerWidth - 2;
-    const availableHeight = window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT - 2;
+    const availableHeight = window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT;
     
     const { newCellSize, newRows, newCols } = handleZoom(
       cellSize,
@@ -206,16 +205,16 @@ const App: React.FC = () => {
     // Calculate initial grid dimensions based on default cell size
     const defaultCellSize = 20;
     const availableWidth = window.innerWidth - 2;
-    const availableHeight = window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT - 2;
-    const cols = Math.floor(availableWidth / defaultCellSize);
+    const availableHeight = window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT;
+    const cellWidth = Math.floor(defaultCellSize * 0.5);
+    const cols = Math.floor(availableWidth / cellWidth);
     const rows = Math.floor(availableHeight / defaultCellSize);
-    const squareSize = Math.max(rows, cols);
     
     // Reset all state to defaults
     setCellSize(defaultCellSize);
-    setGridRows(squareSize);
-    setGridCols(squareSize);
-    safeSetGrid(getInitialGrid(squareSize, squareSize, DEFAULT_FG, DEFAULT_BG));
+    setGridRows(rows);
+    setGridCols(cols);
+    safeSetGrid(getInitialGrid(rows, cols, DEFAULT_FG, DEFAULT_BG));
     
     // Clear saved state and history
     clearSavedState();
