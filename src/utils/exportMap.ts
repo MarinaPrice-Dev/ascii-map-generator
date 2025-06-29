@@ -176,7 +176,9 @@ const exportAsHtml = (grid: Cell[][], fontSize: number = 14) => {
   for (let row = top; row <= bottom; row++) {
     let line = '';
     for (let col = left; col <= right; col++) {
-      line += grid[row][col].char;
+      const cell = grid[row][col];
+      const char = cell.char === ' ' ? '&nbsp;' : cell.char;
+      line += `<span>${char}</span>`;
     }
     asciiContent += `<div>${line}</div>`;
   }
@@ -195,6 +197,13 @@ const exportAsHtml = (grid: Cell[][], fontSize: number = 14) => {
             font-size: ${fontSize}px;
             white-space: pre;
             color: #000000;
+        }
+        div {
+            height: 20px;
+        }
+        div span {
+            width: 10px;
+            display: inline-block;
         }
     </style>
 </head>
@@ -227,11 +236,17 @@ const exportAsHtmlColor = (grid: Cell[][], fontSize: number = 14) => {
     <style>
         body {
             margin: 0;
-            background-color: #ffffff;
+            background-color: #222222;
             font-family: 'Fira Mono', 'Consolas', 'Menlo', 'Monaco', 'Liberation Mono', monospace;
             font-size: ${fontSize}px;
             white-space: pre;
-            color: #000000;
+        }
+        div {
+            height: 20px;
+        }
+        div span {
+            width: 10px;
+            display: inline-block;
         }
     </style>
 </head>
