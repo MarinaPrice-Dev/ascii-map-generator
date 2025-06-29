@@ -1,0 +1,182 @@
+/* Responsive CSS - All media queries from the codebase */
+
+/* Header responsive styles */
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none;
+  }
+}
+
+/* App responsive styles */
+@media (max-width: 600px) {
+  header h1 {
+    font-size: 18px;
+  }
+  .App {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 900px) {
+  .header-actions {
+    display: none !important;
+  }
+  .toolbar-actions {
+    display: flex;
+    width: 100vw;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    background: var(--footer-bg);
+    border-bottom: 1px solid var(--border);
+    z-index: 20;
+  }
+  .app-header {
+    padding-bottom: 0 !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+  .toolbar-actions button, .toolbar-actions label {
+    font-size: 18px;
+    height: 40px;
+    min-width: 48px;
+    padding: 0 10px;
+  }
+}
+
+@media (max-width: 1150px) {
+  .app-header h1 {
+    font-size: 1.2rem!important;
+  }
+  .app-header {
+    padding: 0 10px!important;
+  }
+}
+
+@media (max-width: 560px) {
+  .zoom-controls, .border-button {
+    display: none!important;
+  }
+}
+
+/* Footer responsive styles */
+@media (max-width: 1024px) {
+  .footer {
+    height: 460px !important;
+  }
+  
+  .footer:hover {
+    height: 460px !important;
+  }
+
+  .footer-sections {
+    flex-direction: column;
+    gap: 8px;
+    opacity: 1;
+  }
+
+  .color-section {
+    gap: 4px;
+  }
+
+  .color-mode-buttons {
+    flex-direction: row;
+    justify-content: center;
+  }
+}
+
+/* Force Portrait Mode */
+@media screen and (max-height: 350px) and (orientation: landscape) {
+  .App {
+    display: none;
+  }
+
+  .App::after {
+    content: "Unsupported screen size";
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--bg);
+    padding: 2rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    z-index: 1000;
+  }
+}
+
+/* Color Palette responsive styles */
+@media (max-width: 768px) {
+  .color-grid {
+    grid-template-columns: repeat(auto-fill, minmax(20px, 1fr));
+    gap: 3px;
+  }
+
+  .color-swatch {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Info Dialog responsive styles */
+@media (max-width: 768px) {
+  .info-dialog {
+    max-width: 96%;
+    max-height: calc(100% - 4%);
+    top: 2%;
+    left: 2%;
+  }
+}
+
+/* Image Import Dialog responsive styles */
+@media (max-width: 900px) {
+  .image-import-panel {
+    width: 100vw;
+    right: -100vw;
+  }
+  
+  .image-import-panel.open {
+    right: 0;
+  }
+}
+
+/* Export Dropdown responsive styles */
+@media (max-width: 900px) {
+  .export-panel {
+    width: 100%;
+    right: -100%;
+  }
+  
+  .export-panel.open {
+    right: 0;
+  }
+}
+
+/* Menu responsive styles */
+@media (max-width: 900px) {
+  .menu-panel {
+    width: 100vw;
+    right: -100vw;
+  }
+  
+  .menu-panel.open {
+    right: 0;
+  }
+}
+
+/* Reset Dialog responsive styles */
+@media (max-width: 480px) {
+  .reset-dialog {
+    width: 95%;
+    margin: 1rem;
+  }
+  
+  .reset-dialog-actions {
+    flex-direction: column;
+  }
+  
+  .reset-dialog-button {
+    width: 100%;
+  }
+} 

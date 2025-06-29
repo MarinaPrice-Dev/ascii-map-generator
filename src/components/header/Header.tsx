@@ -8,6 +8,7 @@ import ImageImportDialog from './ImageImportDialog';
 import { MIN_ZOOM, MAX_ZOOM } from '../../utils/zoomUtils';
 import { importMap } from '../../utils/importMap';
 import { imageToAscii } from '../../utils/imageToAscii';
+import { getActualGridDimensions } from '../../utils/mapUtils';
 import type { Cell } from '../../types/cell';
 
 interface HeaderProps {
@@ -17,7 +18,7 @@ interface HeaderProps {
   onRedo: () => void;
   canUndo: boolean;
   canRedo: boolean;
-  grid: Array<Array<{ char: string }>>;
+  grid: Cell[][];
   cellSize: number;
   gridRows: number;
   gridCols: number;
@@ -69,23 +70,24 @@ const Header: React.FC<HeaderProps> = ({
   const [imageDimensions, setImageDimensions] = useState<{ width: number; height: number; gridRows: number; gridCols: number } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   
-  // Grid dimension input state
-  const [rowsInput, setRowsInput] = useState(gridRows.toString());
-  const [colsInput, setColsInput] = useState(gridCols.toString());
-
+  // Calculate actual grid dimensions from the grid data
+  const actualDimensions = getActualGridDimensions(grid);
+  const actualRows = actualDimensions.rows;
+  const actualCols = actualDimensions.cols;
+  
   // Update input values when grid dimensions change
   React.useEffect(() => {
-    setRowsInput(gridRows.toString());
-    setColsInput(gridCols.toString());
+    // No longer needed since we're not using input fields
   }, [gridRows, gridCols]);
 
-  const handleResizeGrid = () => {
-    const newRows = parseInt(rowsInput, 10);
-    const newCols = parseInt(colsInput, 10);
+  const handleResizeGrid = (type: 'cols' | 'rows', action: 'increase' | 'decrease') => {
+    let newRows = actualRows;
+    let newCols = actualCols;
     
-    if (isNaN(newRows) || isNaN(newCols) || newRows < 1 || newCols < 1) {
-      alert('Please enter valid positive numbers for rows and columns');
-      return;
+    if (type === 'cols') {
+      newCols = action === 'increase' ? actualCols + 1 : Math.max(1, actualCols - 1);
+    } else {
+      newRows = action === 'increase' ? actualRows + 1 : Math.max(1, actualRows - 1);
     }
     
     onResizeGrid(newRows, newCols);
@@ -267,33 +269,44 @@ const Header: React.FC<HeaderProps> = ({
         <div className="header-actions">
           <div className="desktop-only grid-dimensions">
             <div className="dimension-inputs">
-              <input
-                type="number"
-                min="1"
-                value={colsInput}
-                onChange={(e) => setColsInput(e.target.value)}
-                className="dimension-input"
-                placeholder="Cols"
-                title="Number of columns"
-              />
-              <span className="dimension-separator">×</span>
-              <input
-                type="number"
-                min="1"
-                value={rowsInput}
-                onChange={(e) => setRowsInput(e.target.value)}
-                className="dimension-input"
-                placeholder="Rows"
-                title="Number of rows"
-              />
+              <button
+                className="icon-button"
+                onClick={() => handleResizeGrid('cols', 'decrease')}
+                disabled={actualCols <= 1}
+                title="Decrease Columns"
+              >
+                -
+              </button>
+              <span className="dimension-separator">{actualCols}</span>
+              <button
+                className="icon-button"
+                onClick={() => handleResizeGrid('cols', 'increase')}
+                disabled={actualCols >= 350}
+                title="Increase Columns"
+              >
+                +
+              </button>
             </div>
-            <button
-              className="icon-button resize-button"
-              onClick={handleResizeGrid}
-              title="Resize Grid"
-            >
-              <ResizeIcon />
-            </button>
+            <span className="dimension-separator dimension-multiply">×</span>
+            <div className="dimension-inputs">
+              <button
+                className="icon-button"
+                onClick={() => handleResizeGrid('rows', 'decrease')}
+                disabled={actualRows <= 1}
+                title="Decrease Rows"
+              >
+                -
+              </button>
+              <span className="dimension-separator">{actualRows}</span>
+              <button
+                className="icon-button"
+                onClick={() => handleResizeGrid('rows', 'increase')}
+                disabled={actualRows >= 150}
+                title="Increase Rows"
+              >
+                +
+              </button>
+            </div>
           </div>
           <button 
             className={`icon-button border-button ${showBorders ? 'active' : ''}`}

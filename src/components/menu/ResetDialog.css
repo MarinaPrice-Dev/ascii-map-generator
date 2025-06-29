@@ -135,18 +135,3 @@
   background: #c82333;
   border-color: #bd2130;
 }
-
-@media (max-width: 480px) {
-  .reset-dialog {
-    width: 95%;
-    margin: 1rem;
-  }
-  
-  .reset-dialog-actions {
-    flex-direction: column;
-  }
-  
-  .reset-dialog-button {
-    width: 100%;
-  }
-} 

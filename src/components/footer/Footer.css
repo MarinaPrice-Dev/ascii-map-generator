@@ -115,49 +115,18 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Responsive adjustments */
-/* Mobile and Tablet Styles */
-@media (max-width: 1024px) {
-  .footer {
-    height: 460px !important;
-  }
-  
-  .footer:hover {
-    height: 460px !important;
-  }
-
-  .footer-sections {
-    flex-direction: column;
-    gap: 8px;
-    opacity: 1;
-  }
-
-  .color-section {
-    gap: 4px;
-  }
-
-  .color-mode-buttons {
-    flex-direction: row;
-    justify-content: center;
-  }
+.contact-link:hover {
+  background: var(--menu);
+  color: var(--fg);
 }
 
-/* Force Portrait Mode */
-@media screen and (max-height: 350px) and (orientation: landscape) {
-  .App {
-    display: none;
-  }
+.reset-link:hover {
+  background: #dc3545 !important;
+  color: white !important;
+}
 
-  .App::after {
-    content: "Unsupported screen size";
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: var(--bg);
-    padding: 2rem;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    z-index: 1000;
-  }
+.contact-icon {
+  width: 1.2rem;
+  height: 1.2rem;
+  flex-shrink: 0;
 } 

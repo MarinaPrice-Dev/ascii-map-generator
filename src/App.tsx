@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import './App.css'
+import './assets/responsive.css'
 import AsciiMapGrid from './components/grid/AsciiMapGrid'
 import { useUndoRedo } from './utils/useUndoRedo'
 import { getInitialGrid } from './utils/mapUtils'

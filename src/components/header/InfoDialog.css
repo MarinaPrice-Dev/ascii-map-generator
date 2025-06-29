@@ -114,13 +114,3 @@
   background: var(--border);
   border-radius: 3px;
 }
-
-
-@media (max-width: 768px) {
-  .info-dialog {
-    max-width: 96%;
-    max-height: calc(100% - 4%);
-    top: 2%;
-    left: 2%;
-  }
-}

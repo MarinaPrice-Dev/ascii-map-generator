@@ -154,14 +154,3 @@
   height: 1.2rem;
   flex-shrink: 0;
 }
-
-@media (max-width: 900px) {
-  .menu-panel {
-    width: 100vw;
-    right: -100vw;
-  }
-  
-  .menu-panel.open {
-    right: 0;
-  }
-} 

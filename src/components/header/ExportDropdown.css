@@ -121,14 +121,3 @@
   background: var(--save);
   color: var(--fg);
 }
-
-@media (max-width: 900px) {
-  .export-panel {
-    width: 100%;
-    right: -100%;
-  }
-  
-  .export-panel.open {
-    right: 0;
-  }
-} 

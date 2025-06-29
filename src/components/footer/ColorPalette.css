@@ -74,16 +74,3 @@
   background: var(--border);
   border-radius: 4px;
 }
-
-/* Mobile adjustments */
-@media (max-width: 768px) {
-  .color-grid {
-    grid-template-columns: repeat(auto-fill, minmax(20px, 1fr));
-    gap: 3px;
-  }
-
-  .color-swatch {
-    width: 20px;
-    height: 20px;
-  }
-} 

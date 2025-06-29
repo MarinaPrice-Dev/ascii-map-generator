@@ -314,17 +314,6 @@
   cursor: not-allowed;
 }
 
-@media (max-width: 900px) {
-  .image-import-panel {
-    width: 100vw;
-    right: -100vw;
-  }
-  
-  .image-import-panel.open {
-    right: 0;
-  }
-}
-
 .adjustments-header {
   display: flex;
   justify-content: space-between;
