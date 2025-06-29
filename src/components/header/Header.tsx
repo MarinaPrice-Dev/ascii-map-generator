@@ -130,11 +130,11 @@ const Header: React.FC<HeaderProps> = ({
       try {
         const dimensions = await getImageDimensions(file);
         const imageAspectRatio = dimensions.width / dimensions.height;
-        const newWidth = 100;
+        const newWidth = 40;
         const newHeight = Math.round(newWidth / imageAspectRatio);
 
         const result = await imageToAscii(file, {
-          targetCols: newWidth,
+          targetCols: newWidth * 2,
           targetRows: newHeight,
           colorMode: 'smart',
           invert: true,

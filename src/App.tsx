@@ -326,10 +326,7 @@ const App: React.FC = () => {
       // Use the grid dimensions from the image conversion result
       const { gridRows: newRows, gridCols: newCols } = imageDimensions;
       
-      const newCellSize = 10;
-      
-      // Update zoom and grid dimensions
-      setCellSize(newCellSize);
+      // Update grid dimensions (keep current cell size)
       setGridRows(newRows);
       setGridCols(newCols);
       

@@ -68,7 +68,7 @@ const defaultOptions: ImageImportOptions = {
   blacks: 0,
   invert: true,
   targetRows: 50,
-  targetCols: 100
+  targetCols: 80
 };
 
 const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
@@ -125,13 +125,14 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
     
     // Handle invalid or empty values
     if (isNaN(value) || value <= 0) {
-      constrainedValue = 20;
-    } else if (value > 200) {
-      constrainedValue = 200;
-    } else if (value < 20) {
-      constrainedValue = 20;
+      constrainedValue = key === 'targetCols' ? 40 : 20;
+    } else if (value > (key === 'targetCols' ? 400 : 200)) {
+      constrainedValue = key === 'targetCols' ? 400 : 200;
+    } else if (value < (key === 'targetCols' ? 40 : 20)) {
+      constrainedValue = key === 'targetCols' ? 40 : 20;
     }
     
+    // Note: targetCols represents actual grid width (not doubled in Header.tsx)
     if (constrainedValue !== value) {
       setOptions(prev => ({ ...prev, [key]: constrainedValue }));
     }
@@ -141,47 +142,54 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
     if (!imageDimensions) return;
 
     const imageAspectRatio = imageDimensions.width / imageDimensions.height;
-    let newWidth: number;
+    let newGridWidth: number;
     let newHeight: number;
 
     if (options.targetCols > 0 && options.targetRows > 0) {
-      // Both filled in - recalculate height based on width
-      newWidth = options.targetCols;
-      newHeight = Math.round(newWidth / imageAspectRatio);
+      // Both filled in - recalculate height based on grid width
+      // Since cell width is half cell height, we need to adjust the aspect ratio calculation
+      newGridWidth = options.targetCols;
+      // Visual width = gridWidth * 0.5, so we need to account for this in the aspect ratio
+      newHeight = Math.round((newGridWidth * 0.5) / imageAspectRatio);
     } else if (options.targetCols > 0) {
-      // Only width filled in - calculate height
-      newWidth = options.targetCols;
-      newHeight = Math.round(newWidth / imageAspectRatio);
+      // Only width filled in - calculate height based on grid width
+      newGridWidth = options.targetCols;
+      // Visual width = gridWidth * 0.5, so we need to account for this in the aspect ratio
+      newHeight = Math.round((newGridWidth * 0.5) / imageAspectRatio);
     } else if (options.targetRows > 0) {
-      // Only height filled in - calculate width
+      // Only height filled in - calculate grid width
       newHeight = options.targetRows;
-      newWidth = Math.round(newHeight * imageAspectRatio);
+      // Visual width = gridWidth * 0.5, so gridWidth = visualWidth * 2
+      // visualWidth = height * imageAspectRatio
+      newGridWidth = Math.round(newHeight * imageAspectRatio * 2);
     } else {
-      // Both empty - set width to 100 and calculate height
-      newWidth = 100;
-      newHeight = Math.round(newWidth / imageAspectRatio);
+      // Both empty - set grid width to 80 and calculate height
+      newGridWidth = 80;
+      // Visual width = 80 * 0.5 = 40, so height = 40 / imageAspectRatio
+      newHeight = Math.round((newGridWidth * 0.5) / imageAspectRatio);
     }
 
-    // Ensure minimum dimensions
-    newWidth = Math.max(20, Math.min(200, newWidth));
+    // Ensure minimum dimensions (constraints apply to grid width)
+    newGridWidth = Math.max(40, Math.min(400, newGridWidth));
     newHeight = Math.max(20, Math.min(200, newHeight));
 
     const newOptions = {
       ...options,
-      targetCols: newWidth,
+      targetCols: newGridWidth, // Store actual grid width in options
       targetRows: newHeight,
     };
     
     setOptions(newOptions);
-    onImport(newOptions);
+    onImport(newOptions); // This will be doubled in Header.tsx, so we need to halve it here
   };
 
   useEffect(() => {
     if (isOpen && imageDimensions) {
       // Reset all options to default, then set dimensions from the initial import
+      // Display actual grid dimensions to the user
       setOptions({
         ...defaultOptions,
-        targetCols: imageDimensions.gridCols,
+        targetCols: imageDimensions.gridCols, // Show actual grid width
         targetRows: imageDimensions.gridRows,
       });
     }
@@ -211,8 +219,8 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
                 type="number"
                 value={options.targetCols || ''}
                 onChange={(e) => handleOptionChange('targetCols', e.target.value === '' ? 0 : parseInt(e.target.value) || 0)}
-                min="20"
-                max="200"
+                min="40"
+                max="400"
                 placeholder="Width"
                 onFocus={handleInputFocus}
                 onBlur={(e) => handleInputBlur('targetCols', parseInt(e.target.value) || 0)}
