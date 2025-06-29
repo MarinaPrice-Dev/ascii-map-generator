@@ -17,12 +17,14 @@
   align-items: center;
   justify-content: center;
   font-family: monospace;
+  line-height: 1;
   cursor: pointer;
   user-select: none;
   transition: border-color 0.2s ease;
 }
 
-.ascii-map-grid-cell.selected {
+.ascii-map-grid-cell.selected,
+.ascii-map-grid.no-borders .ascii-map-grid-cell.selected {
   border-color: #aaaaaa !important;
   border-style: dashed;
 }
@@ -44,11 +46,11 @@
 }
 
 .ascii-map-grid.no-borders {
-  border: none;
+  border-color: transparent !important;
 }
 
 .ascii-map-grid.no-borders .ascii-map-grid-cell {
-  border: none !important;
+  border-color: transparent !important;
 }
 
 .cell-preview {

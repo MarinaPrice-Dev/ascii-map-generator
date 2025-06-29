@@ -38,10 +38,28 @@ const ExportDropdown: React.FC<ExportDropdownProps> = ({
           <button className="export-panel-close" onClick={onToggle}>×</button>
         </div>
         <div className="export-panel-content">
+        <div className="export-item" onClick={() => handleExport('html-color')}>
+            <div className="export-item-content">
+              <span className="export-label">HTML File (.html)  <span style={{fontWeight: '400', color: '#aaa'}}>**Recommended**</span></span>
+              <span className="export-description">HTML with individual character colors preserved. Ideal for sharing.</span>
+            </div>
+          </div>
+          <div className="export-item" onClick={() => handleExport('html')}>
+            <div className="export-item-content">
+              <span className="export-label">HTML File (.html) - Plain text</span>
+              <span className="export-description">Basic HTML with monospaced font styling, no colors.</span>
+            </div>
+          </div>
           <div className="export-item" onClick={() => handleExport('txt')}>
             <div className="export-item-content">
               <span className="export-label">Text File (.txt)</span>
-              <span className="export-description">Plain text, no colors. Best for sharing.</span>
+              <span className="export-description">Plain text, no colors.</span>
+            </div>
+          </div>
+          <div className="export-item" onClick={() => handleExport('png')}>
+            <div className="export-item-content">
+              <span className="export-label">PNG Image (.png)</span>
+              <span className="export-description">High-quality image with exact colors and styling.</span>
             </div>
           </div>
           <div className="export-item" onClick={() => handleExport('json')}>
@@ -60,24 +78,6 @@ const ExportDropdown: React.FC<ExportDropdownProps> = ({
             <div className="export-item-content">
               <span className="export-label">ROT.js File (.rot.txt)</span>
               <span className="export-description">Special format for the ROT.js roguelike library.</span>
-            </div>
-          </div>
-          <div className="export-item" onClick={() => handleExport('html')}>
-            <div className="export-item-content">
-              <span className="export-label">HTML File (.html)</span>
-              <span className="export-description">Web-ready HTML with monospaced font styling.</span>
-            </div>
-          </div>
-          <div className="export-item" onClick={() => handleExport('html-color')}>
-            <div className="export-item-content">
-              <span className="export-label">Colored HTML File (.html)</span>
-              <span className="export-description">HTML with individual character colors preserved.</span>
-            </div>
-          </div>
-          <div className="export-item" onClick={() => handleExport('png')}>
-            <div className="export-item-content">
-              <span className="export-label">PNG Image (.png)</span>
-              <span className="export-description">High-quality image with exact colors and styling.</span>
             </div>
           </div>
         </div>

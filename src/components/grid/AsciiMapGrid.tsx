@@ -325,11 +325,6 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, updateGri
                   color: cell.fg,
                   background: cell.bg,
                   fontSize: Math.floor(cellSize * 0.8),
-                  fontFamily: 'monospace',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  lineHeight: 1,
                 }}
               >
                 {cell.char}
