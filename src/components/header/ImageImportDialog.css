@@ -89,21 +89,6 @@
   text-align: left;
 }
 
-/* Custom scrollbar for image import content */
-.image-import-content::-webkit-scrollbar {
-  width: 8px;
-}
-
-.image-import-content::-webkit-scrollbar-track {
-  background: var(--bg);
-  border-radius: 3px;
-}
-
-.image-import-content::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 3px;
-}
-
 .option-group {
   margin-bottom: 1rem;
 }

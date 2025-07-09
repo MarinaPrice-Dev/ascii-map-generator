@@ -73,18 +73,3 @@
   border-color: var(--accent);
   box-shadow: 0 0 0 2px rgba(var(--accent-rgb), 0.2);
 }
-
-/* Scrollbar styles */
-.character-categories::-webkit-scrollbar {
-  width: 8px;
-}
-
-.character-categories::-webkit-scrollbar-track {
-  background: var(--bg);
-  border-radius: 3px;
-}
-
-.character-categories::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 3px;
-}
