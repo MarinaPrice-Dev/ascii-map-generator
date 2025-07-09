@@ -12,6 +12,7 @@
   cursor: pointer;
   transition: all 0.2s ease;
   outline: none;
+  position: relative;
 }
 
 .icon-button:focus {

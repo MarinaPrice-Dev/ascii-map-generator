@@ -5,6 +5,8 @@
   justify-content: space-between;
   padding: 0 24px;
   border-bottom: 1px solid var(--border);
+  position: relative;
+  z-index: 10;
 }
 
 .app-header h1 {
@@ -152,3 +154,75 @@
   min-width: auto;
   padding: 0 8px;
 }
+
+/* Tooltip styles for header buttons */
+.icon-button[title]:hover::after {
+  content: attr(title);
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg);
+  color: var(--fg);
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 1000;
+  margin-top: 8px;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+
+.icon-button[title]:hover::before {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-bottom-color: var(--bg);
+  margin-top: 3px;
+  z-index: 1001;
+  pointer-events: none;
+}
+
+/* Special handling for disabled buttons with tooltips */
+.icon-button[title]:disabled {
+  pointer-events: auto;
+}
+
+.icon-button[title]:disabled:hover::after {
+  content: attr(title);
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg);
+  color: var(--fg);
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 2000;
+  margin-top: 8px;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+
+.icon-button[title]:disabled:hover::before {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-bottom-color: var(--bg);
+  margin-top: 3px;
+  z-index: 2001;
+  pointer-events: none;
+}
+
+

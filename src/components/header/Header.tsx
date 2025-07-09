@@ -340,7 +340,7 @@ const Header: React.FC<HeaderProps> = ({
           <button className="icon-button" onClick={onRedo} disabled={!canRedo} title="Redo">
             <RedoIcon />
           </button>
-          <button className="icon-button clear-button" onClick={onClearMap} disabled={isGridEmpty} title="Clear Map">
+          <button className="icon-button clear-button" onClick={onClearMap} disabled={isGridEmpty} title="Clear">
             <ClearIcon />
           </button>
           <div className="desktop-only">
@@ -352,7 +352,7 @@ const Header: React.FC<HeaderProps> = ({
             />
           </div>
           <div className="desktop-only">
-            <button className={`icon-button import-button ${isImageDialogOpen ? 'open' : ''}`} onClick={handleImportClick} title="Import Map">
+            <button className={`icon-button import-button ${isImageDialogOpen ? 'open' : ''}`} onClick={handleImportClick} title="Import">
               <ImportIcon />
               <span className="button-label">Import</span>
             </button>
@@ -414,7 +414,7 @@ const Header: React.FC<HeaderProps> = ({
         <button className="icon-button" onClick={onRedo} disabled={!canRedo} title="Redo">
           <RedoIcon />
         </button>
-        <button className="icon-button clear-button" onClick={onClearMap} disabled={isGridEmpty} title="Clear Map">
+        <button className="icon-button clear-button" onClick={onClearMap} disabled={isGridEmpty} title="Clear">
           <ClearIcon />
         </button>
         <ExportDropdown
@@ -423,7 +423,7 @@ const Header: React.FC<HeaderProps> = ({
               isOpen={isExportPanelOpen}
               onToggle={onExportPanelToggle}
             />
-        <button className={`icon-button import-button ${isImageDialogOpen ? 'open' : ''}`} onClick={handleImportClick} title="Import Map">
+        <button className={`icon-button import-button ${isImageDialogOpen ? 'open' : ''}`} onClick={handleImportClick} title="Import">
           <ImportIcon />
         </button>
         <input

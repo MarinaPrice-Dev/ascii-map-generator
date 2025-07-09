@@ -26,7 +26,7 @@ const ExportDropdown: React.FC<ExportDropdownProps> = ({
         className={`icon-button save-button ${isOpen ? 'dropdown-open' : ''}`}
         onClick={onToggle}
         disabled={disabled}
-        title="Export Map"
+        title="Export"
       >
         <SaveIcon />
         <span className="button-label">Export</span>
