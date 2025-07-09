@@ -67,6 +67,12 @@ const InfoDialog: React.FC<InfoDialogProps> = ({ onClose }) => (
         <h3>Example ASCII Maps (coming soon)</h3>
         <p>Here are some examples of what you can create with ASCII Studio:</p>
         <h3>Latest Updates</h3>
+        <h5>2025-07-09</h5>
+        <ul>
+            <li><strong>New sidebar:</strong> New sidebar to access tools and edit the grid.</li>
+            <li><strong>New grid button:</strong> Reset the grid to start a new project.</li>
+            <li><strong>Tooltips:</strong> Added tooltips to the sidebar and header.</li>
+        </ul>
         <h5>2025-06-29</h5>
         <ul>
             <li><strong>Grid Resizing:</strong> Resize the grid to your desired size.</li>
