@@ -69,12 +69,12 @@
 
 .sidebar-icon:hover {
   background: var(--fg);
-  color: var(--bg);
+  color: var(--side);
 }
 
 .sidebar-radio-btn input[type="radio"]:checked + .sidebar-icon {
-  background: var(--fg);
-  color: var(--bg);
+  background: var(--side);
+  color: var(--fg);
 }
 
 .sidebar-btn {

@@ -28,18 +28,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror }) => {
   return (
     <aside className="sidebar">
       <div className="sidebar-content">
-        {/* Clear Selection Button */}
-        {selectedCount > 0 && (
-          <div className="sidebar-section">
-            <button 
-              className="sidebar-clear-btn"
-              onClick={clearSelection}
-              title="Clear all selections"
-            >
-              Clear
-            </button>
-          </div>
-        )}
+
 
         {/* Mode Section */}
         <div className="sidebar-section">
@@ -100,6 +89,20 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror }) => {
               <input
                 type="radio"
                 name="sidebarSelectionTool"
+                value="select-cells"
+                checked={activeTool === 'select-cells'}
+                onChange={(e) => setActiveTool(e.target.value as Tool)}
+                className="sr-only"
+              />
+              <div className="sidebar-icon" title="Drag across individual cells">
+                <CellsIcon />
+              </div>
+            </label>
+            
+            <label className="sidebar-radio-btn">
+              <input
+                type="radio"
+                name="sidebarSelectionTool"
                 value="select-area"
                 checked={activeTool === 'select-area'}
                 onChange={(e) => setActiveTool(e.target.value as Tool)}
@@ -123,60 +126,48 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror }) => {
                 <RectangleIcon />
               </div>
             </label>
-            
-            <label className="sidebar-radio-btn">
-              <input
-                type="radio"
-                name="sidebarSelectionTool"
-                value="select-cells"
-                checked={activeTool === 'select-cells'}
-                onChange={(e) => setActiveTool(e.target.value as Tool)}
-                className="sr-only"
-              />
-              <div className="sidebar-icon" title="Drag across individual cells">
-                <CellsIcon />
+          </div>
+        </div>
+
+        {/* Visual Separator and Transform Section - only show when in selection mode */}
+        {(selectionMode === 'single' || selectionMode === 'multiple') && (
+          <>
+            <div className="sidebar-separator"></div>
+            <div className="sidebar-section">
+              <div className="sidebar-section-title">Edit</div>
+              <div className="sidebar-buttons">
+                <button 
+                  onClick={() => onRotate('left')} 
+                  className="sidebar-btn"
+                  title="Rotate Left"
+                >
+                  <RotateLeftIcon />
+                </button>
+                <button 
+                  onClick={() => onRotate('right')} 
+                  className="sidebar-btn"
+                  title="Rotate Right"
+                >
+                  <RotateRightIcon />
+                </button>
+                <button 
+                  onClick={() => onMirror('horizontal')} 
+                  className="sidebar-btn"
+                  title="Flip Horizontal"
+                >
+                  <FlipHorizontalIcon />
+                </button>
+                <button 
+                  onClick={() => onMirror('vertical')} 
+                  className="sidebar-btn"
+                  title="Flip Vertical"
+                >
+                  <FlipVerticalIcon />
+                </button>
               </div>
-            </label>
-          </div>
-        </div>
-
-        {/* Visual Separator */}
-        <div className="sidebar-separator"></div>
-
-        {/* Transform Section */}
-        <div className="sidebar-section">
-          <div className="sidebar-section-title">Change</div>
-          <div className="sidebar-buttons">
-            <button 
-              onClick={() => onRotate('left')} 
-              className="sidebar-btn"
-              title="Rotate Left"
-            >
-              <RotateLeftIcon />
-            </button>
-            <button 
-              onClick={() => onRotate('right')} 
-              className="sidebar-btn"
-              title="Rotate Right"
-            >
-              <RotateRightIcon />
-            </button>
-            <button 
-              onClick={() => onMirror('horizontal')} 
-              className="sidebar-btn"
-              title="Flip Horizontal"
-            >
-              <FlipHorizontalIcon />
-            </button>
-            <button 
-              onClick={() => onMirror('vertical')} 
-              className="sidebar-btn"
-              title="Flip Vertical"
-            >
-              <FlipVerticalIcon />
-            </button>
-          </div>
-        </div>
+            </div>
+          </>
+        )}
       </div>
     </aside>
   );
