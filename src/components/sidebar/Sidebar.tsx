@@ -32,7 +32,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror }) => {
 
         {/* Mode Section */}
         <div className="sidebar-section">
-          <div className="sidebar-section-title">Mode</div>
+          <div className="sidebar-section-title">Tools</div>
           <div className="sidebar-buttons">
             <label className="sidebar-radio-btn">
               <input

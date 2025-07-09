@@ -602,8 +602,6 @@ const App: React.FC = () => {
         <Menu 
           isOpen={isMenuOpen} 
           onClose={handleMenuToggle} 
-          onRotate={handleRotate} 
-          onMirror={handleMirror}
           onReset={handleReset}
         />
       </div>

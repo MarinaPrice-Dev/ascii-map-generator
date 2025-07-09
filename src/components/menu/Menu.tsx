@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import SelectionTool from '../tools/SelectionTool';
 import Shortcuts from './Shortcuts';
 import Help from './Help';
 import ResetDialog from './ResetDialog';
@@ -8,13 +7,11 @@ import './Menu.css';
 interface MenuProps {
   isOpen: boolean;
   onClose: () => void;
-  onRotate: (direction: 'left' | 'right') => void;
-  onMirror: (direction: 'horizontal' | 'vertical') => void;
   onReset: () => void;
 }
 
-const Menu: React.FC<MenuProps> = ({ isOpen, onClose, onRotate, onMirror, onReset }) => {
-  const [activeSection, setActiveSection] = useState<string>('tools');
+const Menu: React.FC<MenuProps> = ({ isOpen, onClose, onReset }) => {
+  const [activeSection, setActiveSection] = useState<string>('shortcuts');
   const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
 
   const handleResetClick = () => {
@@ -28,8 +25,6 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose, onRotate, onMirror, onRese
 
   const renderSection = () => {
     switch (activeSection) {
-      case 'tools':
-        return <SelectionTool onRotate={onRotate} onMirror={onMirror} />;
       case 'shortcuts':
         return <Shortcuts />;
       case 'help':
@@ -43,12 +38,6 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose, onRotate, onMirror, onRese
     <>
     <div className={`menu-panel ${isOpen ? 'open' : ''}`}>
       <div className="menu-navigation">
-        <button 
-          className={`nav-button ${activeSection === 'tools' ? 'active' : ''}`}
-          onClick={() => setActiveSection('tools')}
-        >
-          Tools
-        </button>
         <button 
           className={`nav-button ${activeSection === 'shortcuts' ? 'active' : ''}`}
           onClick={() => setActiveSection('shortcuts')}
