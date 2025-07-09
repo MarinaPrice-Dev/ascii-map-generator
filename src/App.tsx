@@ -19,6 +19,7 @@ import Loader from './components/loader/Loader'
 const HEADER_HEIGHT = 60;
 const FOOTER_HEIGHT = 200;
 const CELL_SIZE = 20;
+const SIDEBAR_WIDTH = 48;
 
 const getCellSize = () => CELL_SIZE;
 
@@ -38,7 +39,7 @@ const App: React.FC = () => {
 
   // Calculate initial grid dimensions once
   const getInitialGridDims = (currentCellSize: number) => {
-    const availableWidth = window.innerWidth - 2;
+    const availableWidth = window.innerWidth - 2 - SIDEBAR_WIDTH;
     const availableHeight = window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT;
     const cellWidth = Math.floor(currentCellSize * 0.5);
     const cols = Math.floor(availableWidth / cellWidth);
@@ -130,7 +131,7 @@ const App: React.FC = () => {
   // Handle zoom in/out
   const handleZoomIn = () => {
     beginAction();
-    const availableWidth = window.innerWidth - 2;
+    const availableWidth = window.innerWidth - 2 - SIDEBAR_WIDTH;
     const availableHeight = window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT;
     
     const { newCellSize, newRows, newCols } = handleZoom(
@@ -154,7 +155,7 @@ const App: React.FC = () => {
 
   const handleZoomOut = () => {
     beginAction();
-    const availableWidth = window.innerWidth - 2;
+    const availableWidth = window.innerWidth - 2 - SIDEBAR_WIDTH;
     const availableHeight = window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT;
     
     const { newCellSize, newRows, newCols } = handleZoom(
@@ -206,7 +207,7 @@ const App: React.FC = () => {
   const handleReset = () => {
     // Calculate initial grid dimensions based on default cell size
     const defaultCellSize = 20;
-    const availableWidth = window.innerWidth - 2;
+    const availableWidth = window.innerWidth - 2 - SIDEBAR_WIDTH;
     const availableHeight = window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT;
     const cellWidth = Math.floor(defaultCellSize * 0.5);
     const cols = Math.floor(availableWidth / cellWidth);
