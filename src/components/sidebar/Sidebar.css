@@ -90,6 +90,7 @@
   cursor: pointer;
   transition: all 0.2s ease;
   padding: 0;
+  position: relative;
 }
 
 .sidebar-btn:hover {
