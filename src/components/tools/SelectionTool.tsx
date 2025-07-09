@@ -25,47 +25,9 @@ const SelectionTool: React.FC<SelectionToolProps> = ({ onRotate, onMirror }) => 
 
   const selectedCount = getSelectedCellsCount();
 
-  const modeOptions: { value: SelectionMode; label: string; description: string; icon: React.FC }[] = [
-    {
-      value: 'draw',
-      label: 'Draw',
-      description: 'Draw using symbols and colors',
-      icon: PencilIcon
-    },
-    {
-      value: 'single',
-      label: 'Select',
-      description: 'Select an area to manipulate',
-      icon: SingleBoxIcon
-    },
-    {
-      value: 'multiple',
-      label: 'Multi-Select',
-      description: 'Select multiple areas to manipulate',
-      icon: MultipleBoxIcon
-    }
-  ];
 
-  const toolOptions: { value: Tool; label: string; description: string; icon: React.FC }[] = [
-    {
-      value: 'select-area',
-      label: 'Area',
-      description: 'Drag for a rectangular area',
-      icon: AreaIcon
-    },
-    {
-      value: 'select-rectangle',
-      label: 'Rectangle',
-      description: 'Drag for a rectangle',
-      icon: RectangleIcon
-    },
-    {
-      value: 'select-cells',
-      label: 'Pen',
-      description: 'Drag across individual cells',
-      icon: CellsIcon
-    },
-  ];
+
+
 
   return (
     <div className="selection-tool">
@@ -86,46 +48,106 @@ const SelectionTool: React.FC<SelectionToolProps> = ({ onRotate, onMirror }) => 
     <div className="selection-tool-section">
         <h4>Mode</h4>
         <div className="mode-options">
-          {modeOptions.map((mode) => (
-            <label key={mode.value} className="mode-option">
-              <input
-                type="radio"
-                name="selectionMode"
-                value={mode.value}
-                checked={selectionMode === mode.value}
-                onChange={(e) => setSelectionMode(e.target.value as SelectionMode)}
-                className="sr-only"
-              />
-              <div className="mode-icon"><mode.icon /></div>
-              <div className="mode-option-content">
-                <span className="mode-label">{mode.label}</span>
-                <span className="mode-description">{mode.description}</span>
-              </div>
-            </label>
-          ))}
+          <label className="mode-option">
+            <input
+              type="radio"
+              name="selectionMode"
+              value="draw"
+              checked={selectionMode === 'draw'}
+              onChange={(e) => setSelectionMode(e.target.value as SelectionMode)}
+              className="sr-only"
+            />
+            <div className="mode-icon"><PencilIcon /></div>
+            <div className="mode-option-content">
+              <span className="mode-label">Draw</span>
+              <span className="mode-description">Draw using symbols and colors</span>
+            </div>
+          </label>
+          
+          <label className="mode-option">
+            <input
+              type="radio"
+              name="selectionMode"
+              value="single"
+              checked={selectionMode === 'single'}
+              onChange={(e) => setSelectionMode(e.target.value as SelectionMode)}
+              className="sr-only"
+            />
+            <div className="mode-icon"><SingleBoxIcon /></div>
+            <div className="mode-option-content">
+              <span className="mode-label">Select</span>
+              <span className="mode-description">Select an area to manipulate</span>
+            </div>
+          </label>
+          
+          <label className="mode-option">
+            <input
+              type="radio"
+              name="selectionMode"
+              value="multiple"
+              checked={selectionMode === 'multiple'}
+              onChange={(e) => setSelectionMode(e.target.value as SelectionMode)}
+              className="sr-only"
+            />
+            <div className="mode-icon"><MultipleBoxIcon /></div>
+            <div className="mode-option-content">
+              <span className="mode-label">Multi-Select</span>
+              <span className="mode-description">Select multiple areas to manipulate</span>
+            </div>
+          </label>
         </div>
       </div>
 
       <div className="selection-tool-section">
         <h4>Shape</h4>
         <div className="tool-options">
-          {toolOptions.map((tool) => (
-            <label key={tool.value} className="tool-option">
-              <input
-                type="radio"
-                name="selectionTool"
-                value={tool.value}
-                checked={activeTool === tool.value}
-                onChange={(e) => setActiveTool(e.target.value as Tool)}
-                className="sr-only"
-              />
-              <div className="tool-icon"><tool.icon /></div>
-              <div className="tool-option-content">
-                <span className="tool-label">{tool.label}</span>
-                <span className="tool-description">{tool.description}</span>
-              </div>
-            </label>
-          ))}
+          <label className="tool-option">
+            <input
+              type="radio"
+              name="selectionTool"
+              value="select-area"
+              checked={activeTool === 'select-area'}
+              onChange={(e) => setActiveTool(e.target.value as Tool)}
+              className="sr-only"
+            />
+            <div className="tool-icon"><AreaIcon /></div>
+            <div className="tool-option-content">
+              <span className="tool-label">Area</span>
+              <span className="tool-description">Drag for a rectangular area</span>
+            </div>
+          </label>
+          
+          <label className="tool-option">
+            <input
+              type="radio"
+              name="selectionTool"
+              value="select-rectangle"
+              checked={activeTool === 'select-rectangle'}
+              onChange={(e) => setActiveTool(e.target.value as Tool)}
+              className="sr-only"
+            />
+            <div className="tool-icon"><RectangleIcon /></div>
+            <div className="tool-option-content">
+              <span className="tool-label">Rectangle</span>
+              <span className="tool-description">Drag for a rectangle</span>
+            </div>
+          </label>
+          
+          <label className="tool-option">
+            <input
+              type="radio"
+              name="selectionTool"
+              value="select-cells"
+              checked={activeTool === 'select-cells'}
+              onChange={(e) => setActiveTool(e.target.value as Tool)}
+              className="sr-only"
+            />
+            <div className="tool-icon"><CellsIcon /></div>
+            <div className="tool-option-content">
+              <span className="tool-label">Pen</span>
+              <span className="tool-description">Drag across individual cells</span>
+            </div>
+          </label>
         </div>
       </div>
 

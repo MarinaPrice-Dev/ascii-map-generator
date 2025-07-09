@@ -1,14 +1,181 @@
 import React from 'react';
+import { useSelectionStore } from '../../store/selectionStore';
+import type { SelectionTool as Tool, SelectionMode } from '../../store/selectionStore';
+import { 
+  PencilIcon, SingleBoxIcon, MultipleBoxIcon, 
+  AreaIcon, RectangleIcon, CellsIcon,
+  RotateLeftIcon, RotateRightIcon, FlipHorizontalIcon, FlipVerticalIcon
+} from '../icons/Icons';
 import './Sidebar.css';
 
-// We'll add props for shortcuts and other functionality later
-const Sidebar: React.FC = () => {
+interface SidebarProps {
+  onRotate: (direction: 'left' | 'right') => void;
+  onMirror: (direction: 'horizontal' | 'vertical') => void;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror }) => {
+  const {
+    activeTool,
+    selectionMode,
+    setActiveTool,
+    setSelectionMode,
+    clearSelection,
+    getSelectedCellsCount
+  } = useSelectionStore();
+
+  const selectedCount = getSelectedCellsCount();
+
   return (
     <aside className="sidebar">
       <div className="sidebar-content">
-        {/* Placeholder for shortcut buttons - we'll implement these next */}
-        <div className="sidebar-placeholder">
-          <span>Shortcuts</span>
+        {/* Clear Selection Button */}
+        {selectedCount > 0 && (
+          <div className="sidebar-section">
+            <button 
+              className="sidebar-clear-btn"
+              onClick={clearSelection}
+              title="Clear all selections"
+            >
+              Clear
+            </button>
+          </div>
+        )}
+
+        {/* Mode Section */}
+        <div className="sidebar-section">
+          <div className="sidebar-section-title">Mode</div>
+          <div className="sidebar-buttons">
+            <label className="sidebar-radio-btn">
+              <input
+                type="radio"
+                name="sidebarSelectionMode"
+                value="draw"
+                checked={selectionMode === 'draw'}
+                onChange={(e) => setSelectionMode(e.target.value as SelectionMode)}
+                className="sr-only"
+              />
+              <div className="sidebar-icon" title="Draw using symbols and colors">
+                <PencilIcon />
+              </div>
+            </label>
+            
+            <label className="sidebar-radio-btn">
+              <input
+                type="radio"
+                name="sidebarSelectionMode"
+                value="single"
+                checked={selectionMode === 'single'}
+                onChange={(e) => setSelectionMode(e.target.value as SelectionMode)}
+                className="sr-only"
+              />
+              <div className="sidebar-icon" title="Select an area to manipulate">
+                <SingleBoxIcon />
+              </div>
+            </label>
+            
+            <label className="sidebar-radio-btn">
+              <input
+                type="radio"
+                name="sidebarSelectionMode"
+                value="multiple"
+                checked={selectionMode === 'multiple'}
+                onChange={(e) => setSelectionMode(e.target.value as SelectionMode)}
+                className="sr-only"
+              />
+              <div className="sidebar-icon" title="Select multiple areas to manipulate">
+                <MultipleBoxIcon />
+              </div>
+            </label>
+          </div>
+        </div>
+
+        {/* Visual Separator */}
+        <div className="sidebar-separator"></div>
+
+        {/* Shape Section */}
+        <div className="sidebar-section">
+          <div className="sidebar-section-title">Shape</div>
+          <div className="sidebar-buttons">
+            <label className="sidebar-radio-btn">
+              <input
+                type="radio"
+                name="sidebarSelectionTool"
+                value="select-area"
+                checked={activeTool === 'select-area'}
+                onChange={(e) => setActiveTool(e.target.value as Tool)}
+                className="sr-only"
+              />
+              <div className="sidebar-icon" title="Drag for a rectangular area">
+                <AreaIcon />
+              </div>
+            </label>
+            
+            <label className="sidebar-radio-btn">
+              <input
+                type="radio"
+                name="sidebarSelectionTool"
+                value="select-rectangle"
+                checked={activeTool === 'select-rectangle'}
+                onChange={(e) => setActiveTool(e.target.value as Tool)}
+                className="sr-only"
+              />
+              <div className="sidebar-icon" title="Drag for a rectangle">
+                <RectangleIcon />
+              </div>
+            </label>
+            
+            <label className="sidebar-radio-btn">
+              <input
+                type="radio"
+                name="sidebarSelectionTool"
+                value="select-cells"
+                checked={activeTool === 'select-cells'}
+                onChange={(e) => setActiveTool(e.target.value as Tool)}
+                className="sr-only"
+              />
+              <div className="sidebar-icon" title="Drag across individual cells">
+                <CellsIcon />
+              </div>
+            </label>
+          </div>
+        </div>
+
+        {/* Visual Separator */}
+        <div className="sidebar-separator"></div>
+
+        {/* Transform Section */}
+        <div className="sidebar-section">
+          <div className="sidebar-section-title">Change</div>
+          <div className="sidebar-buttons">
+            <button 
+              onClick={() => onRotate('left')} 
+              className="sidebar-btn"
+              title="Rotate Left"
+            >
+              <RotateLeftIcon />
+            </button>
+            <button 
+              onClick={() => onRotate('right')} 
+              className="sidebar-btn"
+              title="Rotate Right"
+            >
+              <RotateRightIcon />
+            </button>
+            <button 
+              onClick={() => onMirror('horizontal')} 
+              className="sidebar-btn"
+              title="Flip Horizontal"
+            >
+              <FlipHorizontalIcon />
+            </button>
+            <button 
+              onClick={() => onMirror('vertical')} 
+              className="sidebar-btn"
+              title="Flip Vertical"
+            >
+              <FlipVerticalIcon />
+            </button>
+          </div>
         </div>
       </div>
     </aside>
