@@ -69,15 +69,13 @@ This application is fully optimized for search engines with:
 For detailed SEO information, see [SEO.md](./SEO.md).
 
 ## TO DO
-- grid border on/off
+- fix scroll styles
+- copy/paste
 - preview on mouse hover
 - Select and multiselect unclear, remove the first one
-- shortcuts for tool selections (Ctrl 1-0)
 - menu: documentation, example maps, blog
-- copy/paste
 - more exports
 - procedurally generated maps
-- infinite canvas
 
 ## Bugs
 - clear map doesnt work if you only use colours

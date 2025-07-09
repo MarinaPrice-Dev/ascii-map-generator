@@ -4,31 +4,43 @@ import type { SelectionTool as Tool, SelectionMode } from '../../store/selection
 import { 
   PencilIcon, SingleBoxIcon, MultipleBoxIcon, 
   AreaIcon, RectangleIcon, CellsIcon,
-  RotateLeftIcon, RotateRightIcon, FlipHorizontalIcon, FlipVerticalIcon
+  RotateLeftIcon, RotateRightIcon, FlipHorizontalIcon, FlipVerticalIcon,
+  NewFileIcon
 } from '../icons/Icons';
 import './Sidebar.css';
 
 interface SidebarProps {
   onRotate: (direction: 'left' | 'right') => void;
   onMirror: (direction: 'horizontal' | 'vertical') => void;
+  onReset: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror }) => {
+const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset }) => {
   const {
     activeTool,
     selectionMode,
     setActiveTool,
-    setSelectionMode,
-    clearSelection,
-    getSelectedCellsCount
+    setSelectionMode
   } = useSelectionStore();
-
-  const selectedCount = getSelectedCellsCount();
 
   return (
     <aside className="sidebar">
       <div className="sidebar-content">
+        {/* New Grid Section */}
+        <div className="sidebar-section">
+          <div className="sidebar-buttons">
+            <button 
+              onClick={onReset} 
+              className="sidebar-btn"
+              title="New grid"
+            >
+              <NewFileIcon />
+            </button>
+          </div>
+        </div>
 
+        {/* Visual Separator */}
+        <div className="sidebar-separator"></div>
 
         {/* Mode Section */}
         <div className="sidebar-section">
