@@ -9,6 +9,7 @@ import { exportMap } from './utils/exportMap'
 import Header from './components/header/Header'
 import { Footer } from './components/footer/Footer'
 import Menu from './components/menu/Menu'
+import Sidebar from './components/sidebar/Sidebar'
 import type { Cell } from './types/cell'
 import { handleZoom, expandGrid } from './utils/zoomUtils'
 import { useSelectionStore } from './store/selectionStore'
@@ -565,35 +566,38 @@ const App: React.FC = () => {
       />
       
       <div className="main-content">
-        {/* Main Grid Area */}
-        <main ref={mainRef} className={`main-grid-area ${isMenuOpen ? 'menu-open' : ''} ${isImageDialogOpen ? 'imageimportdialog-open' : ''}`}>
-          {grid.length > 0 && (
-            <AsciiMapGrid
-              grid={grid}
-              updateCell={updateCell}
-              updateGrid={updateGrid}
-              beginAction={beginAction}
-              selectedChar={selectedChar}
-              selectedFg={selectedFg}
-              selectedBg={selectedBg}
-              cellSize={cellSize}
-              defaultFg={DEFAULT_FG}
-              defaultBg={DEFAULT_BG}
-              showBorders={showBorders}
-            />
-          )}
-        </main>
-        
-        <Footer
-          selectedChar={selectedChar}
-          setSelectedChar={handleUpdateSelectedChar}
-          selectedFg={selectedFg}
-          setSelectedFg={handleUpdateSelectedFg}
-          selectedBg={selectedBg}
-          setSelectedBg={handleUpdateSelectedBg}
-          isMenuOpen={isMenuOpen}
-          isImageDialogOpen={isImageDialogOpen}
-        />
+        <Sidebar />
+        <div className="content-area">
+          {/* Main Grid Area */}
+          <main ref={mainRef} className={`main-grid-area ${isMenuOpen ? 'menu-open' : ''} ${isImageDialogOpen ? 'imageimportdialog-open' : ''}`}>
+            {grid.length > 0 && (
+              <AsciiMapGrid
+                grid={grid}
+                updateCell={updateCell}
+                updateGrid={updateGrid}
+                beginAction={beginAction}
+                selectedChar={selectedChar}
+                selectedFg={selectedFg}
+                selectedBg={selectedBg}
+                cellSize={cellSize}
+                defaultFg={DEFAULT_FG}
+                defaultBg={DEFAULT_BG}
+                showBorders={showBorders}
+              />
+            )}
+          </main>
+          
+          <Footer
+            selectedChar={selectedChar}
+            setSelectedChar={handleUpdateSelectedChar}
+            selectedFg={selectedFg}
+            setSelectedFg={handleUpdateSelectedFg}
+            selectedBg={selectedBg}
+            setSelectedBg={handleUpdateSelectedBg}
+            isMenuOpen={isMenuOpen}
+            isImageDialogOpen={isImageDialogOpen}
+          />
+        </div>
         
         <Menu 
           isOpen={isMenuOpen} 

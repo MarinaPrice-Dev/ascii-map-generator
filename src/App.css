@@ -44,11 +44,11 @@
 }
 
 :root {
-  --bg: #222;
-  --bg-light: #2a2a2a;
+  --bg: #1a1a1a;
+  --bg-light: #222222;
   --fg: #fff;
   --border: #444;
-  --footer-bg: #181818;
+  --footer-bg: #1a1a1a;
   --cells: #deb202;
   --save: #22c55e;
   --clear: #ee3333;
@@ -88,14 +88,21 @@ header {
 .main-content {
   flex: 1;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   position: relative;
   overflow: hidden;
   min-height: 0;
 }
 
+.content-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
 footer {
-  width: 100vw;
+  width: 100%;
   background: var(--footer-bg);
   color: var(--fg);
   border-top: 1px solid var(--border);
@@ -107,16 +114,16 @@ footer {
 }
 
 footer.menu-open {
-  width: calc(100vw - 340px);
+  width: calc(100% - 340px);
 }
 
 footer.imageimportdialog-open {
-  width: calc(100vw - 340px);
+  width: calc(100% - 340px);
 }
 
 main {
   flex: 1;
-  width: 100vw;
+  width: 100%;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
@@ -128,11 +135,11 @@ main {
 }
 
 main.menu-open {
-  width: calc(100vw - 340px);
+  width: calc(100% - 340px);
 }
 
 main.imageimportdialog-open {
-  width: calc(100vw - 340px);
+  width: calc(100% - 340px);
 }
 
 /* Custom scrollbar for main */
@@ -197,11 +204,11 @@ button:disabled {
 }
 
 .main-grid-area.menu-open {
-  width: calc(100vw - 340px);
+  width: calc(100% - 340px);
 }
 
 .main-grid-area.imageimportdialog-open {
-  width: calc(100vw - 340px);
+  width: calc(100% - 340px);
 }
 
 /* DEPRECATED: Scrollbar styles moved to main element */
