@@ -5,7 +5,7 @@ import {
   PencilIcon, SingleBoxIcon, MultipleBoxIcon, 
   AreaIcon, RectangleIcon, CellsIcon,
   RotateLeftIcon, RotateRightIcon, FlipHorizontalIcon, FlipVerticalIcon,
-  NewFileIcon
+  NewFileIcon, CopyIcon, PasteIcon, CutIcon
 } from '../icons/Icons';
 import './Sidebar.css';
 
@@ -146,7 +146,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset }) => {
           <>
             <div className="sidebar-separator"></div>
             <div className="sidebar-section">
-              <div className="sidebar-section-title">Edit</div>
+              <div className="sidebar-section-title">Alter</div>
               <div className="sidebar-buttons">
                 <button 
                   onClick={() => onRotate('left')} 
@@ -180,6 +180,34 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset }) => {
             </div>
           </>
         )}
+
+        {/* Visual Separator */}
+        <div className="sidebar-separator"></div>
+
+        {/* Clipboard Section */}
+        <div className="sidebar-section">
+          <div className="sidebar-section-title">Edit</div>
+          <div className="sidebar-buttons">
+            <button 
+              className="sidebar-btn"
+              title="Copy selection"
+            >
+              <CopyIcon />
+            </button>
+            <button 
+              className="sidebar-btn"
+              title="Paste from clipboard"
+            >
+              <PasteIcon />
+            </button>
+            <button 
+              className="sidebar-btn"
+              title="Cut selection"
+            >
+              <CutIcon />
+            </button>
+          </div>
+        </div>
       </div>
     </aside>
   );
