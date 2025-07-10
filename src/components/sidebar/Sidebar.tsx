@@ -49,6 +49,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, grid, se
   // Cut handler
   const handleCut = async () => {
     try {
+      beginAction();
       await cutGridAsHtml(grid, selectedCells, updateGrid, clearSelection, onPasteModeToggle);
     } catch (error) {
       console.error('Error cutting:', error);
@@ -270,7 +271,10 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, grid, se
               <div className="sidebar-buttons">
                 <Tippy content="Rotate Left" placement="right">
                   <button 
-                    onClick={() => onRotate('left')} 
+                    onClick={() => {
+                      beginAction();
+                      onRotate('left');
+                    }} 
                     className="sidebar-btn"
                   >
                     <RotateLeftIcon />
@@ -278,7 +282,10 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, grid, se
                 </Tippy>
                 <Tippy content="Rotate Right" placement="right">
                   <button 
-                    onClick={() => onRotate('right')} 
+                    onClick={() => {
+                      beginAction();
+                      onRotate('right');
+                    }} 
                     className="sidebar-btn"
                   >
                     <RotateRightIcon />
@@ -286,7 +293,10 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, grid, se
                 </Tippy>
                 <Tippy content="Flip Horizontal" placement="right">
                   <button 
-                    onClick={() => onMirror('horizontal')} 
+                    onClick={() => {
+                      beginAction();
+                      onMirror('horizontal');
+                    }} 
                     className="sidebar-btn"
                   >
                     <FlipHorizontalIcon />
@@ -294,7 +304,10 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, grid, se
                 </Tippy>
                 <Tippy content="Flip Vertical" placement="right">
                   <button 
-                    onClick={() => onMirror('vertical')} 
+                    onClick={() => {
+                      beginAction();
+                      onMirror('vertical');
+                    }} 
                     className="sidebar-btn"
                   >
                     <FlipVerticalIcon />

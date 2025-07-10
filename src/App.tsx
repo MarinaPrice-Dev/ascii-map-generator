@@ -226,14 +226,14 @@ const AppContent: React.FC = () => {
     const cols = Math.floor(availableWidth / cellWidth);
     const rows = Math.floor(availableHeight / defaultCellSize);
     
+    // Save current state for undo/redo before resetting
+    beginAction();
+    
     // Reset all state to defaults
     setCellSize(defaultCellSize);
     setGridRows(rows);
     setGridCols(cols);
     safeSetGrid(getInitialGrid(rows, cols, DEFAULT_FG, DEFAULT_BG));
-    
-    // Clear saved state and history
-    clearSavedState();
     
     // Clear selection
     clearSelection();
@@ -702,6 +702,7 @@ const AppContent: React.FC = () => {
 
   const handlePasteAtCell = (row: number, col: number) => {
     if (!pastePreviewData) return;
+    beginAction();
     const newGrid = grid.map(r => r.map(cell => ({ ...cell })));
     const rows = pastePreviewData.length;
     const cols = Math.max(...pastePreviewData.map(row => row.length));
