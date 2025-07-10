@@ -7,7 +7,7 @@ import {
   RotateLeftIcon, RotateRightIcon, FlipHorizontalIcon, FlipVerticalIcon,
   NewFileIcon, CopyIcon, PasteIcon, CutIcon
 } from '../icons/Icons';
-import { copyGridAsHtml } from '../../utils/copyPaste';
+import { copyGridAsHtml, cutGridAsHtml } from '../../utils/copyPaste';
 import './Sidebar.css';
 
 import type { Cell } from '../../types/cell';
@@ -18,22 +18,35 @@ interface SidebarProps {
   onReset: () => void;
   grid: Cell[][];
   selectedCells: Set<string>;
+  pasteMode: boolean;
+  onPasteModeToggle: () => void;
+  updateGrid: (newGrid: Cell[][]) => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, grid, selectedCells }) => {
+const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, grid, selectedCells, pasteMode, onPasteModeToggle, updateGrid }) => {
   const {
     activeTool,
     selectionMode,
     setActiveTool,
-    setSelectionMode
+    setSelectionMode,
+    clearSelection
   } = useSelectionStore();
 
   // Copy handler
   const handleCopy = async () => {
     try {
-      await copyGridAsHtml(grid, selectedCells);
+      await copyGridAsHtml(grid, selectedCells, clearSelection, onPasteModeToggle);
     } catch (error) {
       console.error('Error copying:', error);
+    }
+  };
+
+  // Cut handler
+  const handleCut = async () => {
+    try {
+      await cutGridAsHtml(grid, selectedCells, updateGrid, clearSelection, onPasteModeToggle);
+    } catch (error) {
+      console.error('Error cutting:', error);
     }
   };
 
@@ -209,16 +222,17 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, grid, se
             >
               <CopyIcon />
             </button>
-            
             <button 
-              className="sidebar-btn"
-              title="Paste from clipboard"
+              className={`sidebar-btn${pasteMode ? ' paste-mode-active' : ''}`}
+              title={pasteMode ? 'Exit paste mode' : 'Paste from clipboard'}
+              onClick={onPasteModeToggle}
             >
               <PasteIcon />
             </button>
             <button 
               className="sidebar-btn"
               title="Cut selection"
+              onClick={handleCut}
             >
               <CutIcon />
             </button>

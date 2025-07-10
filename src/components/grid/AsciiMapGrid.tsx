@@ -15,9 +15,14 @@ type AsciiMapGridProps = {
   defaultFg: string;
   defaultBg: string;
   showBorders: boolean;
+  pasteMode?: boolean;
+  pastePreviewData?: Cell[][] | null;
+  onPaste?: (row: number, col: number) => void;
 };
 
-const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, updateGrid, beginAction, selectedChar, selectedFg, selectedBg, cellSize, defaultFg, defaultBg, showBorders }) => {
+const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({
+  grid, updateCell, updateGrid, beginAction, selectedChar, selectedFg, selectedBg, cellSize, defaultFg, defaultBg, showBorders, pasteMode, pastePreviewData, onPaste
+}) => {
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [startCell, setStartCell] = useState<{ row: number; col: number } | null>(null);
   const [hoverCell, setHoverCell] = useState<{ row: number; col: number } | null>(null);
@@ -293,14 +298,59 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, updateGri
 
   const selectionRect = getSelectionRectangle();
 
+  // Render preview overlay for paste mode
+  const renderPastePreview = () => {
+    if (!pasteMode || !pastePreviewData || !previewCell) return null;
+    const rows = pastePreviewData.length;
+    const cols = Math.max(...pastePreviewData.map(row => row.length));
+    const startRow = previewCell.row;
+    const startCol = previewCell.col;
+    const cellWidth = Math.floor(cellSize * 0.5);
+    return (
+      <div style={{ position: 'absolute', pointerEvents: 'none', zIndex: 10, top: 0, left: 0 }}>
+        {Array.from({ length: rows }).map((_, r) => (
+          <div key={r} style={{ display: 'flex', position: 'absolute', top: (startRow + r) * cellSize, left: startCol * cellWidth }}>
+            {Array.from({ length: cols }).map((_, c) => {
+              const cell = pastePreviewData[r]?.[c];
+              // Crop if out of bounds
+              if (startRow + r >= grid.length || startCol + c >= grid[0].length || !cell) return null;
+              return (
+                <div
+                  key={c}
+                  style={{
+                    width: cellWidth,
+                    height: cellSize,
+                    opacity: 0.8,
+                    background: cell.bg,
+                    color: cell.fg,
+                    fontFamily: 'monospace',
+                    fontSize: Math.floor(cellSize * 0.8),
+                    border: '1px dashed #3b83f6',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  {cell.char}
+                </div>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div 
       className={`ascii-map-grid ${selectionMode !== 'draw' ? 'selection-mode' : ''} ${!showBorders ? 'no-borders' : ''}`}
       style={{
         gridTemplateColumns: `repeat(${grid[0]?.length || 0}, ${Math.floor(cellSize * 0.5)}px)`,
         gridTemplateRows: `repeat(${grid.length}, ${cellSize}px)`,
+        position: 'relative',
       }}
     >
+      {renderPastePreview()}
       {grid.map((row, rowIndex) => (
         <div key={rowIndex} className="ascii-map-grid-row">
           {row.map((cell, colIndex) => {
@@ -311,7 +361,14 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({ grid, updateCell, updateGri
                 key={colIndex}
                 data-row={rowIndex}
                 data-col={colIndex}
-                onMouseDown={(e) => handleStart(rowIndex, colIndex, e.button === 2)}
+                onMouseDown={(e) => {
+                  if (pasteMode && pastePreviewData && onPaste) {
+                    e.preventDefault();
+                    onPaste(rowIndex, colIndex);
+                  } else {
+                    handleStart(rowIndex, colIndex, e.button === 2);
+                  }
+                }}
                 onMouseOver={() => handleMove(rowIndex, colIndex)}
                 onMouseEnter={() => setPreviewCell({ row: rowIndex, col: colIndex })}
                 onMouseLeave={() => setPreviewCell(null)}

@@ -36,6 +36,8 @@ const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showBorders, setShowBorders] = useState(true);
   const mainRef = useRef<HTMLDivElement>(null);
+  const [pasteMode, setPasteMode] = useState(false);
+  const [pastePreviewData, setPastePreviewData] = useState<Cell[][] | null>(null);
 
   // Calculate initial grid dimensions once
   const getInitialGridDims = (currentCellSize: number) => {
@@ -536,6 +538,177 @@ const App: React.FC = () => {
     handleImportMap
   ]);
 
+  const handlePasteModeToggle = async () => {
+    if (!pasteMode) {
+      // Entering paste mode: read clipboard
+      try {
+        // Try to read HTML first (for our own copied data with colors)
+        let htmlData: string | null = null;
+        try {
+          const clipboardItems = await navigator.clipboard.read();
+          for (const item of clipboardItems) {
+            if (item.types.includes('text/html')) {
+              const htmlBlob = await item.getType('text/html');
+              htmlData = await htmlBlob.text();
+              break;
+            }
+          }
+        } catch (e) {
+          // Fallback to plain text if HTML reading fails
+        }
+
+        let parsedData: Cell[][] | null = null;
+
+        if (htmlData) {
+          // Parse HTML to extract characters and colors
+          parsedData = parseHtmlToCells(htmlData);
+        }
+
+        if (!parsedData) {
+          // Fallback to plain text
+          const text = await navigator.clipboard.readText();
+          const sanitized = text.replace(/<[^>]*>/g, ''); // Remove any HTML tags
+          const rows = sanitized.split(/\r?\n/);
+          parsedData = rows.map(row => 
+            row.split('').map(char => ({ 
+              char, 
+              fg: DEFAULT_FG, 
+              bg: DEFAULT_BG 
+            }))
+          );
+        }
+
+        setPastePreviewData(parsedData);
+      } catch (e) {
+        console.error('Failed to read clipboard:', e);
+        setPastePreviewData(null);
+      }
+    } else {
+      // Exiting paste mode
+      setPastePreviewData(null);
+    }
+    setPasteMode((prev) => !prev);
+  };
+
+  // Handle Escape key to exit paste mode
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && pasteMode) {
+        setPasteMode(false);
+        setPastePreviewData(null);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [pasteMode]);
+
+  // Parse HTML clipboard data to extract characters and colors
+  const parseHtmlToCells = (html: string): Cell[][] => {
+    try {
+      // Create a temporary element to parse the HTML
+      const tempElement = document.createElement('div');
+      tempElement.innerHTML = html;
+      
+      const rows: Cell[][] = [];
+      let currentRow: Cell[] = [];
+      
+      // Walk through the DOM nodes
+      const walkNodes = (node: Node) => {
+        if (node.nodeType === Node.TEXT_NODE) {
+          // Text node - split into characters
+          const text = node.textContent || '';
+          for (const char of text) {
+            if (char === '\n') {
+              // New line
+              if (currentRow.length > 0) {
+                rows.push([...currentRow]);
+                currentRow = [];
+              }
+            } else {
+              // Regular character - use default colors
+              currentRow.push({ 
+                char, 
+                fg: DEFAULT_FG, 
+                bg: DEFAULT_BG 
+              });
+            }
+          }
+        } else if (node.nodeType === Node.ELEMENT_NODE) {
+          const element = node as HTMLElement;
+          
+          if (element.tagName === 'BR') {
+            // Line break
+            if (currentRow.length > 0) {
+              rows.push([...currentRow]);
+              currentRow = [];
+            }
+          } else if (element.tagName === 'SPAN') {
+            // Span element with color information
+            const style = element.style;
+            const fg = style.color || DEFAULT_FG;
+            const bg = style.backgroundColor || DEFAULT_BG;
+            
+            const text = element.textContent || '';
+            for (const char of text) {
+              if (char === '\n') {
+                if (currentRow.length > 0) {
+                  rows.push([...currentRow]);
+                  currentRow = [];
+                }
+              } else {
+                currentRow.push({ char, fg, bg });
+              }
+            }
+          } else {
+            // Other elements - recursively process children
+            for (const child of Array.from(element.childNodes)) {
+              walkNodes(child);
+            }
+          }
+        }
+      };
+      
+      // Process all child nodes
+      for (const child of Array.from(tempElement.childNodes)) {
+        walkNodes(child);
+      }
+      
+      // Add the last row if it has content
+      if (currentRow.length > 0) {
+        rows.push(currentRow);
+      }
+      
+      return rows;
+    } catch (error) {
+      console.error('Failed to parse HTML:', error);
+      return [];
+    }
+  };
+
+  const handlePasteAtCell = (row: number, col: number) => {
+    if (!pastePreviewData) return;
+    const newGrid = grid.map(r => r.map(cell => ({ ...cell })));
+    const rows = pastePreviewData.length;
+    const cols = Math.max(...pastePreviewData.map(row => row.length));
+    
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const targetRow = row + r;
+        const targetCol = col + c;
+        if (targetRow < newGrid.length && targetCol < newGrid[0].length) {
+          const sourceCell = pastePreviewData[r]?.[c];
+          if (sourceCell) {
+            newGrid[targetRow][targetCol] = { ...sourceCell };
+          }
+        }
+      }
+    }
+    setGrid(newGrid);
+    setPasteMode(false);
+    setPastePreviewData(null);
+  };
+
   return (
     <div className="App" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--bg)', color: 'var(--fg)' }}>
       {isLoading && <Loader message="Exporting..." />}
@@ -573,6 +746,9 @@ const App: React.FC = () => {
           onReset={handleReset}
           grid={grid}
           selectedCells={selectedCells}
+          pasteMode={pasteMode}
+          onPasteModeToggle={handlePasteModeToggle}
+          updateGrid={updateGrid}
         />
         <div className="content-area">
           {/* Main Grid Area */}
@@ -590,6 +766,9 @@ const App: React.FC = () => {
                 defaultFg={DEFAULT_FG}
                 defaultBg={DEFAULT_BG}
                 showBorders={showBorders}
+                pasteMode={pasteMode}
+                pastePreviewData={pastePreviewData}
+                onPaste={handlePasteAtCell}
               />
             )}
           </main>

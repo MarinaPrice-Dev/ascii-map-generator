@@ -174,4 +174,11 @@
   display: none;
 }
 
+.sidebar-btn.paste-mode-active {
+  background: var(--side);
+  color: var(--bg);
+  border: 2px solid var(--fg);
+  box-shadow: 0 0 0 2px var(--side), 0 2px 8px rgba(0,0,0,0.15);
+}
+
  

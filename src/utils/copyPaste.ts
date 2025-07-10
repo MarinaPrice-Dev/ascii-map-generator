@@ -4,9 +4,16 @@ import type { Cell } from '../types/cell';
  * Copy grid data to clipboard as HTML with preserved colors and formatting
  * @param grid - The 2D grid of cells
  * @param selectedCells - Set of selected cell keys in "row,col" format
+ * @param clearSelection - Function to clear the selection
+ * @param onPasteModeToggle - Optional function to toggle paste mode after copying
  * @returns Promise that resolves when copy is complete
  */
-export const copyGridAsHtml = async (grid: Cell[][], selectedCells: Set<string>): Promise<void> => {
+export const copyGridAsHtml = async (
+  grid: Cell[][], 
+  selectedCells: Set<string>, 
+  clearSelection: () => void,
+  onPasteModeToggle?: () => void
+): Promise<void> => {
   try {
     // Determine what to copy: selection or entire grid
     const gridData = selectedCells.size > 0 ? getSelectedCellsData(grid, selectedCells) : getAllGridData(grid);
@@ -23,8 +30,69 @@ export const copyGridAsHtml = async (grid: Cell[][], selectedCells: Set<string>)
     await copyHtmlToClipboard(htmlContent);
     
     console.log('Copy successful');
+    
+    // Clear selection after copying
+    clearSelection();
+    
+    // Automatically start paste mode if callback provided
+    if (onPasteModeToggle) {
+      onPasteModeToggle();
+    }
   } catch (error) {
     console.error('Error copying:', error);
+    throw error;
+  }
+};
+
+/**
+ * Cut grid data to clipboard as HTML and clear the content from the grid
+ * @param grid - The 2D grid of cells
+ * @param selectedCells - Set of selected cell keys in "row,col" format
+ * @param updateGrid - Function to update the grid
+ * @param clearSelection - Function to clear the selection
+ * @param onPasteModeToggle - Optional function to toggle paste mode after cutting
+ * @returns Promise that resolves when cut is complete
+ */
+export const cutGridAsHtml = async (
+  grid: Cell[][], 
+  selectedCells: Set<string>, 
+  updateGrid: (newGrid: Cell[][]) => void,
+  clearSelection: () => void,
+  onPasteModeToggle?: () => void
+): Promise<void> => {
+  try {
+    // First copy the content
+    await copyGridAsHtml(grid, selectedCells, clearSelection);
+    
+    // Then clear the content from the grid
+    if (selectedCells.size > 0) {
+      // Clear selected cells
+      const newGrid = grid.map(row => row.map(cell => ({ ...cell })));
+      selectedCells.forEach(key => {
+        const [row, col] = key.split(',').map(Number);
+        if (newGrid[row]?.[col]) {
+          newGrid[row][col] = { char: ' ', fg: '#FFFFFF', bg: '#222222' };
+        }
+      });
+      updateGrid(newGrid);
+      clearSelection();
+    } else {
+      // Clear entire grid
+      const newGrid = grid.map(row => 
+        row.map(() => ({ char: ' ', fg: '#FFFFFF', bg: '#222222' }))
+      );
+      updateGrid(newGrid);
+      clearSelection();
+    }
+    
+    console.log('Cut successful');
+    
+    // Automatically start paste mode if callback provided
+    if (onPasteModeToggle) {
+      onPasteModeToggle();
+    }
+  } catch (error) {
+    console.error('Error cutting:', error);
     throw error;
   }
 };
