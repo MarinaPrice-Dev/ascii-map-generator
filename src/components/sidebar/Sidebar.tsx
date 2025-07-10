@@ -5,9 +5,10 @@ import {
   PencilIcon, SingleBoxIcon, MultipleBoxIcon, 
   AreaIcon, RectangleIcon, CellsIcon,
   RotateLeftIcon, RotateRightIcon, FlipHorizontalIcon, FlipVerticalIcon,
-  NewFileIcon, CopyIcon, PasteIcon, CutIcon
+  NewFileIcon, CopyIcon, PasteIcon, CutIcon, ClearIcon
 } from '../icons/Icons';
 import { copyGridAsHtml, cutGridAsHtml } from '../../utils/copyPaste';
+import { useToast } from '../toast/ToastContainer';
 import './Sidebar.css';
 
 import type { Cell } from '../../types/cell';
@@ -21,9 +22,11 @@ interface SidebarProps {
   pasteMode: boolean;
   onPasteModeToggle: () => void;
   updateGrid: (newGrid: Cell[][]) => void;
+  beginAction: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, grid, selectedCells, pasteMode, onPasteModeToggle, updateGrid }) => {
+const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, grid, selectedCells, pasteMode, onPasteModeToggle, updateGrid, beginAction }) => {
+  const { showToast } = useToast();
   const {
     activeTool,
     selectionMode,
@@ -47,6 +50,51 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, grid, se
       await cutGridAsHtml(grid, selectedCells, updateGrid, clearSelection, onPasteModeToggle);
     } catch (error) {
       console.error('Error cutting:', error);
+    }
+  };
+
+  // Selection mode handlers with toast notifications
+  const handleSelectionModeChange = (mode: SelectionMode) => {
+    setSelectionMode(mode);
+    if (mode === 'single' || mode === 'multiple') {
+      showToast('Click and drag to select any area in the grid. Edit or Alter to manipulate your selection. Press [Esc] to remove any selections.');
+    }
+  };
+
+  // Erase handler
+  const handleErase = () => {
+    beginAction();
+    
+    if (selectedCells.size > 0) {
+      // Erase only selected cells
+      const newGrid = grid.map(row => row.map(cell => ({ ...cell })));
+      
+      selectedCells.forEach(cellKey => {
+        const [row, col] = cellKey.split(',').map(Number);
+        if (newGrid[row] && newGrid[row][col]) {
+          newGrid[row][col] = { 
+            char: ' ', 
+            fg: '#FFFFFF', 
+            bg: '#222222',
+            selected: false 
+          };
+        }
+      });
+      
+      updateGrid(newGrid);
+      clearSelection();
+    } else {
+      // Erase entire grid
+      const newGrid = grid.map(row => 
+        row.map(cell => ({ 
+          char: ' ', 
+          fg: '#FFFFFF', 
+          bg: '#222222',
+          selected: cell.selected 
+        }))
+      );
+      
+      updateGrid(newGrid);
     }
   };
 
@@ -79,7 +127,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, grid, se
                 name="sidebarSelectionMode"
                 value="draw"
                 checked={selectionMode === 'draw'}
-                onChange={(e) => setSelectionMode(e.target.value as SelectionMode)}
+                onChange={(e) => handleSelectionModeChange(e.target.value as SelectionMode)}
                 className="sr-only"
               />
               <div className="sidebar-icon" title="Draw using symbols and colors">
@@ -93,7 +141,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, grid, se
                 name="sidebarSelectionMode"
                 value="single"
                 checked={selectionMode === 'single'}
-                onChange={(e) => setSelectionMode(e.target.value as SelectionMode)}
+                onChange={(e) => handleSelectionModeChange(e.target.value as SelectionMode)}
                 className="sr-only"
               />
               <div className="sidebar-icon" title="Select an area to manipulate">
@@ -107,7 +155,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, grid, se
                 name="sidebarSelectionMode"
                 value="multiple"
                 checked={selectionMode === 'multiple'}
-                onChange={(e) => setSelectionMode(e.target.value as SelectionMode)}
+                onChange={(e) => handleSelectionModeChange(e.target.value as SelectionMode)}
                 className="sr-only"
               />
               <div className="sidebar-icon" title="Select multiple areas to manipulate">
@@ -168,6 +216,37 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, grid, se
           </div>
         </div>
 
+        {/* Visual Separator */}
+        <div className="sidebar-separator"></div>
+
+        {/* Edit Section */}
+        <div className="sidebar-section">
+          <div className="sidebar-section-title">Edit</div>
+          <div className="sidebar-buttons">
+            <button 
+              className="sidebar-btn"
+              title="Copy selection"
+              onClick={handleCopy}
+            >
+              <CopyIcon />
+            </button>
+            <button 
+              className={`sidebar-btn${pasteMode ? ' paste-mode-active' : ''}`}
+              title={pasteMode ? 'Exit paste mode' : 'Paste from clipboard'}
+              onClick={onPasteModeToggle}
+            >
+              <PasteIcon />
+            </button>
+            <button 
+              className="sidebar-btn"
+              title="Cut selection"
+              onClick={handleCut}
+            >
+              <CutIcon />
+            </button>
+          </div>
+        </div>
+
         {/* Visual Separator and Transform Section - only show when in selection mode */}
         {(selectionMode === 'single' || selectionMode === 'multiple') && (
           <>
@@ -203,41 +282,17 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, grid, se
                 >
                   <FlipVerticalIcon />
                 </button>
+                <button 
+                  onClick={handleErase} 
+                  className="sidebar-btn"
+                  title="Clear"
+                >
+                  <ClearIcon />
+                </button>
               </div>
             </div>
           </>
         )}
-
-        {/* Visual Separator */}
-        <div className="sidebar-separator"></div>
-
-        {/* Clipboard Section */}
-        <div className="sidebar-section">
-          <div className="sidebar-section-title">Edit</div>
-          <div className="sidebar-buttons">
-            <button 
-              className="sidebar-btn"
-              title="Copy selection"
-              onClick={handleCopy}
-            >
-              <CopyIcon />
-            </button>
-            <button 
-              className={`sidebar-btn${pasteMode ? ' paste-mode-active' : ''}`}
-              title={pasteMode ? 'Exit paste mode' : 'Paste from clipboard'}
-              onClick={onPasteModeToggle}
-            >
-              <PasteIcon />
-            </button>
-            <button 
-              className="sidebar-btn"
-              title="Cut selection"
-              onClick={handleCut}
-            >
-              <CutIcon />
-            </button>
-          </div>
-        </div>
       </div>
     </aside>
   );

@@ -58,6 +58,12 @@ const ToastContainer: React.FC<ToastContainerProps> = ({ children }) => {
       return;
     }
 
+    // Check if a toast with the same message is already displayed
+    const isDuplicate = toasts.some(toast => toast.message === message);
+    if (isDuplicate) {
+      return;
+    }
+
     const id = `toast-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     const newToast: ToastItem = { id, message };
     

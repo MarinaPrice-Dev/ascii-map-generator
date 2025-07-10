@@ -590,6 +590,9 @@ const AppContent: React.FC = () => {
         }
 
         setPastePreviewData(parsedData);
+        
+        // Show paste mode toast
+        showToast('You are in paste mode. Click anywhere on the grid to paste. Press [Esc] to exit');
       } catch (e) {
         console.error('Failed to read clipboard:', e);
         setPastePreviewData(null);
@@ -760,6 +763,7 @@ const AppContent: React.FC = () => {
           pasteMode={pasteMode}
           onPasteModeToggle={handlePasteModeToggle}
           updateGrid={updateGrid}
+          beginAction={beginAction}
         />
         <div className="content-area">
           {/* Main Grid Area */}
