@@ -16,11 +16,18 @@ const InfoDialog: React.FC<InfoDialogProps> = ({ onClose }) => (
         <p>ASCII Studio is a powerful tool for creating ASCII art with customizable characters and colors.</p>
         <h3>Getting Started</h3>
         <p>Just click on any square in the grid to start drawing your very own art. You can easily change any of the symbols and colors by selecting from the footer.</p>
-        <p>You can also import images from your computer and convert them to ASCII art. This is a great way to get started with ASCII Studio!</p>
-        <p>For more advanced features, click the Menu button in the top right corner of the screen. This will open the tools menu. From here, you can select any of the shapes tools to start creating more customisable art. Use the "Selection Tool" to select and manipulate areas of the grid.</p>
+        <p>You can import images from your computer and convert them to ASCII art. This is a great way to get started with ASCII Studio!</p>
+        <p>The sidebar offers a variety of tools to help you create your art. Try out the various tools to see what you can create! If you make a mistake, you can always undo or redo your actions.</p>
         <p>You can export your art in a variety of formats, including .html, .txt, .json, .ansi, .rot.txt, and .png. The json format is best for saving your work and re-importing to continue it as it includes all the information needed to recreate your art.</p>
+        <p><strong>Don't forget that when you use the copy tool, it uses the clipboard so you can copy/paste art from AND into any another application!</strong></p>
         <h3>Features</h3>
         <ul className="feature">
+          <li>
+          <svg className="feature-icon" viewBox="0 0 24 24" width="16" height="16">
+            <path fill="currentColor" d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+          </svg>
+            <strong>Copy/Paste:</strong> Copy and paste on the grid. It uses your clipboard so works with external apps too, try pasting your own art into the grid!
+          </li>
           <li>
           <svg className="feature-icon" viewBox="0 0 24 24" width="16" height="16">
             <path fill="currentColor" d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
@@ -61,12 +68,28 @@ const InfoDialog: React.FC<InfoDialogProps> = ({ onClose }) => (
         <ul>
           <li><strong>Ctrl + Z:</strong> Undo the last action.</li>
           <li><strong>Ctrl + Y:</strong> Redo the last undone action.</li>
-          <li><strong>Ctrl + S:</strong> Save the current map.</li>
+          <li><strong>Ctrl + S:</strong> Save the current art.</li>
           <li><strong>Ctrl + M:</strong> Open the menu, the rest of the shortcuts are listed here!</li>
         </ul>
-        <h3>Example ASCII Maps (coming soon)</h3>
-        <p>Here are some examples of what you can create with ASCII Studio:</p>
+        <h3>Example ASCII Art</h3>
+        <p>Not yet available, but will be soon!</p>
         <h3>Latest Updates</h3>
+        <h5>2025-07-10</h5>
+        <ul>
+            <li><strong>Copy/Cut:</strong> Either make a selection or use the entire grid. Copy and cut goes to the clipboard.</li>
+            <li><strong>Paste mode:</strong> Paste from the clipboard, you need to hover over the grid to paste. It uses your clipboard so works with external apps/websites too.</li>
+            <li><strong>Undo/Redo:</strong> Improved undo and redo - works more reliably.</li>
+            <li><strong>Tooltips:</strong> Added tooltips to the sidebar and header.</li>
+            <li><strong>Toasts:</strong> Added toasts to the screen to helpful messages.</li>
+            <li><strong>Shortcuts:</strong> More shortcuts available, now with MacOS support.</li>
+            <li><strong>Bug fixes</strong></li>
+        </ul>
+        <h5>2025-07-09</h5>
+        <ul>
+            <li><strong>New sidebar:</strong> New sidebar to access tools and edit the grid.</li>
+            <li><strong>New grid button:</strong> Reset the grid to start a new project.</li>
+            <li><strong>Tooltips:</strong> Added tooltips to the sidebar and header.</li>
+        </ul>
         <h5>2025-06-29</h5>
         <ul>
             <li><strong>Grid Resizing:</strong> Resize the grid to your desired size.</li>
