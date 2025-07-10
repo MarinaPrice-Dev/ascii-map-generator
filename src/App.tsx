@@ -6,6 +6,7 @@ import { useUndoRedo } from './utils/useUndoRedo'
 import { getInitialGrid } from './utils/mapUtils'
 import { loadSavedState, saveState, clearSavedState } from './utils/saveState'
 import { exportMap } from './utils/exportMap'
+import { copyGridAsHtml, cutGridAsHtml } from './utils/copyPaste'
 import Header from './components/header/Header'
 import { Footer } from './components/footer/Footer'
 import Menu from './components/menu/Menu'
@@ -518,37 +519,6 @@ const AppContent: React.FC = () => {
     setGrid(newGrid);
   };
 
-  // Setup keyboard shortcuts
-  useEffect(() => {
-    const cleanup = setupKeyboardShortcuts({
-      undo,
-      redo,
-      handleZoomIn,
-      handleZoomOut,
-      handleExportPanelToggle,
-      handleMenuToggle,
-      clearSelection,
-      updateSelection,
-      gridRows,
-      gridCols,
-      handleImportMap,
-    });
-
-    return cleanup;
-  }, [
-    undo, 
-    redo, 
-    handleZoomIn, 
-    handleZoomOut, 
-    handleExportPanelToggle, 
-    handleMenuToggle, 
-    clearSelection, 
-    updateSelection, 
-    gridRows, 
-    gridCols, 
-    handleImportMap
-  ]);
-
   const handlePasteModeToggle = async () => {
     if (!pasteMode) {
       // Entering paste mode: read clipboard
@@ -603,6 +573,101 @@ const AppContent: React.FC = () => {
     }
     setPasteMode((prev) => !prev);
   };
+
+  // Copy handler
+  const handleCopy = async () => {
+    try {
+      await copyGridAsHtml(grid, selectedCells, clearSelection, handlePasteModeToggle);
+    } catch (error) {
+      console.error('Error copying:', error);
+    }
+  };
+
+  // Cut handler
+  const handleCut = async () => {
+    try {
+      beginAction();
+      await cutGridAsHtml(grid, selectedCells, updateGrid, clearSelection, handlePasteModeToggle);
+    } catch (error) {
+      console.error('Error cutting:', error);
+    }
+  };
+
+  // Clear handler
+  const handleClear = () => {
+    beginAction();
+    
+    if (selectedCells.size > 0) {
+      // Clear only selected cells
+      const newGrid = grid.map(row => row.map(cell => ({ ...cell })));
+      
+      selectedCells.forEach(cellKey => {
+        const [row, col] = cellKey.split(',').map(Number);
+        if (newGrid[row] && newGrid[row][col]) {
+          newGrid[row][col] = { 
+            char: ' ', 
+            fg: '#FFFFFF', 
+            bg: '#222222',
+            selected: false 
+          };
+        }
+      });
+      
+      updateGrid(newGrid);
+      clearSelection();
+    } else {
+      // Clear entire grid
+      const newGrid = grid.map(row => 
+        row.map(cell => ({ 
+          char: ' ', 
+          fg: '#FFFFFF', 
+          bg: '#222222',
+          selected: cell.selected 
+        }))
+      );
+      
+      updateGrid(newGrid);
+    }
+  };
+
+  // Setup keyboard shortcuts
+  useEffect(() => {
+    const cleanup = setupKeyboardShortcuts({
+      undo,
+      redo,
+      handleZoomIn,
+      handleZoomOut,
+      handleExportPanelToggle,
+      handleMenuToggle,
+      clearSelection,
+      updateSelection,
+      gridRows,
+      gridCols,
+      handleImportMap,
+      handleCopy: handleCopy,
+      handlePasteModeToggle,
+      handleCut: handleCut,
+      handleClear,
+    });
+
+    return cleanup;
+  }, [
+    undo, 
+    redo, 
+    handleZoomIn, 
+    handleZoomOut, 
+    handleExportPanelToggle, 
+    handleMenuToggle, 
+    clearSelection, 
+    updateSelection, 
+    gridRows, 
+    gridCols, 
+    handleImportMap,
+    handleCopy,
+    handlePasteModeToggle,
+    handleCut,
+    handleClear
+  ]);
 
   // Handle Escape key to exit paste mode
   useEffect(() => {
@@ -765,6 +830,9 @@ const AppContent: React.FC = () => {
           onPasteModeToggle={handlePasteModeToggle}
           updateGrid={updateGrid}
           beginAction={beginAction}
+          onCopy={handleCopy}
+          onCut={handleCut}
+          onClear={handleClear}
         />
         <div className="content-area">
           {/* Main Grid Area */}

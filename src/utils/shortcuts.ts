@@ -14,6 +14,10 @@ interface ShortcutProps {
   gridRows: number;
   gridCols: number;
   handleImportMap: (grid: Cell[][]) => void;
+  handleCopy: () => void;
+  handlePasteModeToggle: () => void;
+  handleCut: () => void;
+  handleClear: () => void;
 }
 
 export const setupKeyboardShortcuts = (props: ShortcutProps) => {
@@ -29,6 +33,10 @@ export const setupKeyboardShortcuts = (props: ShortcutProps) => {
     gridRows,
     gridCols,
     handleImportMap,
+    handleCopy,
+    handlePasteModeToggle,
+    handleCut,
+    handleClear,
   } = props;
 
   const { setSelectionMode } = useSelectionStore.getState();
@@ -91,13 +99,36 @@ export const setupKeyboardShortcuts = (props: ShortcutProps) => {
     } else if (e.key === '-' && ctrlKey) {
         e.preventDefault();
         handleZoomOut();
-    } else if (e.code === 'Space' && ctrlKey) {
+    } else if (e.code === 'Space' && ctrlKey && !isMac) {
+      // Windows/Linux: Ctrl + Space
+      e.preventDefault();
+      const currentMode = useSelectionStore.getState().selectionMode;
+      setSelectionMode(currentMode === 'draw' ? 'multiple' : 'draw');
+    } else if (e.code === 'Space' && ctrlKey && e.shiftKey && isMac) {
+      // macOS: Cmd + Shift + Space
       e.preventDefault();
       const currentMode = useSelectionStore.getState().selectionMode;
       setSelectionMode(currentMode === 'draw' ? 'multiple' : 'draw');
     } else if (e.key === 'm' && ctrlKey) {
       e.preventDefault();
       handleMenuToggle();
+    } else if (e.key === 'c' && ctrlKey) {
+      e.preventDefault();
+      handleCopy();
+    } else if (e.key === 'v' && ctrlKey) {
+      e.preventDefault();
+      handlePasteModeToggle();
+    } else if (e.key === 'x' && ctrlKey) {
+      e.preventDefault();
+      handleCut();
+    } else if (e.key === 'Delete' && !isMac) {
+      // Windows: Delete key
+      e.preventDefault();
+      handleClear();
+    } else if (e.key === 'Backspace' && isMac) {
+      // macOS: Backspace key
+      e.preventDefault();
+      handleClear();
     }
   };
 

@@ -25,9 +25,12 @@ interface SidebarProps {
   onPasteModeToggle: () => void;
   updateGrid: (newGrid: Cell[][]) => void;
   beginAction: () => void;
+  onCopy: () => void;
+  onCut: () => void;
+  onClear: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, grid, selectedCells, pasteMode, onPasteModeToggle, updateGrid, beginAction }) => {
+const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, grid, selectedCells, pasteMode, onPasteModeToggle, updateGrid, beginAction, onCopy, onCut, onClear }) => {
   const { showToast } = useToast();
   const {
     activeTool,
@@ -37,24 +40,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, grid, se
     clearSelection
   } = useSelectionStore();
 
-  // Copy handler
-  const handleCopy = async () => {
-    try {
-      await copyGridAsHtml(grid, selectedCells, clearSelection, onPasteModeToggle);
-    } catch (error) {
-      console.error('Error copying:', error);
-    }
-  };
 
-  // Cut handler
-  const handleCut = async () => {
-    try {
-      beginAction();
-      await cutGridAsHtml(grid, selectedCells, updateGrid, clearSelection, onPasteModeToggle);
-    } catch (error) {
-      console.error('Error cutting:', error);
-    }
-  };
 
   // Selection mode handlers with toast notifications
   const handleSelectionModeChange = (mode: SelectionMode) => {
@@ -64,42 +50,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, grid, se
     }
   };
 
-  // Erase handler
-  const handleErase = () => {
-    beginAction();
-    
-    if (selectedCells.size > 0) {
-      // Erase only selected cells
-      const newGrid = grid.map(row => row.map(cell => ({ ...cell })));
-      
-      selectedCells.forEach(cellKey => {
-        const [row, col] = cellKey.split(',').map(Number);
-        if (newGrid[row] && newGrid[row][col]) {
-          newGrid[row][col] = { 
-            char: ' ', 
-            fg: '#FFFFFF', 
-            bg: '#222222',
-            selected: false 
-          };
-        }
-      });
-      
-      updateGrid(newGrid);
-      clearSelection();
-    } else {
-      // Erase entire grid
-      const newGrid = grid.map(row => 
-        row.map(cell => ({ 
-          char: ' ', 
-          fg: '#FFFFFF', 
-          bg: '#222222',
-          selected: cell.selected 
-        }))
-      );
-      
-      updateGrid(newGrid);
-    }
-  };
+
 
   return (
     <aside className="sidebar">
@@ -238,7 +189,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, grid, se
             <Tippy content="Copy selection" placement="right">
               <button 
                 className="sidebar-btn"
-                onClick={handleCopy}
+                onClick={onCopy}
               >
                 <CopyIcon />
               </button>
@@ -254,7 +205,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, grid, se
             <Tippy content="Cut selection" placement="right">
               <button 
                 className="sidebar-btn"
-                onClick={handleCut}
+                onClick={onCut}
               >
                 <CutIcon />
               </button>
@@ -315,7 +266,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, grid, se
                 </Tippy>
                 <Tippy content="Clear" placement="right">
                   <button 
-                    onClick={handleErase} 
+                    onClick={onClear} 
                     className="sidebar-btn"
                   >
                     <ClearIcon />

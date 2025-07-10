@@ -1,6 +1,6 @@
 .shortcuts-section h3 {
-  padding: 0 0 5px 0;
-  margin-bottom: 5px;
+  padding: 0 0 8px 0;
+  margin-bottom: 12px;
   font-size: 13px;
   font-weight: bold;
   text-transform: uppercase;
@@ -19,25 +19,26 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    padding: 0.5rem;
+    padding: 0.2rem 0;
 }
 
 .shortcut-item kbd {
   border: 1px solid var(--border);
   border-radius: 3px;
   padding: 0.2rem 0.4rem;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   font-family: monospace;
   color: var(--fg);
-  min-width: 100px;
+  min-width: 40px;
   text-align: center;
   background: var(--bg-light);
+  margin-right: 0.5rem;
 }
 
 .shortcut-item span {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   color: var(--fg);
   text-align: left;
   opacity: 0.95;
-  margin-left: 1rem;
+  margin-left: 0.5rem;
 } 
