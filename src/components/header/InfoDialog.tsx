@@ -14,12 +14,12 @@ const InfoDialog: React.FC<InfoDialogProps> = ({ onClose }) => (
       </div>
       <div className="info-dialog-body">
         <p>ASCII Studio is a powerful tool for creating ASCII art with customizable characters and colors.</p>
+        <p>You can <strong>import images</strong> from your computer and convert them to ASCII art. Or you can <strong>paste ascii art</strong> from your favourite website. These are a great way to get started with ASCII Studio!</p>
         <h3>Getting Started</h3>
         <p>Just click on any square in the grid to start drawing your very own art. You can easily change any of the symbols and colors by selecting from the footer.</p>
-        <p>You can import images from your computer and convert them to ASCII art. This is a great way to get started with ASCII Studio!</p>
         <p>The sidebar offers a variety of tools to help you create your art. Try out the various tools to see what you can create! If you make a mistake, you can always undo or redo your actions.</p>
         <p>You can export your art in a variety of formats, including .html, .txt, .json, .ansi, .rot.txt, and .png. The json format is best for saving your work and re-importing to continue it as it includes all the information needed to recreate your art.</p>
-        <p><strong>Don't forget that when you use the copy tool, it uses the clipboard so you can copy/paste art from AND into any another application!</strong></p>
+        <p><strong>Don't forget that when you use the copy tool, it uses the clipboard so you can copy/paste art to and from any other application!</strong></p>
         <h3>Features</h3>
         <ul className="feature">
           <li>
@@ -45,7 +45,7 @@ const InfoDialog: React.FC<InfoDialogProps> = ({ onClose }) => (
               <path fill="currentColor" d="M20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 18H4V4h16v16z"/>
               <path fill="currentColor" d="M7 7h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2zM7 11h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2zM7 15h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2z"/>
           </svg>
-          <strong>Selection Tool:</strong> Use the selection tool to select and manipulate areas of the grid. Available in the Tools menu.
+          <strong>Selection Tool:</strong> Use the selection tool to select and manipulate areas of the grid. Available in the sidebar.
           </li>
           <li>
           <svg className="feature-icon" viewBox="0 0 24 24" width="16" height="16">
@@ -62,7 +62,7 @@ const InfoDialog: React.FC<InfoDialogProps> = ({ onClose }) => (
               <path fill="currentColor" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
               <path fill="currentColor" d="M7 12h2v5H7zm4-3h2v8h-2zm4-3h2v11h-2z"/>
             </svg>
-            <strong>Responsive:</strong> Provides limited feature support for tablets and mobile.</li>
+            <strong>Responsive:</strong> Decent support for tablets, more limited in mobile.</li>
         </ul>
         <h3>Keyboard Shortcuts</h3>
         <ul>
@@ -77,10 +77,10 @@ const InfoDialog: React.FC<InfoDialogProps> = ({ onClose }) => (
         <h5>2025-07-10</h5>
         <ul>
             <li><strong>Copy/Cut:</strong> Either make a selection or use the entire grid. Copy and cut goes to the clipboard.</li>
-            <li><strong>Paste mode:</strong> Paste from the clipboard, you need to hover over the grid to paste. It uses your clipboard so works with external apps/websites too.</li>
+            <li><strong>Paste mode:</strong> Paste from the clipboard, you need to hover over the grid to paste. Works with external apps/websites.</li>
             <li><strong>Undo/Redo:</strong> Improved undo and redo - works more reliably.</li>
             <li><strong>Tooltips:</strong> Added tooltips to the sidebar and header.</li>
-            <li><strong>Toasts:</strong> Added toasts to the screen to helpful messages.</li>
+            <li><strong>Toasts:</strong> Added toasts for helpful messages.</li>
             <li><strong>Shortcuts:</strong> More shortcuts available, now with MacOS support.</li>
             <li><strong>Bug fixes</strong></li>
         </ul>

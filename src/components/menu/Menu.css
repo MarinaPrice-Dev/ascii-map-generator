@@ -62,6 +62,7 @@
   padding: 1rem;
   flex-grow: 1;
   overflow-y: auto;
+  font-family: system-ui, sans-serif;
 }
 
 /* Custom scrollbar for menu content */
@@ -103,7 +104,7 @@
   color: var(--fg);
   font-family: "Doto", sans-serif;
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 1rem;
   text-align: left;
   flex-shrink: 0;
 }

@@ -19,7 +19,7 @@ const ResetDialog: React.FC<ResetDialogProps> = ({ isOpen, onClose, onConfirm })
     <div className="reset-dialog-overlay" onClick={onClose}>
       <div className="reset-dialog" onClick={(e) => e.stopPropagation()}>
         <div className="reset-dialog-header">
-          <h3>Reset Grid</h3>
+          <h3>Master Grid Reset</h3>
           <button className="reset-dialog-close" onClick={onClose}>
             ✕
           </button>

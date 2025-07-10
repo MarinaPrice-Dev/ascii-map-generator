@@ -54,6 +54,7 @@
   flex-grow: 1;
   margin: 20px 10px;
   opacity: 0.9;
+  font-family: system-ui, sans-serif;
 }
 
 .info-dialog-body h3 {
@@ -65,6 +66,8 @@
     margin-bottom: 6px;
     border-top: 2px dashed var(--border);
     padding-top: 5px;
+    font-family: "Doto", sans-serif;
+    font-weight: 700;
 }
 
 .info-dialog-body h5 {
