@@ -567,7 +567,13 @@ const App: React.FC = () => {
       />
       
       <div className="main-content">
-        <Sidebar onRotate={handleRotate} onMirror={handleMirror} onReset={handleReset} />
+        <Sidebar 
+          onRotate={handleRotate} 
+          onMirror={handleMirror} 
+          onReset={handleReset}
+          grid={grid}
+          selectedCells={selectedCells}
+        />
         <div className="content-area">
           {/* Main Grid Area */}
           <main ref={mainRef} className={`main-grid-area ${isMenuOpen ? 'menu-open' : ''} ${isImageDialogOpen ? 'imageimportdialog-open' : ''}`}>

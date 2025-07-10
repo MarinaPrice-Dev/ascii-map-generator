@@ -5,7 +5,7 @@
   border-right: 1px solid var(--border);
   flex-shrink: 0;
   position: relative;
-  z-index: 5;
+  z-index: 15;
 }
 
 .sidebar-content {
@@ -172,4 +172,6 @@
 /* Remove the old placeholder styles */
 .sidebar-placeholder {
   display: none;
-} 
+}
+
+ 

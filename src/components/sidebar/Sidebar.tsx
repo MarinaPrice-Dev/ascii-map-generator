@@ -7,21 +7,35 @@ import {
   RotateLeftIcon, RotateRightIcon, FlipHorizontalIcon, FlipVerticalIcon,
   NewFileIcon, CopyIcon, PasteIcon, CutIcon
 } from '../icons/Icons';
+import { copyGridAsHtml } from '../../utils/copyPaste';
 import './Sidebar.css';
+
+import type { Cell } from '../../types/cell';
 
 interface SidebarProps {
   onRotate: (direction: 'left' | 'right') => void;
   onMirror: (direction: 'horizontal' | 'vertical') => void;
   onReset: () => void;
+  grid: Cell[][];
+  selectedCells: Set<string>;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset }) => {
+const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, grid, selectedCells }) => {
   const {
     activeTool,
     selectionMode,
     setActiveTool,
     setSelectionMode
   } = useSelectionStore();
+
+  // Copy handler
+  const handleCopy = async () => {
+    try {
+      await copyGridAsHtml(grid, selectedCells);
+    } catch (error) {
+      console.error('Error copying:', error);
+    }
+  };
 
   return (
     <aside className="sidebar">
@@ -191,9 +205,11 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset }) => {
             <button 
               className="sidebar-btn"
               title="Copy selection"
+              onClick={handleCopy}
             >
               <CopyIcon />
             </button>
+            
             <button 
               className="sidebar-btn"
               title="Paste from clipboard"
