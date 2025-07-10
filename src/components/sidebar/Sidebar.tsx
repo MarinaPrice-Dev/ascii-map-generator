@@ -46,7 +46,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, grid, se
   const handleSelectionModeChange = (mode: SelectionMode) => {
     setSelectionMode(mode);
     if (mode === 'single' || mode === 'multiple') {
-      showToast('Click and drag to select any area in the grid. Edit or Alter to manipulate your selection. Press [Esc] to remove any selections.');
+      showToast('Selection: Click and drag to select an area. Edit or Alter to manipulate your selection. Press [Esc] to remove any selections.');
     }
   };
 
