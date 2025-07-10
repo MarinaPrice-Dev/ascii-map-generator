@@ -1,4 +1,6 @@
 import React from 'react';
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
 import { useSelectionStore } from '../../store/selectionStore';
 import type { SelectionTool as Tool, SelectionMode } from '../../store/selectionStore';
 import { 
@@ -104,13 +106,14 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, grid, se
         {/* New Grid Section */}
         <div className="sidebar-section">
           <div className="sidebar-buttons">
-            <button 
-              onClick={onReset} 
-              className="sidebar-btn"
-              title="New grid"
-            >
-              <NewFileIcon />
-            </button>
+            <Tippy content="New grid" placement="right">
+              <button 
+                onClick={onReset} 
+                className="sidebar-btn"
+              >
+                <NewFileIcon />
+              </button>
+            </Tippy>
           </div>
         </div>
 
@@ -121,47 +124,51 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, grid, se
         <div className="sidebar-section">
           <div className="sidebar-section-title">Tools</div>
           <div className="sidebar-buttons">
-            <label className="sidebar-radio-btn">
-              <input
-                type="radio"
-                name="sidebarSelectionMode"
-                value="draw"
-                checked={selectionMode === 'draw'}
-                onChange={(e) => handleSelectionModeChange(e.target.value as SelectionMode)}
-                className="sr-only"
-              />
-              <div className="sidebar-icon" title="Draw using symbols and colors">
-                <PencilIcon />
-              </div>
-            </label>
-            
-            <label className="sidebar-radio-btn">
-              <input
-                type="radio"
-                name="sidebarSelectionMode"
-                value="single"
-                checked={selectionMode === 'single'}
-                onChange={(e) => handleSelectionModeChange(e.target.value as SelectionMode)}
-                className="sr-only"
-              />
-              <div className="sidebar-icon" title="Select an area to manipulate">
-                <SingleBoxIcon />
-              </div>
-            </label>
-            
-            <label className="sidebar-radio-btn">
-              <input
-                type="radio"
-                name="sidebarSelectionMode"
-                value="multiple"
-                checked={selectionMode === 'multiple'}
-                onChange={(e) => handleSelectionModeChange(e.target.value as SelectionMode)}
-                className="sr-only"
-              />
-              <div className="sidebar-icon" title="Select multiple areas to manipulate">
-                <MultipleBoxIcon />
-              </div>
-            </label>
+            <Tippy content="Draw using symbols and colors" placement="right">
+              <label className="sidebar-radio-btn">
+                <input
+                  type="radio"
+                  name="sidebarSelectionMode"
+                  value="draw"
+                  checked={selectionMode === 'draw'}
+                  onChange={(e) => handleSelectionModeChange(e.target.value as SelectionMode)}
+                  className="sr-only"
+                />
+                <div className="sidebar-icon">
+                  <PencilIcon />
+                </div>
+              </label>
+            </Tippy>
+            <Tippy content="Select an area to manipulate" placement="right">
+              <label className="sidebar-radio-btn">
+                <input
+                  type="radio"
+                  name="sidebarSelectionMode"
+                  value="single"
+                  checked={selectionMode === 'single'}
+                  onChange={(e) => handleSelectionModeChange(e.target.value as SelectionMode)}
+                  className="sr-only"
+                />
+                <div className="sidebar-icon">
+                  <SingleBoxIcon />
+                </div>
+              </label>
+            </Tippy>
+            <Tippy content="Select multiple areas to manipulate" placement="right">
+              <label className="sidebar-radio-btn">
+                <input
+                  type="radio"
+                  name="sidebarSelectionMode"
+                  value="multiple"
+                  checked={selectionMode === 'multiple'}
+                  onChange={(e) => handleSelectionModeChange(e.target.value as SelectionMode)}
+                  className="sr-only"
+                />
+                <div className="sidebar-icon">
+                  <MultipleBoxIcon />
+                </div>
+              </label>
+            </Tippy>
           </div>
         </div>
 
@@ -172,47 +179,51 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, grid, se
         <div className="sidebar-section">
           <div className="sidebar-section-title">Shape</div>
           <div className="sidebar-buttons">
-            <label className="sidebar-radio-btn">
-              <input
-                type="radio"
-                name="sidebarSelectionTool"
-                value="select-cells"
-                checked={activeTool === 'select-cells'}
-                onChange={(e) => setActiveTool(e.target.value as Tool)}
-                className="sr-only"
-              />
-              <div className="sidebar-icon" title="Drag across individual cells">
-                <CellsIcon />
-              </div>
-            </label>
-            
-            <label className="sidebar-radio-btn">
-              <input
-                type="radio"
-                name="sidebarSelectionTool"
-                value="select-area"
-                checked={activeTool === 'select-area'}
-                onChange={(e) => setActiveTool(e.target.value as Tool)}
-                className="sr-only"
-              />
-              <div className="sidebar-icon" title="Drag for a rectangular area">
-                <AreaIcon />
-              </div>
-            </label>
-            
-            <label className="sidebar-radio-btn">
-              <input
-                type="radio"
-                name="sidebarSelectionTool"
-                value="select-rectangle"
-                checked={activeTool === 'select-rectangle'}
-                onChange={(e) => setActiveTool(e.target.value as Tool)}
-                className="sr-only"
-              />
-              <div className="sidebar-icon" title="Drag for a rectangle">
-                <RectangleIcon />
-              </div>
-            </label>
+            <Tippy content="Drag across individual cells" placement="right">
+              <label className="sidebar-radio-btn">
+                <input
+                  type="radio"
+                  name="sidebarSelectionTool"
+                  value="select-cells"
+                  checked={activeTool === 'select-cells'}
+                  onChange={(e) => setActiveTool(e.target.value as Tool)}
+                  className="sr-only"
+                />
+                <div className="sidebar-icon">
+                  <CellsIcon />
+                </div>
+              </label>
+            </Tippy>
+            <Tippy content="Drag for a rectangular area" placement="right">
+              <label className="sidebar-radio-btn">
+                <input
+                  type="radio"
+                  name="sidebarSelectionTool"
+                  value="select-area"
+                  checked={activeTool === 'select-area'}
+                  onChange={(e) => setActiveTool(e.target.value as Tool)}
+                  className="sr-only"
+                />
+                <div className="sidebar-icon">
+                  <AreaIcon />
+                </div>
+              </label>
+            </Tippy>
+            <Tippy content="Drag for a rectangle" placement="right">
+              <label className="sidebar-radio-btn">
+                <input
+                  type="radio"
+                  name="sidebarSelectionTool"
+                  value="select-rectangle"
+                  checked={activeTool === 'select-rectangle'}
+                  onChange={(e) => setActiveTool(e.target.value as Tool)}
+                  className="sr-only"
+                />
+                <div className="sidebar-icon">
+                  <RectangleIcon />
+                </div>
+              </label>
+            </Tippy>
           </div>
         </div>
 
@@ -223,27 +234,30 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, grid, se
         <div className="sidebar-section">
           <div className="sidebar-section-title">Edit</div>
           <div className="sidebar-buttons">
-            <button 
-              className="sidebar-btn"
-              title="Copy selection"
-              onClick={handleCopy}
-            >
-              <CopyIcon />
-            </button>
-            <button 
-              className={`sidebar-btn${pasteMode ? ' paste-mode-active' : ''}`}
-              title={pasteMode ? 'Exit paste mode' : 'Paste from clipboard'}
-              onClick={onPasteModeToggle}
-            >
-              <PasteIcon />
-            </button>
-            <button 
-              className="sidebar-btn"
-              title="Cut selection"
-              onClick={handleCut}
-            >
-              <CutIcon />
-            </button>
+            <Tippy content="Copy selection" placement="right">
+              <button 
+                className="sidebar-btn"
+                onClick={handleCopy}
+              >
+                <CopyIcon />
+              </button>
+            </Tippy>
+            <Tippy content={pasteMode ? "Exit paste mode" : "Paste from clipboard"} placement="right">
+              <button 
+                className={`sidebar-btn${pasteMode ? ' paste-mode-active' : ''}`}
+                onClick={onPasteModeToggle}
+              >
+                <PasteIcon />
+              </button>
+            </Tippy>
+            <Tippy content="Cut selection" placement="right">
+              <button 
+                className="sidebar-btn"
+                onClick={handleCut}
+              >
+                <CutIcon />
+              </button>
+            </Tippy>
           </div>
         </div>
 
@@ -254,41 +268,46 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, grid, se
             <div className="sidebar-section">
               <div className="sidebar-section-title">Alter</div>
               <div className="sidebar-buttons">
-                <button 
-                  onClick={() => onRotate('left')} 
-                  className="sidebar-btn"
-                  title="Rotate Left"
-                >
-                  <RotateLeftIcon />
-                </button>
-                <button 
-                  onClick={() => onRotate('right')} 
-                  className="sidebar-btn"
-                  title="Rotate Right"
-                >
-                  <RotateRightIcon />
-                </button>
-                <button 
-                  onClick={() => onMirror('horizontal')} 
-                  className="sidebar-btn"
-                  title="Flip Horizontal"
-                >
-                  <FlipHorizontalIcon />
-                </button>
-                <button 
-                  onClick={() => onMirror('vertical')} 
-                  className="sidebar-btn"
-                  title="Flip Vertical"
-                >
-                  <FlipVerticalIcon />
-                </button>
-                <button 
-                  onClick={handleErase} 
-                  className="sidebar-btn"
-                  title="Clear"
-                >
-                  <ClearIcon />
-                </button>
+                <Tippy content="Rotate Left" placement="right">
+                  <button 
+                    onClick={() => onRotate('left')} 
+                    className="sidebar-btn"
+                  >
+                    <RotateLeftIcon />
+                  </button>
+                </Tippy>
+                <Tippy content="Rotate Right" placement="right">
+                  <button 
+                    onClick={() => onRotate('right')} 
+                    className="sidebar-btn"
+                  >
+                    <RotateRightIcon />
+                  </button>
+                </Tippy>
+                <Tippy content="Flip Horizontal" placement="right">
+                  <button 
+                    onClick={() => onMirror('horizontal')} 
+                    className="sidebar-btn"
+                  >
+                    <FlipHorizontalIcon />
+                  </button>
+                </Tippy>
+                <Tippy content="Flip Vertical" placement="right">
+                  <button 
+                    onClick={() => onMirror('vertical')} 
+                    className="sidebar-btn"
+                  >
+                    <FlipVerticalIcon />
+                  </button>
+                </Tippy>
+                <Tippy content="Clear" placement="right">
+                  <button 
+                    onClick={handleErase} 
+                    className="sidebar-btn"
+                  >
+                    <ClearIcon />
+                  </button>
+                </Tippy>
               </div>
             </div>
           </>

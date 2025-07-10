@@ -1,4 +1,6 @@
 import React, { useState, useRef } from 'react';
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
 import { UndoIcon, RedoIcon, ClearIcon, InfoIcon, ZoomInIcon, ZoomOutIcon, ImportIcon, MenuIcon, BorderIcon } from '../icons/Icons';
 import '../icons/Icons.css';
 import './Header.css';
@@ -269,79 +271,83 @@ const Header: React.FC<HeaderProps> = ({
         <div className="header-actions">
           <div className="desktop-only grid-dimensions">
             <div className="dimension-inputs">
-              <button
-                className="icon-button"
-                onClick={() => handleResizeGrid('cols', 'decrease')}
-                disabled={actualCols <= 1}
-                title="Decrease Columns"
-              >
-                -
-              </button>
+              <Tippy content="Decrease Columns" placement="bottom">
+                <button
+                  className="icon-button"
+                  onClick={() => handleResizeGrid('cols', 'decrease')}
+                  disabled={actualCols <= 1}
+                >
+                  -
+                </button>
+              </Tippy>
               <span className="dimension-separator">{actualCols}</span>
-              <button
-                className="icon-button"
-                onClick={() => handleResizeGrid('cols', 'increase')}
-                disabled={actualCols >= 350}
-                title="Increase Columns"
-              >
-                +
-              </button>
+              <Tippy content="Increase Columns" placement="bottom">
+                <button
+                  className="icon-button"
+                  onClick={() => handleResizeGrid('cols', 'increase')}
+                  disabled={actualCols >= 350}
+                >
+                  +
+                </button>
+              </Tippy>
             </div>
             <span className="dimension-separator dimension-multiply">×</span>
             <div className="dimension-inputs">
-              <button
-                className="icon-button"
-                onClick={() => handleResizeGrid('rows', 'decrease')}
-                disabled={actualRows <= 1}
-                title="Decrease Rows"
-              >
-                -
-              </button>
+              <Tippy content="Decrease Rows" placement="bottom">
+                <button
+                  className="icon-button"
+                  onClick={() => handleResizeGrid('rows', 'decrease')}
+                  disabled={actualRows <= 1}
+                >
+                  -
+                </button>
+              </Tippy>
               <span className="dimension-separator">{actualRows}</span>
-              <button
-                className="icon-button"
-                onClick={() => handleResizeGrid('rows', 'increase')}
-                disabled={actualRows >= 150}
-                title="Increase Rows"
-              >
-                +
-              </button>
+              <Tippy content="Increase Rows" placement="bottom">
+                <button
+                  className="icon-button"
+                  onClick={() => handleResizeGrid('rows', 'increase')}
+                  disabled={actualRows >= 150}
+                >
+                  +
+                </button>
+              </Tippy>
             </div>
           </div>
-          <button 
-            className={`icon-button border-button ${showBorders ? 'active' : ''}`}
-            onClick={onBorderToggle}
-            title={showBorders ? "Hide Grid Borders" : "Show Grid Borders"}
-          >
-            <BorderIcon />
-          </button>
+          <Tippy content={showBorders ? "Hide Grid Borders" : "Show Grid Borders"} placement="bottom">
+            <button 
+              className={`icon-button border-button ${showBorders ? 'active' : ''}`}
+              onClick={onBorderToggle}
+            >
+              <BorderIcon />
+            </button>
+          </Tippy>
           <div className="zoom-controls">
-            <button 
-              className="icon-button zoom-button" 
-              onClick={onZoomOut} 
-              disabled={cellSize <= MIN_ZOOM} 
-              title="Zoom Out"
-            >
-              <ZoomOutIcon />
-            </button>
+            <Tippy content="Zoom Out" placement="bottom">
+              <button 
+                className="icon-button zoom-button" 
+                onClick={onZoomOut} 
+                disabled={cellSize <= MIN_ZOOM} 
+              >
+                <ZoomOutIcon />
+              </button>
+            </Tippy>
             <span className="zoom-level">{cellSize}px</span>
-            <button 
-              className="icon-button zoom-button" 
-              onClick={onZoomIn} 
-              disabled={cellSize >= MAX_ZOOM} 
-              title="Zoom In"
-            >
-              <ZoomInIcon />
-            </button>
+            <Tippy content="Zoom In" placement="bottom">
+              <button 
+                className="icon-button zoom-button" 
+                onClick={onZoomIn} 
+                disabled={cellSize >= MAX_ZOOM} 
+              >
+                <ZoomInIcon />
+              </button>
+            </Tippy>
           </div>
-          <button className="icon-button" onClick={onUndo} disabled={!canUndo} title="Undo">
+          <button className="icon-button" onClick={onUndo} disabled={!canUndo}>
             <UndoIcon />
           </button>
-          <button className="icon-button" onClick={onRedo} disabled={!canRedo} title="Redo">
+          <button className="icon-button" onClick={onRedo} disabled={!canRedo}>
             <RedoIcon />
-          </button>
-          <button className="icon-button clear-button" onClick={onClearMap} disabled={isGridEmpty} title="Clear">
-            <ClearIcon />
           </button>
           <div className="desktop-only">
             <ExportDropdown
@@ -352,7 +358,7 @@ const Header: React.FC<HeaderProps> = ({
             />
           </div>
           <div className="desktop-only">
-            <button className={`icon-button import-button ${isImageDialogOpen ? 'open' : ''}`} onClick={handleImportClick} title="Import">
+            <button className={`icon-button import-button ${isImageDialogOpen ? 'open' : ''}`} onClick={handleImportClick}>
               <ImportIcon />
               <span className="button-label">Import</span>
             </button>
@@ -367,14 +373,12 @@ const Header: React.FC<HeaderProps> = ({
           <button 
             className="icon-button info-button" 
             onClick={() => setShowInfoDialog(true)} 
-            title="More Information"
           >
             <InfoIcon />
           </button>
           <button 
             className={`icon-button menu-button ${isMenuOpen ? 'active' : ''}`}
             onClick={onMenuToggle} 
-            title="Menu"
           >
             <MenuIcon />
           </button>
@@ -382,40 +386,40 @@ const Header: React.FC<HeaderProps> = ({
       </header>
       {/* Toolbar for mobile/tablet */}
       <div className="toolbar-actions">
-        <button 
-          className={`icon-button border-button ${showBorders ? 'active' : ''}`}
-          onClick={onBorderToggle}
-          title={showBorders ? "Hide Grid Borders" : "Show Grid Borders"}
-        >
-          <BorderIcon />
-        </button>
+        <Tippy content={showBorders ? "Hide Grid Borders" : "Show Grid Borders"} placement="top">
+          <button 
+            className={`icon-button border-button ${showBorders ? 'active' : ''}`}
+            onClick={onBorderToggle}
+          >
+            <BorderIcon />
+          </button>
+        </Tippy>
         <div className="zoom-controls">
-            <button 
-              className="icon-button zoom-button" 
-              onClick={onZoomOut} 
-              disabled={cellSize <= MIN_ZOOM} 
-              title="Zoom Out"
-            >
-              <ZoomOutIcon />
-            </button>
+            <Tippy content="Zoom Out" placement="top">
+              <button 
+                className="icon-button zoom-button" 
+                onClick={onZoomOut} 
+                disabled={cellSize <= MIN_ZOOM} 
+              >
+                <ZoomOutIcon />
+              </button>
+            </Tippy>
             <span className="zoom-level">{cellSize}px</span>
-            <button 
-              className="icon-button zoom-button" 
-              onClick={onZoomIn} 
-              disabled={cellSize >= MAX_ZOOM} 
-              title="Zoom In"
-            >
-              <ZoomInIcon />
-            </button>
+            <Tippy content="Zoom In" placement="top">
+              <button 
+                className="icon-button zoom-button" 
+                onClick={onZoomIn} 
+                disabled={cellSize >= MAX_ZOOM} 
+              >
+                <ZoomInIcon />
+              </button>
+            </Tippy>
           </div>
-        <button className="icon-button" onClick={onUndo} disabled={!canUndo} title="Undo">
+        <button className="icon-button" onClick={onUndo} disabled={!canUndo}>
           <UndoIcon />
         </button>
-        <button className="icon-button" onClick={onRedo} disabled={!canRedo} title="Redo">
+        <button className="icon-button" onClick={onRedo} disabled={!canRedo}>
           <RedoIcon />
-        </button>
-        <button className="icon-button clear-button" onClick={onClearMap} disabled={isGridEmpty} title="Clear">
-          <ClearIcon />
         </button>
         <ExportDropdown
               onExport={onSaveMap}
@@ -423,7 +427,7 @@ const Header: React.FC<HeaderProps> = ({
               isOpen={isExportPanelOpen}
               onToggle={onExportPanelToggle}
             />
-        <button className={`icon-button import-button ${isImageDialogOpen ? 'open' : ''}`} onClick={handleImportClick} title="Import">
+        <button className={`icon-button import-button ${isImageDialogOpen ? 'open' : ''}`} onClick={handleImportClick}>
           <ImportIcon />
         </button>
         <input
@@ -436,14 +440,12 @@ const Header: React.FC<HeaderProps> = ({
         <button 
           className="icon-button info-button" 
           onClick={() => setShowInfoDialog(true)} 
-          title="More Information"
         >
           <InfoIcon />
         </button>
         <button 
           className={`icon-button menu-button ${isMenuOpen ? 'active' : ''}`}
           onClick={onMenuToggle} 
-          title="Menu"
         >
           <MenuIcon />
         </button>

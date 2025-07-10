@@ -38,10 +38,12 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.10",
+    "@tippyjs/react": "^4.2.6",
     "dom-to-image-more": "^3.6.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "tailwindcss": "^4.1.10",
+    "tippy.js": "^6.3.7",
     "zustand": "^5.0.5"
   },
   "devDependencies": {
