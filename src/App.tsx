@@ -15,6 +15,7 @@ import { handleZoom, expandGrid } from './utils/zoomUtils'
 import { useSelectionStore } from './store/selectionStore'
 import { setupKeyboardShortcuts } from './utils/shortcuts'
 import Loader from './components/loader/Loader'
+import ToastContainer, { useToast } from './components/toast/ToastContainer'
 
 const HEADER_HEIGHT = 60;
 const FOOTER_HEIGHT = 200;
@@ -26,7 +27,8 @@ const getCellSize = () => CELL_SIZE;
 const DEFAULT_FG = '#FFFFFF';
 const DEFAULT_BG = '#222222';
 
-const App: React.FC = () => {
+const AppContent: React.FC = () => {
+  const { showToast } = useToast();
   const [selectedChar, setSelectedChar] = useState<string>('#')
   const [selectedFg, setSelectedFg] = useState<string>(DEFAULT_FG);
   const [selectedBg, setSelectedBg] = useState<string>(DEFAULT_BG);
@@ -129,6 +131,15 @@ const App: React.FC = () => {
   useEffect(() => {
     saveState(grid, gridRows, gridCols, cellSize);
   }, [grid, gridRows, gridCols, cellSize]);
+
+  // Show welcome toast on first visit
+  useEffect(() => {
+    const hasVisited = localStorage.getItem('ascii-studio-visited');
+    if (!hasVisited) {
+      showToast('Welcome to ASCII Studio. Click anywhere on the grid to get started!');
+      localStorage.setItem('ascii-studio-visited', 'true');
+    }
+  }, [showToast]);
 
   // Handle zoom in/out
   const handleZoomIn = () => {
@@ -794,5 +805,13 @@ const App: React.FC = () => {
     </div>
   )
 }
+
+const App: React.FC = () => {
+  return (
+    <ToastContainer>
+      <AppContent />
+    </ToastContainer>
+  );
+};
 
 export default App
