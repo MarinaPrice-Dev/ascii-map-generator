@@ -1,6 +1,6 @@
 .toast-container {
   position: fixed;
-  bottom: 20px;
+  bottom: 210px;
   right: 20px;
   display: flex;
   flex-direction: column;
@@ -15,17 +15,3 @@
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   margin-top: 10px;
 }
-
-/* Mobile styles */
-@media (max-width: 768px) {
-  .toast-container {
-    bottom: 16px;
-    left: 16px;
-    right: 16px;
-    align-items: stretch;
-  }
-  
-  .toast-wrapper {
-    transform: none !important;
-  }
-} 
