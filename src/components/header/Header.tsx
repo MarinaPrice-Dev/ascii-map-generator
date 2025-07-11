@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
-import { UndoIcon, RedoIcon, ClearIcon, InfoIcon, ZoomInIcon, ZoomOutIcon, ImportIcon, MenuIcon, BorderIcon } from '../icons/Icons';
+import { UndoIcon, RedoIcon, InfoIcon, ZoomInIcon, ZoomOutIcon, ImportIcon, MenuIcon, BorderIcon } from '../icons/Icons';
 import '../icons/Icons.css';
 import './Header.css';
 import InfoDialog from './InfoDialog';
@@ -42,7 +42,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({
   onSaveMap,
-  onClearMap,
+
   onUndo,
   onRedo,
   canUndo,

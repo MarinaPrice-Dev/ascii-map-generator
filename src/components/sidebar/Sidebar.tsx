@@ -9,7 +9,7 @@ import {
   RotateLeftIcon, RotateRightIcon, FlipHorizontalIcon, FlipVerticalIcon,
   NewFileIcon, CopyIcon, PasteIcon, CutIcon, ClearIcon
 } from '../icons/Icons';
-import { copyGridAsHtml, cutGridAsHtml } from '../../utils/copyPaste';
+
 import { useToast } from '../toast/ToastContainer';
 import './Sidebar.css';
 
@@ -30,14 +30,13 @@ interface SidebarProps {
   onClear: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, grid, selectedCells, pasteMode, onPasteModeToggle, updateGrid, beginAction, onCopy, onCut, onClear }) => {
+const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, pasteMode, onPasteModeToggle, beginAction, onCopy, onCut, onClear }) => {
   const { showToast } = useToast();
   const {
     activeTool,
     selectionMode,
     setActiveTool,
-    setSelectionMode,
-    clearSelection
+    setSelectionMode
   } = useSelectionStore();
 
 
