@@ -116,7 +116,12 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({
       }
 
       if (activeTool === 'select-cells') {
-        processCell(row, col);
+        // For select-cells tool, process the cell immediately with the correct operation
+        if (isRightClick) {
+          clearCell(row, col);
+        } else {
+          updateCell(row, col, selectedChar, selectedFg, selectedBg);
+        }
       }
       return;
     }
