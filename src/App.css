@@ -46,9 +46,10 @@
 :root {
   --bg: #1a1a1a;
   --bg-light: #222222;
+  --bg-bright: #444444;
   --fg: #fff;
   --fg-dark: #dfdfdf;
-  --border: #444;
+  --border: #444444;
   --footer-bg: #1a1a1a;
   --cells: #deb202;
   --save: #22c55e;

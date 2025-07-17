@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AspectIcon } from '../icons/Icons';
 import ImageRangeSlider from './ImageRangeSlider';
+import Tooltip from '../ui/Tooltip';
 import './ImageImportDialog.css';
 
 interface ImageImportOptions {
@@ -213,7 +214,7 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
 
       <div className="option-group">
           <div className="resolution-header">
-            <label>Resolution:</label>
+            <label>Grid size:</label>
             <div className="resolution-inputs">
               <input
                 type="number"
@@ -237,15 +238,16 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
                 onBlur={(e) => handleInputBlur('targetRows', parseInt(e.target.value) || 0)}
               />
             </div>
-            <button 
-              type="button" 
-              className="auto-calculate-button" 
-              onClick={autoCalculateDimensions}
-              disabled={!imageDimensions}
-              title="Change the aspect ratio based on new input"
-            >
-              <AspectIcon />
-            </button>
+            <Tooltip content="Auto-calculate dimensions to maintain image aspect ratio" placement="top">
+              <button 
+                type="button" 
+                className="auto-calculate-button" 
+                onClick={autoCalculateDimensions}
+                disabled={!imageDimensions}
+              >
+                <AspectIcon />
+              </button>
+            </Tooltip>
           </div>
         </div>
         <div className="line"></div>
@@ -530,7 +532,7 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
           Reset
         </button>
         <div className="footer-spacer"></div>
-        <button className="cancel-button" onClick={onClose}>Close</button>
+        <button className="cancel-button" onClick={onClose}>Finish</button>
       </div>
     </div>
   );

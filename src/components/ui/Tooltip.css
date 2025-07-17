@@ -1,8 +1,7 @@
 /* Tooltip component styles */
 .tippy-box {
-  background-color: var(--bg);
+  background-color: var(--bg-bright);
   color: var(--fg);
-  border: 1px solid var(--border);
   border-radius: 6px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   font-size: 14px;
@@ -13,11 +12,7 @@
 }
 
 .tippy-arrow {
-  color: var(--bg);
-}
-
-.tippy-arrow::before {
-  border-color: var(--border);
+  color: var(--bg-bright);
 }
 
 /* Mobile-friendly adjustments */

@@ -253,8 +253,8 @@
 
 .cancel-button {
   background: var(--bg-light);
-  color: var(--fg);
-  border: none;
+  color: var(--save);
+  border: 1px solid var(--save);
   padding: 0.5rem 1rem;
   border-radius: 4px;
   cursor: pointer;
@@ -264,8 +264,9 @@
 }
 
 .cancel-button:hover {
-  background: #555;
+  background: var(--save);
   color: var(--fg);
+  border: 1px solid var(--save);
 }
 
 .auto-calculate-button {
