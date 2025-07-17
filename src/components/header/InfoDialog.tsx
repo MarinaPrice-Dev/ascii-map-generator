@@ -74,6 +74,10 @@ const InfoDialog: React.FC<InfoDialogProps> = ({ onClose }) => (
         <h3>Example ASCII Art</h3>
         <p>Not yet available, but will be soon!</p>
         <h3>Latest Updates</h3>
+        <h5>2025-07-17</h5>
+        <ul>
+            <li><strong>Bug fixes</strong></li>
+        </ul>
         <h5>2025-07-10</h5>
         <ul>
             <li><strong>Copy/Cut:</strong> Either make a selection or use the entire grid. Copy and cut goes to the clipboard.</li>
