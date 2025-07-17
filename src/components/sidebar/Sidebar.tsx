@@ -1,6 +1,4 @@
 import React from 'react';
-import Tippy from '@tippyjs/react';
-import 'tippy.js/dist/tippy.css';
 import { useSelectionStore } from '../../store/selectionStore';
 import type { SelectionTool as Tool, SelectionMode } from '../../store/selectionStore';
 import { 
@@ -9,6 +7,7 @@ import {
   RotateLeftIcon, RotateRightIcon, FlipHorizontalIcon, FlipVerticalIcon,
   NewFileIcon, CopyIcon, PasteIcon, CutIcon, ClearIcon
 } from '../icons/Icons';
+import Tooltip from '../ui/Tooltip';
 
 import { useToast } from '../toast/ToastContainer';
 import './Sidebar.css';
@@ -57,14 +56,14 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, pasteMod
         {/* New Grid Section */}
         <div className="sidebar-section">
           <div className="sidebar-buttons">
-            <Tippy content="New grid" placement="right">
+            <Tooltip content="New grid" placement="right">
               <button 
                 onClick={onReset} 
                 className="sidebar-btn"
               >
                 <NewFileIcon />
               </button>
-            </Tippy>
+            </Tooltip>
           </div>
         </div>
 
@@ -75,7 +74,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, pasteMod
         <div className="sidebar-section">
           <div className="sidebar-section-title">Tools</div>
           <div className="sidebar-buttons">
-            <Tippy content="Draw using symbols and colors" placement="right">
+            <Tooltip content="Draw using symbols and colors" placement="right">
               <label className="sidebar-radio-btn">
                 <input
                   type="radio"
@@ -89,8 +88,8 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, pasteMod
                   <PencilIcon />
                 </div>
               </label>
-            </Tippy>
-            <Tippy content="Select an area to manipulate" placement="right">
+            </Tooltip>
+            <Tooltip content="Select an area to manipulate" placement="right">
               <label className="sidebar-radio-btn">
                 <input
                   type="radio"
@@ -104,8 +103,8 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, pasteMod
                   <SingleBoxIcon />
                 </div>
               </label>
-            </Tippy>
-            <Tippy content="Select multiple areas to manipulate" placement="right">
+            </Tooltip>
+            <Tooltip content="Select multiple areas to manipulate" placement="right">
               <label className="sidebar-radio-btn">
                 <input
                   type="radio"
@@ -119,7 +118,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, pasteMod
                   <MultipleBoxIcon />
                 </div>
               </label>
-            </Tippy>
+            </Tooltip>
           </div>
         </div>
 
@@ -130,7 +129,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, pasteMod
         <div className="sidebar-section">
           <div className="sidebar-section-title">Shape</div>
           <div className="sidebar-buttons">
-            <Tippy content="Drag across individual cells" placement="right">
+            <Tooltip content="Drag across individual cells" placement="right">
               <label className="sidebar-radio-btn">
                 <input
                   type="radio"
@@ -144,8 +143,8 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, pasteMod
                   <CellsIcon />
                 </div>
               </label>
-            </Tippy>
-            <Tippy content="Drag for a rectangular area" placement="right">
+            </Tooltip>
+            <Tooltip content="Drag for a rectangular area" placement="right">
               <label className="sidebar-radio-btn">
                 <input
                   type="radio"
@@ -159,8 +158,8 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, pasteMod
                   <AreaIcon />
                 </div>
               </label>
-            </Tippy>
-            <Tippy content="Drag for a rectangle" placement="right">
+            </Tooltip>
+            <Tooltip content="Drag for a rectangle" placement="right">
               <label className="sidebar-radio-btn">
                 <input
                   type="radio"
@@ -174,7 +173,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, pasteMod
                   <RectangleIcon />
                 </div>
               </label>
-            </Tippy>
+            </Tooltip>
           </div>
         </div>
 
@@ -185,30 +184,30 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, pasteMod
         <div className="sidebar-section">
           <div className="sidebar-section-title">Edit</div>
           <div className="sidebar-buttons">
-            <Tippy content="Copy selection" placement="right">
+            <Tooltip content="Copy selection" placement="right">
               <button 
                 className="sidebar-btn"
                 onClick={onCopy}
               >
                 <CopyIcon />
               </button>
-            </Tippy>
-            <Tippy content={pasteMode ? "Exit paste mode" : "Paste from clipboard"} placement="right">
+            </Tooltip>
+            <Tooltip content={pasteMode ? "Exit paste mode" : "Paste from clipboard"} placement="right">
               <button 
                 className={`sidebar-btn${pasteMode ? ' paste-mode-active' : ''}`}
                 onClick={onPasteModeToggle}
               >
                 <PasteIcon />
               </button>
-            </Tippy>
-            <Tippy content="Cut selection" placement="right">
+            </Tooltip>
+            <Tooltip content="Cut selection" placement="right">
               <button 
                 className="sidebar-btn"
                 onClick={onCut}
               >
                 <CutIcon />
               </button>
-            </Tippy>
+            </Tooltip>
           </div>
         </div>
 
@@ -219,7 +218,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, pasteMod
             <div className="sidebar-section">
               <div className="sidebar-section-title">Alter</div>
               <div className="sidebar-buttons">
-                <Tippy content="Rotate Left" placement="right">
+                <Tooltip content="Rotate Left" placement="right">
                   <button 
                     onClick={() => {
                       beginAction();
@@ -229,8 +228,8 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, pasteMod
                   >
                     <RotateLeftIcon />
                   </button>
-                </Tippy>
-                <Tippy content="Rotate Right" placement="right">
+                </Tooltip>
+                <Tooltip content="Rotate Right" placement="right">
                   <button 
                     onClick={() => {
                       beginAction();
@@ -240,8 +239,8 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, pasteMod
                   >
                     <RotateRightIcon />
                   </button>
-                </Tippy>
-                <Tippy content="Flip Horizontal" placement="right">
+                </Tooltip>
+                <Tooltip content="Flip Horizontal" placement="right">
                   <button 
                     onClick={() => {
                       beginAction();
@@ -251,8 +250,8 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, pasteMod
                   >
                     <FlipHorizontalIcon />
                   </button>
-                </Tippy>
-                <Tippy content="Flip Vertical" placement="right">
+                </Tooltip>
+                <Tooltip content="Flip Vertical" placement="right">
                   <button 
                     onClick={() => {
                       beginAction();
@@ -262,15 +261,15 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, pasteMod
                   >
                     <FlipVerticalIcon />
                   </button>
-                </Tippy>
-                <Tippy content="Clear" placement="right">
+                </Tooltip>
+                <Tooltip content="Clear" placement="right">
                   <button 
                     onClick={onClear} 
                     className="sidebar-btn"
                   >
                     <ClearIcon />
                   </button>
-                </Tippy>
+                </Tooltip>
               </div>
             </div>
           </>

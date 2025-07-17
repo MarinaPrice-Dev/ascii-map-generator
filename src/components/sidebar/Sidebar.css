@@ -95,27 +95,7 @@
 
 .sidebar-btn:hover {
   background: var(--fg);
-  color: var(--bg);
-}
-
-.sidebar-clear-btn {
-  width: 32px;
-  height: 24px;
-  background: var(--clear);
-  border: none;
-  border-radius: 4px;
-  color: var(--fg);
-  cursor: pointer;
-  font-size: 10px;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  margin: 0 auto;
-  display: block;
-}
-
-.sidebar-clear-btn:hover {
-  background: #ff4444;
-  transform: scale(1.05);
+  color: var(--side);
 }
 
 .sidebar-separator {

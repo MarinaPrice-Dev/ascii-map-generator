@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react';
-import Tippy from '@tippyjs/react';
-import 'tippy.js/dist/tippy.css';
 import { UndoIcon, RedoIcon, InfoIcon, ZoomInIcon, ZoomOutIcon, ImportIcon, MenuIcon, BorderIcon } from '../icons/Icons';
+import Tooltip from '../ui/Tooltip';
 import '../icons/Icons.css';
 import './Header.css';
 import InfoDialog from './InfoDialog';
@@ -271,7 +270,7 @@ const Header: React.FC<HeaderProps> = ({
         <div className="header-actions">
           <div className="desktop-only grid-dimensions">
             <div className="dimension-inputs">
-              <Tippy content="Decrease Columns" placement="bottom">
+              <Tooltip content="Decrease Columns" placement="bottom">
                 <button
                   className="icon-button"
                   onClick={() => handleResizeGrid('cols', 'decrease')}
@@ -279,9 +278,9 @@ const Header: React.FC<HeaderProps> = ({
                 >
                   -
                 </button>
-              </Tippy>
+              </Tooltip>
               <span className="dimension-separator">{actualCols}</span>
-              <Tippy content="Increase Columns" placement="bottom">
+              <Tooltip content="Increase Columns" placement="bottom">
                 <button
                   className="icon-button"
                   onClick={() => handleResizeGrid('cols', 'increase')}
@@ -289,11 +288,11 @@ const Header: React.FC<HeaderProps> = ({
                 >
                   +
                 </button>
-              </Tippy>
+              </Tooltip>
             </div>
             <span className="dimension-separator dimension-multiply">×</span>
             <div className="dimension-inputs">
-              <Tippy content="Decrease Rows" placement="bottom">
+              <Tooltip content="Decrease Rows" placement="bottom">
                 <button
                   className="icon-button"
                   onClick={() => handleResizeGrid('rows', 'decrease')}
@@ -301,9 +300,9 @@ const Header: React.FC<HeaderProps> = ({
                 >
                   -
                 </button>
-              </Tippy>
+              </Tooltip>
               <span className="dimension-separator">{actualRows}</span>
-              <Tippy content="Increase Rows" placement="bottom">
+              <Tooltip content="Increase Rows" placement="bottom">
                 <button
                   className="icon-button"
                   onClick={() => handleResizeGrid('rows', 'increase')}
@@ -311,19 +310,19 @@ const Header: React.FC<HeaderProps> = ({
                 >
                   +
                 </button>
-              </Tippy>
+              </Tooltip>
             </div>
           </div>
-          <Tippy content={showBorders ? "Hide Grid Borders" : "Show Grid Borders"} placement="bottom">
+          <Tooltip content={showBorders ? "Hide Grid Borders" : "Show Grid Borders"} placement="bottom">
             <button 
               className={`icon-button border-button ${showBorders ? 'active' : ''}`}
               onClick={onBorderToggle}
             >
               <BorderIcon />
             </button>
-          </Tippy>
+          </Tooltip>
           <div className="zoom-controls">
-            <Tippy content="Zoom Out" placement="bottom">
+            <Tooltip content="Zoom Out" placement="bottom">
               <button 
                 className="icon-button zoom-button" 
                 onClick={onZoomOut} 
@@ -331,9 +330,9 @@ const Header: React.FC<HeaderProps> = ({
               >
                 <ZoomOutIcon />
               </button>
-            </Tippy>
+            </Tooltip>
             <span className="zoom-level">{cellSize}px</span>
-            <Tippy content="Zoom In" placement="bottom">
+            <Tooltip content="Zoom In" placement="bottom">
               <button 
                 className="icon-button zoom-button" 
                 onClick={onZoomIn} 
@@ -341,7 +340,7 @@ const Header: React.FC<HeaderProps> = ({
               >
                 <ZoomInIcon />
               </button>
-            </Tippy>
+            </Tooltip>
           </div>
           <button className="icon-button" onClick={onUndo} disabled={!canUndo}>
             <UndoIcon />
@@ -386,16 +385,16 @@ const Header: React.FC<HeaderProps> = ({
       </header>
       {/* Toolbar for mobile/tablet */}
       <div className="toolbar-actions">
-        <Tippy content={showBorders ? "Hide Grid Borders" : "Show Grid Borders"} placement="top">
+        <Tooltip content={showBorders ? "Hide Grid Borders" : "Show Grid Borders"} placement="top">
           <button 
             className={`icon-button border-button ${showBorders ? 'active' : ''}`}
             onClick={onBorderToggle}
           >
             <BorderIcon />
           </button>
-        </Tippy>
+        </Tooltip>
         <div className="zoom-controls">
-            <Tippy content="Zoom Out" placement="top">
+            <Tooltip content="Zoom Out" placement="top">
               <button 
                 className="icon-button zoom-button" 
                 onClick={onZoomOut} 
@@ -403,9 +402,9 @@ const Header: React.FC<HeaderProps> = ({
               >
                 <ZoomOutIcon />
               </button>
-            </Tippy>
+            </Tooltip>
             <span className="zoom-level">{cellSize}px</span>
-            <Tippy content="Zoom In" placement="top">
+            <Tooltip content="Zoom In" placement="top">
               <button 
                 className="icon-button zoom-button" 
                 onClick={onZoomIn} 
@@ -413,7 +412,7 @@ const Header: React.FC<HeaderProps> = ({
               >
                 <ZoomInIcon />
               </button>
-            </Tippy>
+            </Tooltip>
           </div>
         <button className="icon-button" onClick={onUndo} disabled={!canUndo}>
           <UndoIcon />
