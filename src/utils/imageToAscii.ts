@@ -516,7 +516,7 @@ const getAverageColor = (
   width: number,
   height: number
 ): { r: number; g: number; b: number; brightness: number; isTransparent: boolean } => {
-  let totalR = 0, totalG = 0, totalB = 0, totalA = 0;
+  let totalR = 0, totalG = 0, totalB = 0;
   let pixelCount = 0;
   let transparentPixels = 0;
 
@@ -538,7 +538,6 @@ const getAverageColor = (
         totalR += imageData.data[index];
         totalG += imageData.data[index + 1];
         totalB += imageData.data[index + 2];
-        totalA += alpha;
       }
       pixelCount++;
     }

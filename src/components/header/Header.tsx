@@ -188,7 +188,37 @@ const Header: React.FC<HeaderProps> = ({
     }
   };
 
-  const handleImageImport = async (options: any) => {
+  interface ImageImportOptions {
+    targetRows?: number;
+    targetCols?: number;
+    colorMode?: 'smart' | 'foreground' | 'background';
+    contrast?: number;
+    brightness?: number;
+    saturation?: number;
+    hue?: number;
+    sepia?: number;
+    grayscale?: number;
+    characterDensity?: number;
+    edgeDetection?: number;
+    threshold?: number;
+    dithering?: number;
+    vignette?: number;
+    grain?: number;
+    blur?: number;
+    sharpen?: number;
+    pixelate?: number;
+    posterize?: number;
+    vibrance?: number;
+    temperature?: number;
+    exposure?: number;
+    highlights?: number;
+    shadows?: number;
+    whites?: number;
+    blacks?: number;
+    invert?: boolean;
+  }
+
+  const handleImageImport = async (options: ImageImportOptions) => {
     if (!selectedImageFile) return;
 
     try {

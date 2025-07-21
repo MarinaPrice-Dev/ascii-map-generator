@@ -536,7 +536,7 @@ const AppContent: React.FC = () => {
               break;
             }
           }
-        } catch (e) {
+        } catch {
           // Fallback to plain text if HTML reading fails
         }
 

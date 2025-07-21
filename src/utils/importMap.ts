@@ -40,7 +40,8 @@ const parseAnsiEscape = (text: string): { char: string; fg: string; bg: string }
   let currentBg = '#000000';
   
   // Split by ANSI escape sequences
-  const parts = text.split(/\x1b\[([0-9;]*)m/);
+  // eslint-disable-next-line no-control-regex
+  const parts = text.split(/\u001b\[([0-9;]*)m/);
   
   for (let i = 0; i < parts.length; i++) {
     if (i % 2 === 0) {
@@ -113,21 +114,22 @@ const parseJsonFile = async (file: File): Promise<ImportedData> => {
   }
 
   // Validate each cell has the required properties
-  const grid = data.grid.map((row: any[]) => {
+  const grid = data.grid.map((row: unknown[]) => {
     if (!Array.isArray(row)) {
       throw new Error('Invalid JSON format: grid rows must be arrays');
     }
-    return row.map((cell: any) => {
+    return row.map((cell: unknown) => {
       if (!cell || typeof cell !== 'object') {
         throw new Error('Invalid JSON format: cells must be objects');
       }
-      if (typeof cell.char !== 'string') {
+      const cellObj = cell as { char?: string; fg?: string; bg?: string };
+      if (typeof cellObj.char !== 'string') {
         throw new Error('Invalid JSON format: cell.char must be a string');
       }
       return {
-        char: cell.char,
-        fg: cell.fg || DEFAULT_FG,
-        bg: cell.bg || DEFAULT_BG
+        char: cellObj.char,
+        fg: cellObj.fg || DEFAULT_FG,
+        bg: cellObj.bg || DEFAULT_BG
       };
     });
   });

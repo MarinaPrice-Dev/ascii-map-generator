@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-expect-error - dom-to-image-more has no type definitions
 import domtoimage from 'dom-to-image-more';
 import type { Cell } from '../types/cell'
 
@@ -111,9 +111,9 @@ const exportAsAnsi = (grid: Cell[][]) => {
       const cell = grid[row][col];
       const fgCode = hexToAnsi(cell.fg);
       const bgCode = hexToAnsi(cell.bg);
-      content += `\x1b[38;5;${fgCode}m\x1b[48;5;${bgCode}m${cell.char}`;
+      content += `\u001b[38;5;${fgCode}m\u001b[48;5;${bgCode}m${cell.char}`;
     }
-    content += '\x1b[0m\n';
+    content += '\u001b[0m\n';
   }
   
   downloadFile(content, generateFileName('map', 'ansi'));

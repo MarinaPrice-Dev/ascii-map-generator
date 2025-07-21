@@ -81,7 +81,7 @@ const ImageImportDialog: React.FC<ImageImportDialogProps> = ({
 }) => {
   const [options, setOptions] = useState<ImageImportOptions>(defaultOptions);
 
-  const handleOptionChange = (key: keyof ImageImportOptions, value: any) => {
+  const handleOptionChange = (key: keyof ImageImportOptions, value: string | number | boolean) => {
     setOptions(prev => ({ ...prev, [key]: value }));
     
     // Auto-apply for color mode and adjustments (except range inputs)
