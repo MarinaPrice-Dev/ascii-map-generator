@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import './App.css'
-import './assets/responsive.css'
 import AsciiMapGrid from './components/grid/AsciiMapGrid'
 import { useUndoRedo } from './utils/useUndoRedo'
 import { getInitialGrid } from './utils/mapUtils'
@@ -17,6 +16,9 @@ import { useSelectionStore } from './store/selectionStore'
 import { setupKeyboardShortcuts } from './utils/shortcuts'
 import Loader from './components/loader/Loader'
 import ToastContainer, { useToast } from './components/toast/ToastContainer'
+
+import './assets/responsive.css'
+
 
 const HEADER_HEIGHT = 60;
 const FOOTER_HEIGHT = 200;

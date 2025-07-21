@@ -135,6 +135,7 @@ A powerful ASCII art editor with support for creating, editing, and converting i
     - make it much smaller, than maybe display in a dialog
     - does grid resizing make sense for mobile? does it need adding?
     - mobile scrollbars should be wider
+    - image import unusable
 
 - Tablet support
     - needs testing

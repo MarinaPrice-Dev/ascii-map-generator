@@ -14,12 +14,3 @@
 .tippy-arrow {
   color: var(--bg-bright);
 }
-
-/* Mobile-friendly adjustments */
-@media (max-width: 768px) {
-  .tippy-box {
-    font-size: 13px;
-    padding: 6px 10px;
-    max-width: 180px;
-  }
-} 

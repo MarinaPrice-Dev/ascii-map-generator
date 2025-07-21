@@ -109,20 +109,3 @@
 .toast-dont-show-again span {
   line-height: 1.4;
 }
-
-/* Mobile styles */
-@media (max-width: 768px) {
-  .toast {
-    max-width: calc(100vw - 32px);
-    min-width: auto;
-    width: calc(100vw - 32px);
-  }
-  
-  .toast-message {
-    font-size: 15px;
-  }
-  
-  .toast-dont-show-again {
-    font-size: 13px;
-  }
-} 

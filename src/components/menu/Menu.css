@@ -25,7 +25,8 @@
 
 .nav-button {
   background: none;
-  border: 1px dashed var(--menu);
+  border-bottom: 1px dashed var(--menu);
+  border-right: 1px dashed var(--menu);
   color: #ccc;
   padding: 6px 12px;
   font-size: 12px;
@@ -37,6 +38,10 @@
   outline: none !important;
   border-left: none;
   font-size: 0.85rem;
+}
+
+.nav-button:last-child {
+  border-right: none;
 }
 
 .nav-button:hover {
