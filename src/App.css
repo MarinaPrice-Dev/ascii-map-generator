@@ -78,7 +78,6 @@ body {
 
 header {
   height: 60px;
-  min-height: 60px;
   max-height: 60px;
   width: 100vw;
   background: var(--bg);

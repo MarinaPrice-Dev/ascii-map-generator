@@ -78,11 +78,15 @@
     padding-bottom: 0 !important;
     justify-content: center !important;
     align-items: center !important;
+    height: 40px;
+  }
+  .app-header h1 {
+    font-size: 1.6em;
   }
   .toolbar-actions button, .toolbar-actions label {
     font-size: 18px;
-    height: 40px;
-    min-width: 48px;
+    height: 38px;
+    min-width: 46px;
     padding: 0 10px;
   }
 
@@ -181,6 +185,7 @@
   .export-panel.open {
     right: 0;
   }
+
 }
 
 /* Reset Dialog responsive styles */
