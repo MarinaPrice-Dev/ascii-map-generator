@@ -10,7 +10,15 @@ const Shortcuts: React.FC = () => {
       <div className="shortcuts-section">
         <h3>Keyboard Shortcuts</h3>
           <div className="shortcut-list">
-            <div className="shortcut-item">
+          <div className="shortcut-item">
+            <kbd>{modifierKey}</kbd> <kbd>I</kbd>
+            <span>Draw Mode</span>
+          </div>
+          <div className="shortcut-item">
+            <kbd>{modifierKey}</kbd> <kbd>E</kbd>
+            <span>Erase Mode</span>
+          </div>
+          <div className="shortcut-item">
             {isMac ? (
               <>
                 <kbd>{modifierKey} Shift</kbd> <kbd>Space</kbd>
@@ -20,7 +28,11 @@ const Shortcuts: React.FC = () => {
                 <kbd>{modifierKey}</kbd> <kbd>Space</kbd>
               </>
             )}
-            <span>Toggle Draw/Select</span>
+            <span>Toggle Select Modes</span>
+          </div>
+          <div className="shortcut-item">
+            <kbd>{modifierKey}</kbd> <kbd>A</kbd>
+            <span>Select All</span>
           </div>
           <div className="shortcut-item">
             <kbd>Esc</kbd>
@@ -41,10 +53,6 @@ const Shortcuts: React.FC = () => {
           <div className="shortcut-item">
             <kbd>{modifierKey}</kbd> <kbd>O</kbd>
             <span>Open/Import</span>
-          </div>
-          <div className="shortcut-item">
-            <kbd>{modifierKey}</kbd> <kbd>A</kbd>
-            <span>Select All</span>
           </div>
           <div className="shortcut-item">
             <kbd>{modifierKey}</kbd> <kbd>+</kbd>
@@ -72,7 +80,7 @@ const Shortcuts: React.FC = () => {
           </div>
           <div className="shortcut-item">
             <kbd>{isMac ? 'Backspace' : 'Delete'}</kbd>
-            <span>Clear</span>
+            <span>Clear Grid</span>
           </div>
         </div>
       </div>

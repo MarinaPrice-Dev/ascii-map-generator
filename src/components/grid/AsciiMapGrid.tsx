@@ -31,6 +31,7 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({
   const [isUnselectOperation, setIsUnselectOperation] = useState(false);
   const [visitedCells, setVisitedCells] = useState<Set<string>>(new Set());
   const [previewCell, setPreviewCell] = useState<{ row: number; col: number } | null>(null);
+  const [eraserPreviewCell, setEraserPreviewCell] = useState<{ row: number; col: number } | null>(null);
 
   const {
     activeTool,
@@ -47,7 +48,7 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({
   const getCellsBetween = (start: { row: number; col: number }, end: { row: number; col: number }) => {
     const cells: { row: number; col: number }[] = [];
     let { row: x0, col: y0 } = start;
-    let { row: x1, col: y1 } = end;
+    const { row: x1, col: y1 } = end;
     
     const dx = Math.abs(x1 - x0);
     const dy = Math.abs(y1 - y0);
@@ -83,7 +84,7 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({
     if (visitedCells.has(cellKey)) return;
 
     if (isDrawMode()) {
-      if (isUnselectOperation) {
+      if (selectionMode === 'eraser' || isUnselectOperation) {
         clearCell(row, col);
       } else {
         updateCell(row, col, selectedChar, selectedFg, selectedBg);
@@ -102,13 +103,15 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({
   const handleStart = (row: number, col: number, isRightClick: boolean = false) => {
     setVisitedCells(new Set());
     setPreviousCell({ row, col });
+    setEraserPreviewCell(null);
 
     if (isDrawMode()) {
       beginAction();
       setIsMouseDown(true);
       setStartCell({ row, col });
       setHoverCell({ row, col });
-      setIsUnselectOperation(isRightClick);
+      // In eraser mode, always treat as unselect operation, otherwise use right-click logic
+      setIsUnselectOperation(selectionMode === 'eraser' || isRightClick);
       
       // Set selection mode to true for area/rectangle tools to show the selection rectangle
       if (activeTool === 'select-area' || activeTool === 'select-rectangle') {
@@ -117,7 +120,7 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({
 
       if (activeTool === 'select-cells') {
         // For select-cells tool, process the cell immediately with the correct operation
-        if (isRightClick) {
+        if (selectionMode === 'eraser' || isRightClick) {
           clearCell(row, col);
         } else {
           updateCell(row, col, selectedChar, selectedFg, selectedBg);
@@ -158,7 +161,7 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({
 
   const handleEnd = () => {
     if (isMouseDown && startCell && hoverCell) {
-      if (selectionMode !== 'draw') {
+      if (!isDrawMode()) {
         // Handle area and rectangle selection/unselection
         if (activeTool === 'select-area') {
           if (isUnselectOperation) {
@@ -193,7 +196,7 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({
             selectRectangle(startCell.row, startCell.col, hoverCell.row, hoverCell.col);
           }
         }
-      } else { // This is Draw Mode
+      } else { // This is Draw Mode (includes both 'draw' and 'eraser')
         const minRow = Math.min(startCell.row, hoverCell.row);
         const maxRow = Math.max(startCell.row, hoverCell.row);
         const minCol = Math.min(startCell.col, hoverCell.col);
@@ -238,6 +241,7 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({
     setHoverCell(null);
     setPreviousCell(null);
     setVisitedCells(new Set());
+    setEraserPreviewCell(null);
   };
 
   const handleContextMenu = (e: React.MouseEvent, row: number, col: number) => {
@@ -256,6 +260,13 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({
     };
     // eslint-disable-next-line
   }, [isMouseDown, startCell, hoverCell, previousCell, selectedChar, selectedFg, selectedBg, isSelectionMode, activeTool, isUnselectOperation, isDrawMode, visitedCells]);
+
+  // Clear eraser preview when selection mode changes
+  React.useEffect(() => {
+    if (selectionMode !== 'eraser') {
+      setEraserPreviewCell(null);
+    }
+  }, [selectionMode]);
 
   // Helper to check if a cell is in the current selection rectangle
   const isInSelection = (row: number, col: number) => {
@@ -303,6 +314,39 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({
 
   const selectionRect = getSelectionRectangle();
 
+  // Render eraser preview overlay
+  const renderEraserPreview = () => {
+    if (selectionMode !== 'eraser' || !eraserPreviewCell || isMouseDown) return null;
+    
+    const cellWidth = Math.floor(cellSize * 0.5);
+    const { row, col } = eraserPreviewCell;
+    
+    return (
+      <div
+        style={{
+          position: 'absolute',
+          top: row * cellSize,
+          left: col * cellWidth,
+          width: cellWidth,
+          height: cellSize,
+          background: defaultBg,
+          color: defaultFg,
+          fontFamily: 'monospace',
+          fontSize: Math.floor(cellSize * 0.8),
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          opacity: 1,
+          border: '1px dashed #ef4444',
+          pointerEvents: 'none',
+          zIndex: 5,
+        }}
+      >
+        {' '}
+      </div>
+    );
+  };
+
   // Render preview overlay for paste mode
   const renderPastePreview = () => {
     if (!pasteMode || !pastePreviewData || !previewCell) return null;
@@ -348,7 +392,7 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({
 
   return (
     <div 
-      className={`ascii-map-grid ${selectionMode !== 'draw' ? 'selection-mode' : ''} ${!showBorders ? 'no-borders' : ''}`}
+      className={`ascii-map-grid ${selectionMode !== 'draw' && selectionMode !== 'eraser' ? 'selection-mode' : ''} ${!showBorders ? 'no-borders' : ''}`}
       style={{
         gridTemplateColumns: `repeat(${grid[0]?.length || 0}, ${Math.floor(cellSize * 0.5)}px)`,
         gridTemplateRows: `repeat(${grid.length}, ${cellSize}px)`,
@@ -356,6 +400,7 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({
       }}
     >
       {renderPastePreview()}
+      {renderEraserPreview()}
       {grid.map((row, rowIndex) => (
         <div key={rowIndex} className="ascii-map-grid-row">
           {row.map((cell, colIndex) => {
@@ -375,8 +420,18 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({
                   }
                 }}
                 onMouseOver={() => handleMove(rowIndex, colIndex)}
-                onMouseEnter={() => setPreviewCell({ row: rowIndex, col: colIndex })}
-                onMouseLeave={() => setPreviewCell(null)}
+                onMouseEnter={() => {
+                  setPreviewCell({ row: rowIndex, col: colIndex });
+                  if (selectionMode === 'eraser') {
+                    setEraserPreviewCell({ row: rowIndex, col: colIndex });
+                  }
+                }}
+                onMouseLeave={() => {
+                  setPreviewCell(null);
+                  if (selectionMode === 'eraser') {
+                    setEraserPreviewCell(null);
+                  }
+                }}
                 onContextMenu={(e) => handleContextMenu(e, rowIndex, colIndex)}
                 onTouchStart={() => handleStart(rowIndex, colIndex)}
                 onTouchMove={handleTouchMove}

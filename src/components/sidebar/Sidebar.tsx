@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelectionStore } from '../../store/selectionStore';
 import type { SelectionTool as Tool, SelectionMode } from '../../store/selectionStore';
 import { 
-  PencilIcon, SingleBoxIcon, MultipleBoxIcon, 
+  PencilIcon, EraserIcon, SingleBoxIcon, MultipleBoxIcon, 
   AreaIcon, RectangleIcon, CellsIcon,
   RotateLeftIcon, RotateRightIcon, FlipHorizontalIcon, FlipVerticalIcon,
   NewFileIcon, CopyIcon, PasteIcon, CutIcon, ClearIcon
@@ -86,6 +86,21 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, pasteMod
                 />
                 <div className="sidebar-icon">
                   <PencilIcon />
+                </div>
+              </label>
+            </Tooltip>
+            <Tooltip content="Erase cells" placement="right">
+              <label className="sidebar-radio-btn">
+                <input
+                  type="radio"
+                  name="sidebarSelectionMode"
+                  value="eraser"
+                  checked={selectionMode === 'eraser'}
+                  onChange={(e) => handleSelectionModeChange(e.target.value as SelectionMode)}
+                  className="sr-only"
+                />
+                <div className="sidebar-icon">
+                  <EraserIcon />
                 </div>
               </label>
             </Tooltip>

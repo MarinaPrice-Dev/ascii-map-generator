@@ -103,12 +103,12 @@ export const setupKeyboardShortcuts = (props: ShortcutProps) => {
       // Windows/Linux: Ctrl + Space
       e.preventDefault();
       const currentMode = useSelectionStore.getState().selectionMode;
-      setSelectionMode(currentMode === 'draw' ? 'multiple' : 'draw');
+      setSelectionMode(currentMode === 'single' ? 'multiple' : 'single');
     } else if (e.code === 'Space' && ctrlKey && e.shiftKey && isMac) {
       // macOS: Cmd + Shift + Space
       e.preventDefault();
       const currentMode = useSelectionStore.getState().selectionMode;
-      setSelectionMode(currentMode === 'draw' ? 'multiple' : 'draw');
+      setSelectionMode(currentMode === 'single' ? 'multiple' : 'single');
     } else if (e.key === 'm' && ctrlKey) {
       e.preventDefault();
       handleMenuToggle();
@@ -121,6 +121,14 @@ export const setupKeyboardShortcuts = (props: ShortcutProps) => {
     } else if (e.key === 'x' && ctrlKey) {
       e.preventDefault();
       handleCut();
+    } else if (e.key === 'e' && ctrlKey) {
+      // Erase mode: Cmd + E (mac) / Ctrl + E (windows)
+      e.preventDefault();
+      setSelectionMode('eraser');
+    } else if (e.key === 'i' && ctrlKey) {
+      // Draw mode: Cmd + I (mac) / Ctrl + I (windows)
+      e.preventDefault();
+      setSelectionMode('draw');
     } else if (e.key === 'Delete' && !isMac) {
       // Windows: Delete key
       e.preventDefault();

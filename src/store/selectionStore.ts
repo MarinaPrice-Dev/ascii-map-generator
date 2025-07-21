@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export type SelectionMode = 'single' | 'multiple' | 'draw';
+export type SelectionMode = 'single' | 'multiple' | 'draw' | 'eraser';
 export type SelectionTool = 'select-area' | 'select-rectangle' | 'select-cells';
 
 interface SelectionState {
@@ -34,7 +34,7 @@ export const useSelectionStore = create<SelectionState>((set, get) => ({
   activeTool: 'select-area',
   selectionMode: 'draw',
 
-  isDrawMode: () => get().selectionMode === 'draw',
+  isDrawMode: () => get().selectionMode === 'draw' || get().selectionMode === 'eraser',
 
   selectCell: (row: number, col: number) => {
     const { selectionMode, selectedCells } = get();
@@ -94,7 +94,7 @@ export const useSelectionStore = create<SelectionState>((set, get) => ({
   setActiveTool: (tool) => set({ activeTool: tool }),
 
   setSelectionMode: (mode: SelectionMode) => {
-    if (mode === 'draw') {
+    if (mode === 'draw' || mode === 'eraser') {
       set({ selectionMode: mode, selectedCells: new Set() });
     } else {
       set({ selectionMode: mode });
