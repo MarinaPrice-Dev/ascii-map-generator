@@ -21,10 +21,11 @@ const Tooltip: React.FC<TooltipProps> = ({
       content={content}
       placement={placement}
       trigger="mouseenter focus"
-      touch="hold"
-      delay={[300, 0]}
+      delay={[50, 0]}
       interactive={false}
       className={className}
+      hideOnClick={true}
+      touch={false}
     >
       {children}
     </Tippy>

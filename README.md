@@ -124,3 +124,18 @@ A powerful ASCII art editor with support for creating, editing, and converting i
 - **Landscape Design**: Garden and outdoor space planning
 - **Circuit Design**: Electronic schematic creation
 - **Mathematical Art**: Algorithmic and mathematical patterns
+
+
+
+
+# Next steps
+
+- Better mobile support
+    - need to design the footer to be more mobile friendly
+    - make it much smaller, than maybe display in a dialog
+    - does grid resizing make sense for mobile? does it need adding?
+    - mobile scrollbars should be wider
+
+- Tablet support
+    - needs testing
+    - what improvements do we need?
