@@ -94,12 +94,27 @@
   .menu-panel {
     width: 100vw;
     right: -100vw;
+    border-top: 1px solid var(--menu);
     border-bottom: 1px solid var(--menu);
     border-left: none;
+    top: 95px;
+    height: calc(100% - 95px);
   }
   
   .menu-panel.open {
     right: 0;
+  }
+
+  /* Image Import Dialog responsive styles */ 
+  .image-import-panel {
+    top: 95px;
+    height: calc(100% - 95px);
+  }
+
+  /* Export Dropdown responsive styles */
+  .export-panel {
+    top: 95px;
+    height: calc(100% - 95px);
   }
 }
 
@@ -166,8 +181,11 @@
    .image-import-panel {
     width: 100vw;
     right: -100vw;
+    border-top: 1px solid var(--save);
     border-bottom: 1px solid var(--save);
     border-left: none;
+    top: 95px;
+    height: calc(100% - 95px);
   }
   
   .image-import-panel.open {
@@ -178,14 +196,27 @@
   .export-panel {
     width: 100%;
     right: -100%;
+    border-top: 1px solid var(--save);
     border-bottom: 1px solid var(--save);
     border-left: none;
+    top: 95px;
+    height: calc(100% - 95px);
   }
   
   .export-panel.open {
     right: 0;
   }
-
+  
+  /* Footer responsive styles */
+  .footer {
+    padding: 2px 0 0 0;
+  }
+  .footer, .footer:hover {
+    height: 300px !important;
+  }
+  .footer-content {
+    padding: 0;
+  }
 }
 
 /* Reset Dialog responsive styles */
