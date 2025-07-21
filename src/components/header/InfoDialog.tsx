@@ -77,6 +77,7 @@ const InfoDialog: React.FC<InfoDialogProps> = ({ onClose }) => (
         <h5>2025-07-21</h5>
         <ul>
             <li><strong>Mobile support:</strong> Added tabbed interface for mobile for improved usability.</li>
+            <li><strong>Eraser Tool:</strong> Added an eraser tool to the sidebar.</li>
             <li><strong>Bug fixes:</strong> Fixed several mobile bugs.</li>
         </ul>
         <h5>2025-07-17</h5>
