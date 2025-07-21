@@ -41,6 +41,11 @@
   pointer-events: none;
 }
 
+.selection-rectangle.eraser-mode {
+  border: 2px solid #ef4444a2;
+  background: #4c1d1d50;
+}
+
 .ascii-map-grid.selection-mode .ascii-map-grid-cell {
   cursor: crosshair;
 }

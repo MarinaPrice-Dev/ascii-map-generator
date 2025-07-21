@@ -316,7 +316,7 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({
 
   // Render eraser preview overlay
   const renderEraserPreview = () => {
-    if (selectionMode !== 'eraser' || !eraserPreviewCell || isMouseDown) return null;
+    if (selectionMode !== 'eraser' || !eraserPreviewCell) return null;
     
     const cellWidth = Math.floor(cellSize * 0.5);
     const { row, col } = eraserPreviewCell;
@@ -452,7 +452,7 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({
       ))}
       {selectionRect && (
         <div
-          className="selection-rectangle"
+          className={`selection-rectangle ${selectionMode === 'eraser' ? 'eraser-mode' : ''}`}
           style={{
             top: selectionRect.top,
             left: selectionRect.left,
@@ -461,7 +461,7 @@ const AsciiMapGrid: React.FC<AsciiMapGridProps> = ({
           }}
         />
       )}
-      {previewCell && isDrawMode() && (
+      {previewCell && isDrawMode() && selectionMode !== 'eraser' && (
         <div
           className="cell-preview"
           style={{
