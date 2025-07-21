@@ -74,6 +74,11 @@ const InfoDialog: React.FC<InfoDialogProps> = ({ onClose }) => (
         <h3>Example ASCII Art</h3>
         <p>Not yet available, but will be soon!</p>
         <h3>Latest Updates</h3>
+        <h5>2025-07-21</h5>
+        <ul>
+            <li><strong>Mobile support:</strong> Added tabbed interface for mobile for improved usability.</li>
+            <li><strong>Bug fixes:</strong> Fixed several mobile bugs.</li>
+        </ul>
         <h5>2025-07-17</h5>
         <ul>
             <li><strong>Bug fixes</strong></li>

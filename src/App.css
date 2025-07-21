@@ -1,6 +1,7 @@
 #root {
   width: 100vw;
   height: 100vh;
+  height: 100svh; /* Modern fix for mobile browsers */
   margin: 0;
   padding: 0;
   text-align: center;
