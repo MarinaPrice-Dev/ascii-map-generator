@@ -127,13 +127,7 @@
 
   /* Color Palette responsive styles */
   .color-grid {
-    grid-template-columns: repeat(auto-fill, minmax(20px, 1fr));
     gap: 3px;
-  }
-
-  .color-swatch {
-    width: 20px;
-    height: 20px;
   }
 
   /* Toast responsive styles */
