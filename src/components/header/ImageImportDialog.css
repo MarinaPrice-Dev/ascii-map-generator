@@ -3,7 +3,7 @@
   top: 60px;
   right: -340px;
   width: 340px;
-  height: calc(100vh - 60px);
+  height: calc(100% - 60px);
   background: var(--bg);
   border-left: 1px solid var(--save);
   z-index: 900;

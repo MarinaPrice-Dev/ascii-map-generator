@@ -1,6 +1,6 @@
 .sidebar {
   width: 48px;
-  height: calc(100vh - 60px); /* Full height minus header height */
+  height: 100%; /* Full height minus header height */
   background: var(--bg-light);
   border-right: 1px solid var(--border);
   flex-shrink: 0;

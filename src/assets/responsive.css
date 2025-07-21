@@ -10,7 +10,6 @@
   }
 }
 
-
 @media (max-width: 1150px) and (min-width: 900px) {
   .app-header h1 {
     font-size: 1.4rem!important;
@@ -56,65 +55,6 @@
 
   .toast-container {
     bottom: 10px!important;
-  }
-}
-
-/* Force Portrait Mode */
-@media screen and (max-height: 350px) and (orientation: landscape) {
-  .App {
-    display: none;
-  }
-
-  .App::after {
-    content: "Unsupported screen size";
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: var(--bg);
-    padding: 2rem;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    z-index: 1000;
-  }
-}
-
-
-@media (max-width: 768px) {
-  /* Header responsive styles */
-  .desktop-only {
-    display: none;
-  }
-
-  /* Color Palette responsive styles */
-  .color-grid {
-    grid-template-columns: repeat(auto-fill, minmax(20px, 1fr));
-    gap: 3px;
-  }
-
-  .color-swatch {
-    width: 20px;
-    height: 20px;
-  }
-
-  /* Toast responsive styles */
-  .toast-container {
-    bottom: 16px;
-    left: 16px;
-    right: 16px;
-    align-items: stretch;
-  }
-  
-  .toast-wrapper {
-    transform: none !important;
-  }
-
-/* Info Dialog responsive styles */
-  .info-dialog {
-    max-width: 96%;
-    max-height: calc(100% - 4%);
-    top: 2%;
-    left: 2%;
   }
 }
 
@@ -177,6 +117,44 @@
   }
 }
 
+@media (max-width: 768px) {
+  /* Header responsive styles */
+  .desktop-only {
+    display: none;
+  }
+
+  /* Color Palette responsive styles */
+  .color-grid {
+    grid-template-columns: repeat(auto-fill, minmax(20px, 1fr));
+    gap: 3px;
+  }
+
+  .color-swatch {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Toast responsive styles */
+  .toast-container {
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+    align-items: stretch;
+  }
+  
+  .toast-wrapper {
+    transform: none !important;
+  }
+
+/* Info Dialog responsive styles */
+  .info-dialog {
+    max-width: 96%;
+    max-height: calc(100% - 4%);
+    top: 2%;
+    left: 2%;
+  }
+}
+
 /* Reset Dialog responsive styles */
 @media (max-width: 480px) {
   .reset-dialog {
@@ -192,3 +170,24 @@
     width: 100%;
   }
 } 
+
+
+/* Force Portrait Mode */
+@media screen and (max-height: 350px) and (orientation: landscape) {
+  .App {
+    display: none;
+  }
+
+  .App::after {
+    content: "Unsupported screen size";
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--bg);
+    padding: 2rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    z-index: 1000;
+  }
+}

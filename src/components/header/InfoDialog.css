@@ -11,10 +11,10 @@
     text-align: left;
     transform: none;
     border-color: #4477ca;
-    height: 100vh;
+    height: 100%;
     width: 100%;
     max-width: 90%;
-    max-height: calc(100vh - 10%);
+    max-height: calc(100% - 10%);
     top: 5%;
     left: 5%;
 }

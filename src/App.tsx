@@ -790,7 +790,7 @@ const AppContent: React.FC = () => {
   };
 
   return (
-    <div className="App" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--bg)', color: 'var(--fg)' }}>
+    <div className="App">
       {isLoading && <Loader message="Exporting..." />}
       <Header
         onSaveMap={handleExport}
