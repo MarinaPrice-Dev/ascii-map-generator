@@ -90,6 +90,7 @@ export const setupKeyboardShortcuts = (props: ShortcutProps) => {
         }
       }
       updateSelection(allCells);
+      setSelectionMode('single');
     } else if (e.key === 'Escape') {
       e.preventDefault();
       clearSelection();
