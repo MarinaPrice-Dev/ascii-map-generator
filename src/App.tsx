@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react'
 import './App.css'
 import AsciiMapGrid from './components/grid/AsciiMapGrid'
 import { useUndoRedo } from './utils/useUndoRedo'
-import { getInitialGrid, isGridEmpty } from './utils/mapUtils'
+import { getInitialGrid, isGridEmpty, findBoundingBox } from './utils/mapUtils'
 import { loadSavedState, saveState, clearSavedState } from './utils/saveState'
 import { exportMap } from './utils/exportMap'
 import { copyGridAsHtml, cutGridAsHtml } from './utils/copyPaste'
@@ -436,14 +436,47 @@ const AppContent: React.FC = () => {
 
   const handleMirror = (direction: 'horizontal' | 'vertical') => {
     handleTransform((currentGrid, currentSelection) => {
-       if (currentSelection.size === 0) { // Full grid mirror
-         const newGrid = direction === 'horizontal' 
-           ? currentGrid.map(row => [...row].reverse())
-           : [...currentGrid].reverse();
-         return { newGrid };
-       }
+      if (currentSelection.size === 0) { 
+        // Mirror only the relevant area (using bounding box)
+        const bounds = findBoundingBox(currentGrid);
+        
+        if (bounds.top > bounds.bottom || bounds.left > bounds.right) {
+          // No content to mirror
+          return { newGrid: currentGrid };
+        }
+        
+        const newGrid = currentGrid.map(row => [...row]);
+        
+        if (direction === 'horizontal') {
+          // Mirror horizontally within the bounding box
+          for (let row = bounds.top; row <= bounds.bottom; row++) {
+            for (let col = bounds.left; col <= Math.floor((bounds.left + bounds.right) / 2); col++) {
+              const mirrorCol = bounds.right - (col - bounds.left);
+              if (newGrid[row]?.[col] && newGrid[row]?.[mirrorCol]) {
+                const temp = { ...newGrid[row][col] };
+                newGrid[row][col] = { ...newGrid[row][mirrorCol] };
+                newGrid[row][mirrorCol] = temp;
+              }
+            }
+          }
+        } else {
+          // Mirror vertically within the bounding box
+          for (let col = bounds.left; col <= bounds.right; col++) {
+            for (let row = bounds.top; row <= Math.floor((bounds.top + bounds.bottom) / 2); row++) {
+              const mirrorRow = bounds.bottom - (row - bounds.top);
+              if (newGrid[row]?.[col] && newGrid[mirrorRow]?.[col]) {
+                const temp = { ...newGrid[row][col] };
+                newGrid[row][col] = { ...newGrid[mirrorRow][col] };
+                newGrid[mirrorRow][col] = temp;
+              }
+            }
+          }
+        }
+        
+        return { newGrid };
+      }
 
-      // Selection mirror logic
+      // Selection mirror logic (unchanged)
       const newGrid = currentGrid.map(row => [...row]);
       const cellsToMove: { from: { r: number, c: number }, cell: Cell }[] = [];
       let minR = Infinity, maxR = -Infinity, minC = Infinity, maxC = -Infinity;
@@ -585,7 +618,7 @@ const AppContent: React.FC = () => {
         setPastePreviewData(parsedData);
         
         // Show paste mode toast
-        showToast('Paste mode: Click anywhere on the grid to paste. Press [Esc] to exit mode.');
+        showToast('Paste mode: Click anywhere on the grid to paste. Press [Esc] or click Paste again to exit mode.');
       } catch (e) {
         console.error('Failed to read clipboard:', e);
         setPastePreviewData(null);
@@ -639,17 +672,28 @@ const AppContent: React.FC = () => {
       updateGrid(newGrid);
       clearSelection();
     } else {
-      // Clear entire grid
-      const newGrid = grid.map(row => 
-        row.map(cell => ({ 
-          char: ' ', 
-          fg: '#FFFFFF', 
-          bg: '#222222',
-          selected: cell.selected 
-        }))
-      );
+      // Clear only the relevant area (using bounding box)
+      const bounds = findBoundingBox(grid);
       
-      updateGrid(newGrid);
+      if (bounds.top <= bounds.bottom && bounds.left <= bounds.right) {
+        const newGrid = grid.map(row => row.map(cell => ({ ...cell })));
+        
+        // Clear only the cells within the bounding box
+        for (let row = bounds.top; row <= bounds.bottom; row++) {
+          for (let col = bounds.left; col <= bounds.right; col++) {
+            if (newGrid[row]?.[col]) {
+              newGrid[row][col] = { 
+                char: ' ', 
+                fg: '#FFFFFF', 
+                bg: '#222222',
+                selected: false 
+              };
+            }
+          }
+        }
+        
+        updateGrid(newGrid);
+      }
     }
   };
 
@@ -847,11 +891,9 @@ const AppContent: React.FC = () => {
           onRotate={handleRotate} 
           onMirror={handleMirror} 
           onReset={handleReset}
-          grid={grid}
           selectedCells={selectedCells}
           pasteMode={pasteMode}
           onPasteModeToggle={handlePasteModeToggle}
-          updateGrid={updateGrid}
           beginAction={beginAction}
           onCopy={handleCopy}
           onCut={handleCut}

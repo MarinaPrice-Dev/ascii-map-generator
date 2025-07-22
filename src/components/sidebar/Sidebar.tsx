@@ -12,24 +12,22 @@ import Tooltip from '../ui/Tooltip';
 import { useToast } from '../toast/ToastContainer';
 import './Sidebar.css';
 
-import type { Cell } from '../../types/cell';
+
 
 interface SidebarProps {
   onRotate: (direction: 'left' | 'right') => void;
   onMirror: (direction: 'horizontal' | 'vertical') => void;
   onReset: () => void;
-  grid: Cell[][];
   selectedCells: Set<string>;
   pasteMode: boolean;
   onPasteModeToggle: () => void;
-  updateGrid: (newGrid: Cell[][]) => void;
   beginAction: () => void;
   onCopy: () => void;
   onCut: () => void;
   onClear: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, pasteMode, onPasteModeToggle, beginAction, onCopy, onCut, onClear }) => {
+const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, selectedCells, pasteMode, onPasteModeToggle, beginAction, onCopy, onCut, onClear }) => {
   const { showToast } = useToast();
   const {
     activeTool,
@@ -233,24 +231,26 @@ const Sidebar: React.FC<SidebarProps> = ({ onRotate, onMirror, onReset, pasteMod
             <div className="sidebar-section">
               <div className="sidebar-section-title">Alter</div>
               <div className="sidebar-buttons">
-                <Tooltip content="Rotate Left" placement="right">
+                <Tooltip content={selectedCells.size > 0 ? "Rotate Left" : "Select cells to rotate"} placement="right">
                   <button 
                     onClick={() => {
                       beginAction();
                       onRotate('left');
                     }} 
                     className="sidebar-btn"
+                    disabled={selectedCells.size === 0}
                   >
                     <RotateLeftIcon />
                   </button>
                 </Tooltip>
-                <Tooltip content="Rotate Right" placement="right">
+                <Tooltip content={selectedCells.size > 0 ? "Rotate Right" : "Select cells to rotate"} placement="right">
                   <button 
                     onClick={() => {
                       beginAction();
                       onRotate('right');
                     }} 
                     className="sidebar-btn"
+                    disabled={selectedCells.size === 0}
                   >
                     <RotateRightIcon />
                   </button>

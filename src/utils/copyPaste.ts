@@ -1,4 +1,5 @@
 import type { Cell } from '../types/cell';
+import { findBoundingBox, extractSubgrid } from './mapUtils';
 
 /**
  * Copy grid data to clipboard as HTML with preserved colors and formatting
@@ -77,11 +78,23 @@ export const cutGridAsHtml = async (
       updateGrid(newGrid);
       clearSelection();
     } else {
-      // Clear entire grid
-      const newGrid = grid.map(row => 
-        row.map(() => ({ char: ' ', fg: '#FFFFFF', bg: '#222222' }))
-      );
-      updateGrid(newGrid);
+      // Clear only the relevant area (using bounding box)
+      const bounds = findBoundingBox(grid);
+      
+      if (bounds.top <= bounds.bottom && bounds.left <= bounds.right) {
+        const newGrid = grid.map(row => row.map(cell => ({ ...cell })));
+        
+        // Clear only the cells within the bounding box
+        for (let row = bounds.top; row <= bounds.bottom; row++) {
+          for (let col = bounds.left; col <= bounds.right; col++) {
+            if (newGrid[row]?.[col]) {
+              newGrid[row][col] = { char: ' ', fg: '#FFFFFF', bg: '#222222' };
+            }
+          }
+        }
+        
+        updateGrid(newGrid);
+      }
       clearSelection();
     }
     
@@ -140,18 +153,21 @@ const getSelectedCellsData = (grid: Cell[][], selectedCells: Set<string>): { cel
 };
 
 /**
- * Get all grid data as a 2D grid with dimensions
+ * Get all grid data as a 2D grid with dimensions, using bounding box to find relevant area
  */
 const getAllGridData = (grid: Cell[][]): { cells: Cell[][], rows: number, cols: number } => {
-  const rows = grid.length;
-  const cols = grid[0]?.length || 0;
+  const bounds = findBoundingBox(grid);
   
-  // Create a copy of the grid
-  const gridCopy: Cell[][] = grid.map(row => 
-    row.map(cell => ({ ...cell }))
-  );
+  // Handle case where no content is found
+  if (bounds.top > bounds.bottom || bounds.left > bounds.right) {
+    return { cells: [], rows: 0, cols: 0 };
+  }
   
-  return { cells: gridCopy, rows, cols };
+  const cells = extractSubgrid(grid, bounds);
+  const rows = bounds.bottom - bounds.top + 1;
+  const cols = bounds.right - bounds.left + 1;
+  
+  return { cells, rows, cols };
 };
 
 /**

@@ -131,16 +131,10 @@ A powerful ASCII art editor with support for creating, editing, and converting i
 # Next steps
 
 - Better mobile support
-    - need to design the footer to be more mobile friendly
-    - make it much smaller, than maybe display in a dialog
     - does grid resizing make sense for mobile? does it need adding?
-    - mobile scrollbars should be wider
     - image import unusable
-
-- Tablet support
-    - needs testing
-    - what improvements do we need?
 
 
 Bugs
 - undo twice after deleting
+- select all

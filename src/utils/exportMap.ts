@@ -1,36 +1,10 @@
 // @ts-expect-error - dom-to-image-more has no type definitions
 import domtoimage from 'dom-to-image-more';
 import type { Cell } from '../types/cell'
+import { findBoundingBox } from './mapUtils';
 
 interface ExportOptions {
   format: 'txt' | 'json' | 'ansi' | 'rot' | 'png' | 'html' | 'html-color';
-}
-
-interface BoundingBox {
-  top: number;
-  left: number;
-  bottom: number;
-  right: number;
-}
-
-const findBoundingBox = (grid: Cell[][]): BoundingBox => {
-  let top = grid.length;
-  let left = grid[0]?.length || 0;
-  let bottom = 0;
-  let right = 0;
-
-  for (let row = 0; row < grid.length; row++) {
-    for (let col = 0; col < grid[row].length; col++) {
-      if (grid[row][col].char !== ' ') {
-        top = Math.min(top, row);
-        left = Math.min(left, col);
-        bottom = Math.max(bottom, row);
-        right = Math.max(right, col);
-      }
-    }
-  }
-
-  return { top, left, bottom, right };
 }
 
 const hexToAnsi = (hex: string): number => {
