@@ -16,3 +16,12 @@ export const getActualGridDimensions = (grid: Cell[][]): { rows: number; cols: n
   
   return { rows, cols };
 }; 
+
+export const isGridEmpty = (grid: Cell[][]): boolean => {
+  return grid.every(row => row.every(cell => cell.char === ' '));
+};
+
+// Test cases for isGridEmpty:
+// - Empty grid: all cells have char === ' ' -> returns true
+// - Grid with content: any cell has char !== ' ' -> returns false
+// - Mixed grid: some cells have content, some are empty -> returns false 

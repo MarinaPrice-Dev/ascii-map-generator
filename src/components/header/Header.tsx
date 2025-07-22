@@ -9,7 +9,7 @@ import ImageImportDialog from './ImageImportDialog';
 import { MIN_ZOOM, MAX_ZOOM } from '../../utils/zoomUtils';
 import { importMap } from '../../utils/importMap';
 import { imageToAscii } from '../../utils/imageToAscii';
-import { getActualGridDimensions } from '../../utils/mapUtils';
+import { getActualGridDimensions, isGridEmpty } from '../../utils/mapUtils';
 import type { Cell } from '../../types/cell';
 
 interface HeaderProps {
@@ -65,7 +65,7 @@ const Header: React.FC<HeaderProps> = ({
   showBorders,
   onBorderToggle,
 }) => {
-  const isGridEmpty = grid.every(row => row.every(cell => cell.char === ' '));
+  const gridIsEmpty = isGridEmpty(grid);
   const [showInfoDialog, setShowInfoDialog] = useState(false);
   const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
   const [imageDimensions, setImageDimensions] = useState<{ width: number; height: number; gridRows: number; gridCols: number } | null>(null);
@@ -381,7 +381,7 @@ const Header: React.FC<HeaderProps> = ({
           <div className="desktop-only">
             <ExportDropdown
               onExport={onSaveMap}
-              disabled={isGridEmpty}
+              disabled={gridIsEmpty}
               isOpen={isExportPanelOpen}
               onToggle={onExportPanelToggle}
             />
@@ -452,7 +452,7 @@ const Header: React.FC<HeaderProps> = ({
         </button>
         <ExportDropdown
               onExport={onSaveMap}
-              disabled={isGridEmpty}
+              disabled={gridIsEmpty}
               isOpen={isExportPanelOpen}
               onToggle={onExportPanelToggle}
             />

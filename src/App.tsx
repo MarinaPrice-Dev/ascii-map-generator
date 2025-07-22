@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react'
 import './App.css'
 import AsciiMapGrid from './components/grid/AsciiMapGrid'
 import { useUndoRedo } from './utils/useUndoRedo'
-import { getInitialGrid } from './utils/mapUtils'
+import { getInitialGrid, isGridEmpty } from './utils/mapUtils'
 import { loadSavedState, saveState, clearSavedState } from './utils/saveState'
 import { exportMap } from './utils/exportMap'
 import { copyGridAsHtml, cutGridAsHtml } from './utils/copyPaste'
@@ -92,10 +92,31 @@ const AppContent: React.FC = () => {
     initialCellSize
   );
 
-  const [cellSize, setCellSize] = useState<number>(savedCellSize);
-  const [gridRows, setGridRows] = useState<number>(initialRows);
-  const [gridCols, setGridCols] = useState<number>(initialCols);
-  const [grid, setGrid, undo, redo, canUndo, canRedo, beginAction] = useUndoRedo<Cell[][]>(savedGrid);
+  // Check if the loaded grid is empty and reset dimensions if so
+  let finalGrid = savedGrid;
+  let finalCellSize = savedCellSize;
+  let finalRows = initialRows;
+  let finalCols = initialCols;
+
+  if (isGridEmpty(savedGrid)) {
+    // Grid is empty, recalculate dimensions based on current window size
+    const defaultCellSize = 20;
+    const availableWidth = window.innerWidth - 2 - SIDEBAR_WIDTH;
+    const availableHeight = window.innerHeight - HEADER_HEIGHT - FOOTER_HEIGHT;
+    const cellWidth = Math.floor(defaultCellSize * 0.5);
+    const cols = Math.floor(availableWidth / cellWidth);
+    const rows = Math.floor(availableHeight / defaultCellSize);
+    
+    finalCellSize = defaultCellSize;
+    finalRows = rows;
+    finalCols = cols;
+    finalGrid = getInitialGrid(rows, cols, DEFAULT_FG, DEFAULT_BG);
+  }
+
+  const [cellSize, setCellSize] = useState<number>(finalCellSize);
+  const [gridRows, setGridRows] = useState<number>(finalRows);
+  const [gridCols, setGridCols] = useState<number>(finalCols);
+  const [grid, setGrid, undo, redo, canUndo, canRedo, beginAction] = useUndoRedo<Cell[][]>(finalGrid);
 
   const { selectedCells, updateSelection, clearSelection } = useSelectionStore();
 

@@ -140,3 +140,7 @@ A powerful ASCII art editor with support for creating, editing, and converting i
 - Tablet support
     - needs testing
     - what improvements do we need?
+
+
+Bugs
+- undo twice after deleting
